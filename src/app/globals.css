@@ -12,3 +12,17 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+#proj-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 25px;
+  height: 75px;
+}
+
+#proj-descrip {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

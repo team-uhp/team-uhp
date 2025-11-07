@@ -26,41 +26,42 @@ enum Skills {
   other
   programming
   scripting
-  applescript
-  arduino
-  assembly
-  batchfile
-  bootstrap
-  c
-  cpp
-  cryengine
-  csharp
-  css
-  fortran
-  gamemaker
-  godot
-  html
-  java
-  jsts
-  lisp
-  lumberyard
-  matlab
-  nextjs
-  pascal
-  perl
-  php
-  python
-  r
-  react
-  renpy
-  ruby
-  rust
-  scratch
-  sql
-  swift
-  torque
-  unity
-  unreal
+  AppleScript
+  Arduino
+  Assembly
+  Batch
+  Bootstrap
+  C
+  C++
+  CryEngine
+  C#
+  CSS
+  FORTRAN
+  GameMaker
+  Godot
+  HTML
+  Java
+  JS/TS
+  Lisp
+  Lumberyard
+  MATLAB
+  NextJS
+  Pascal
+  Perl
+  PHP
+  Python
+  R
+  React
+  RenPy
+  Ruby
+  Rust
+  Scratch
+  SQL
+  Swift
+  Torque
+  Unity
+  Unreal
+  XML
 }
 
 model User {

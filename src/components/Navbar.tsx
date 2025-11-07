@@ -16,7 +16,7 @@ const NavBar: React.FC = () => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="/">Next.js Application Template</Navbar.Brand>
+        <Navbar.Brand href="/">Team UHp!</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto justify-content-start">
@@ -25,8 +25,8 @@ const NavBar: React.FC = () => {
                   <Nav.Link id="add-stuff-nav" href="/add" key="add" active={pathName === '/add'}>
                     Add Stuff
                   </Nav.Link>,
-                  <Nav.Link id="list-stuff-nav" href="/list" key="list" active={pathName === '/list'}>
-                    List Stuff
+                  <Nav.Link id="list-project-nav" href="/project-list" key="list" active={pathName === '/project-list'}>
+                    Projects List
                   </Nav.Link>,
                 ]
               : ''}
