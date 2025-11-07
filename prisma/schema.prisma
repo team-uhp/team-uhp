@@ -22,24 +22,83 @@ enum Role {
   ADMIN
 }
 
+enum Skills {
+  other
+  programming
+  scripting
+  applescript
+  arduino
+  assembly
+  batchfile
+  bootstrap
+  c
+  cpp
+  cryengine
+  csharp
+  css
+  fortran
+  gamemaker
+  godot
+  html
+  java
+  jsts
+  lisp
+  lumberyard
+  matlab
+  nextjs
+  pascal
+  perl
+  php
+  python
+  r
+  react
+  renpy
+  ruby
+  rust
+  scratch
+  sql
+  swift
+  torque
+  unity
+  unreal
+}
+
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
-  role     Role   @default(USER)
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  username      String    @unique
+  password      String
+  role          Role      @default(USER)
+  firstName     String    @default("Change")
+  lastName      String    @default("Me")
+  image         String?
+  phone         String?
+  skills        Skills[]  @default([])
+  availability  Int[]     @default([])
+  contacts      Int[]     @default([])
 }
 
-enum Condition {
-  excellent
-  good
-  fair
-  poor
-}
-
-model Stuff {
+model Project {
   id        Int       @id @default(autoincrement())
-  name      String
-  quantity  Int
-  condition Condition @default(good)
-  owner     String
+  image     String?
+  title     String
+  descrip   String
+  positions Int[]     @default([])
+  members   Int[]
+  admins    Int[]
+  duedate   String
+  skills    Skills[]  @default([])
+}
+
+model Position {
+  id          Int      @id @default(autoincrement())
+  image       String?
+  title       String
+  descrip     String
+  skills      Skills[] @default([])
+  datestart   String
+  dateend     String
+  project     Int
+  admins      Int[]
+  member      Int?
 }

@@ -1,4 +1,5 @@
-import { PrismaClient, Role, Condition } from '@prisma/client';
+import { PrismaClient, Role, Skills } from '@prisma/client';
+
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
 
@@ -7,32 +8,49 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding the database');
   const password = await hash('changeme', 10);
-  config.defaultAccounts.forEach(async (account) => {
+
+  for (const account of config.defaultAccounts) {
     const role = account.role as Role || Role.USER;
     console.log(`  Creating user: ${account.email} with role: ${role}`);
+
+    // eslint-disable-next-line no-await-in-loop
     await prisma.user.upsert({
       where: { email: account.email },
       update: {},
       create: {
+        id: account.id,
         email: account.email,
+        username: account.username,
         password,
         role,
+        firstName: account.firstName,
+        lastName: account.lastName,
+        image: account.image,
+        phone: account.phone,
+        skills: account.skills.map(s => s as Skills) || [],
+        availability: account.availability,
+        contacts: account.contacts,
       },
     });
     // console.log(`  Created user: ${user.email} with role: ${user.role}`);
-  });
-  for (const data of config.defaultData) {
-    const condition = data.condition as Condition || Condition.good;
-    console.log(`  Adding stuff: ${JSON.stringify(data)}`);
+  }
+
+  for (const project of config.defaultProject) {
+    console.log(`  Adding project: ${JSON.stringify(project)}`);
     // eslint-disable-next-line no-await-in-loop
-    await prisma.stuff.upsert({
-      where: { id: config.defaultData.indexOf(data) + 1 },
+    await prisma.project.upsert({
+      where: { id: config.defaultProject.indexOf(project) + 1 },
       update: {},
       create: {
-        name: data.name,
-        quantity: data.quantity,
-        owner: data.owner,
-        condition,
+        id: project.id,
+        image: project.image,
+        title: project.title,
+        descrip: project.descrip,
+        positions: project.positions,
+        members: project.members,
+        admins: project.admins,
+        duedate: project.duedate,
+        skills: project.skills.map(s => s as Skills) || [],
       },
     });
   }

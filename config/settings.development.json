@@ -1,13 +1,18 @@
 {
   "defaultAccounts": [
-    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN" },
-    { "email": "john@foo.com", "password": "changeme" }
+    { "id": 1, "email": "admin1@hawaii.edu", "username": "admin1", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min1", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 2, 3 ] },
+    { "id": 2, "email": "admin2@hawaii.edu", "username": "admin2", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min2", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 3, 4 ] },
+    { "id": 3, "email": "admin3@hawaii.edu", "username": "admin3", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min3", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 4, 5 ]  },
+    { "id": 4, "email": "admin4@hawaii.edu", "username": "admin4", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min4", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 1, 5 ]  },
+    { "id": 5, "email": "admin5@hawaii.edu", "username": "admin5", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min5", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 1, 2 ]  },
+    { "id": 6, "email": "john@hawaii.edu", "username": "john", "password": "changeme", "role": "", "firstName": "John", "lastName": "Smith", "image": "replaceme.png", "phone": "808-867-5309", "skills": [], "availability": [], "contacts": []  }
   ],
 
-  "defaultData": [
-    { "name": "Basket", "quantity": 3, "owner": "john@foo.com", "condition": "excellent" },
-    { "name": "Bicycle", "quantity": 2, "owner": "john@foo.com", "condition": "poor" },
-    { "name": "Banana", "quantity": 2, "owner": "admin@foo.com", "condition": "good" },
-    { "name": "Boogie Board", "quantity": 2, "owner": "admin@foo.com", "condition": "excellent" }
+  "defaultProject": [
+    { "id": 1, "image": "replaceme.png", "title": "Example Project", "descrip": "Not a real project, just initial filler.", "positions": [ 1 ], "members": [ 1, 2, 3, 4, 5 ], "admins": [ 1, 2, 3 ], "duedate": "2025-12-12T23:55:00Z", "skills": [ "programming" ] }
+  ],
+
+  "defaultPosition": [
+    { "id": 1, "image": "replaceme.png", "title": "Programmer", "descrip": "Write code, ????, profit.", "skills": [ "programming" ], "datestart": "2025-11-06T14:27:00Z", "dateend": "2025-12-12T23:55:00Z", "project-id": 1 }
   ]
 }
