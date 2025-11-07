@@ -16,7 +16,6 @@ body {
 #proj-title {
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   margin-left: 25px;
   height: 75px;
 }
@@ -25,4 +24,25 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+#projectPage {
+  box-sizing: border-box;
+  width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+#projectPage .badge {
+  max-width: 100px;
+}
+
+#project-members {
+  display: flex;
+  gap: 20px;
+}
+
+#project-tags {
+  display: flex;
+  gap: 20px;
 }

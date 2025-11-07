@@ -32,16 +32,16 @@ enum Skills {
   Batch
   Bootstrap
   C
-  C++
+  CPP
   CryEngine
-  C#
+  Csharp
   CSS
   FORTRAN
   GameMaker
   Godot
   HTML
   Java
-  JS/TS
+  JS
   Lisp
   Lumberyard
   MATLAB
@@ -59,6 +59,7 @@ enum Skills {
   SQL
   Swift
   Torque
+  TS
   Unity
   Unreal
   XML

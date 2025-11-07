@@ -24,6 +24,7 @@ export const ComponentIDs = {
   loginDropdownSignUp: 'loginDropdownSignUp',
   luckyMenuItem: 'luckyMenuItem',
   profilesMenuItem: 'profilesMenuItem',
+  projectInfo: 'projectInfo',
   projectsMenuItem: 'projectsMenuItem',
   signInFormEmail: 'signInFormEmail',
   signInFormPassword: 'signInFormPassword',
