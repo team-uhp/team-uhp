@@ -93,11 +93,11 @@ model Project {
 }
 
 model Position {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   image       String?
   title       String
   descrip     String
-  skills      Skills[] @default([])
+  skills      Skills[]  @default([])
   datestart   String
   dateend     String
   project     Int

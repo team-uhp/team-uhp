@@ -43,6 +43,7 @@ export const PageIDs = {
   luckyPage: 'luckyPage',
   notAuthorizedPage: 'notAuthorizedPage',
   notFoundPage: 'notFoundPage',
+  openingPage: 'openingPage',
   profilesPage: 'profilesPage',
   projectsList: 'projectsList',
   projectPage: 'projectPage',

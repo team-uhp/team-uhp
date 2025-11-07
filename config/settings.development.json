@@ -9,11 +9,11 @@
   ],
 
   "defaultProject": [
-    { "id": 1, "image": "replaceme.png", "title": "Example Project", "descrip": "Not a real project, just initial filler.", "positions": [ 1 ], "members": [ 1, 2, 3, 4, 5 ], "admins": [ 1, 2, 3 ], "duedate": "2025-12-12T23:55:00Z", "skills": [ "programming" ] },
+    { "id": 1, "image": "", "title": "Example Project", "descrip": "Not a real project, just initial filler.", "positions": [], "members": [ 1, 2, 3, 4, 5 ], "admins": [ 1, 2, 3 ], "duedate": "2025-12-12T23:55:00Z", "skills": [ "programming" ] },
     { "id": 2, "image": "replaceme.png", "title": "Example Project2", "descrip": "The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20-meter shuttle run will begin in 30 seconds. Line up at the start. The second time you fail to complete a lap before the sound, you are out. The test is a lot of fun. Good luck.", "positions": [ 1 ], "members": [ 1, 2, 3, 4, 5 ], "admins": [ 1, 2, 3 ], "duedate": "2025-12-12T23:55:00Z", "skills": [ "programming" ] }
   ],
 
   "defaultPosition": [
-    { "id": 1, "image": "replaceme.png", "title": "Programmer", "descrip": "Write code, ????, profit.", "skills": [ "programming" ], "datestart": "2025-11-06T14:27:00Z", "dateend": "2025-12-12T23:55:00Z", "project-id": 1 }
+    { "id": 1, "image": "replaceme.png", "title": "Programmer", "descrip": "Write code, ????, profit.", "skills": [ "programming" ], "datestart": "2025-11-06T14:27:00Z", "dateend": "2025-12-12T23:55:00Z", "project-id": 1, "admins": [ 1, 2, 3, 4, 5 ], "member": [] }
   ]
 }
