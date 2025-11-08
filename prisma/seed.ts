@@ -54,6 +54,26 @@ async function main() {
       },
     });
   }
+
+  for (const position of config.defaultPosition) {
+    console.log(`   Adding position: ${JSON.stringify(position)}`);
+    // eslint-disable-next-line no-await-in-loop
+    await prisma.position.upsert({
+      where: { id: config.defaultPosition.indexOf(position) + 1 },
+      update: {},
+      create: {
+        id: position.id,
+        image: position.image,
+        title: position.title,
+        descrip: position.descrip,
+        skills: position.skills.map(s => s as Skills) ?? [],
+        datestart: position.datestart,
+        dateend: position.dateend,
+        project: position['project-id'],
+        admins: position.admins,
+      },
+    });
+  }
 }
 main()
   .then(() => prisma.$disconnect())

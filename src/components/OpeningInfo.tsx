@@ -3,34 +3,40 @@ import { ComponentIDs } from '@/utilities/ids';
 import { notFound } from 'next/navigation';
 import { Badge, Container, Row } from 'react-bootstrap';
 import Image from 'next/image';
+import Link from 'next/link';
 import MemberName from './MemberName';
-import OpeningTitle from './OpeningTitle';
 
 /** Renders the information page for a Project. */
-const ProjectInfo = async ({ params }: { params: { id: string; } }) => {
-  const projectId = parseInt(params.id, 10);
-  if (Number.isNaN(projectId)) {
+const OpeningInfo = async ({ params }: { params: { id: string; } }) => {
+  const openingId = parseInt(params.id, 10);
+  if (Number.isNaN(openingId)) {
     notFound();
   }
 
-  const project = await prisma.project.findUnique({ where: { id: projectId } });
-  if (!project) {
+  const position = await prisma.position.findUnique({ where: { id: openingId } });
+  if (!position) {
     notFound();
   }
 
-  const date = new Date(project.duedate);
-  const day = date.getDate().toString().padStart(2, '0');
-  const mon = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear();
-  const imgPath = `/${project.image}`;
+  const sdate = new Date(position.datestart);
+  const edate = new Date(position.dateend);
+  const sday = sdate.getDate().toString().padStart(2, '0');
+  const smon = (sdate.getMonth() + 1).toString().padStart(2, '0');
+  const syear = sdate.getFullYear();
+  const eday = edate.getDate().toString().padStart(2, '0');
+  const emon = (edate.getMonth() + 1).toString().padStart(2, '0');
+  const eyear = edate.getFullYear();
+
+  const imgPath = `/${position.image}`;
+
   return (
     <Container id={ComponentIDs.projectInfo} className="py-3">
       <Row className="justify-content-center">
         <div style={{ height: '200px', position: 'relative' }}>
-          {project.image && project.image.trim() !== '/' ? (
+          {position.image && position.image.trim() !== '/' ? (
             <Image
               src={imgPath}
-              alt={project.title}
+              alt={position.title}
               fill
               style={{ objectFit: 'contain' }}
               sizes="75px"
@@ -53,45 +59,44 @@ const ProjectInfo = async ({ params }: { params: { id: string; } }) => {
         </div>
         <h1>
           Project:&nbsp;
-          {project.title}
+          {position.title}
         </h1>
       </Row>
       <Row>
         <h6>
-          Due date:&nbsp;
-          {day}
+          Start date:&nbsp;
+          {sday}
           /
-          {mon}
+          {smon}
           /
-          {year}
+          {syear}
+        </h6>
+        <h6>
+          End date:&nbsp;
+          {eday}
+          /
+          {emon}
+          /
+          {eyear}
         </h6>
         <br />
         <br />
         <h5>
           Description:&nbsp;
-          {project.descrip}
+          {position.descrip}
         </h5>
       </Row>
       Meet the Team:
       <Container id="project-members" fluid>
-        {project.members.map((member) => (
-          <MemberName key={`User-${member}`} userid={member} />
-        ))}
-      </Container>
-      Project Openings:
-      {project.positions}
-      <Container id="project-openings" fluid>
-        {Array.isArray(project.positions) && project.positions.length > 0 ? (
-          project.positions.map((opening) => (
-            <OpeningTitle key={`Position-${opening}`} openingid={opening} />
-          ))
+        {position.member !== null ? (
+          <MemberName key={`User-${position.member}`} userid={position.member} />
         ) : (
-          'Currently no openings available.'
+          <Link href="/">Apply for opening</Link>
         )}
       </Container>
       Looking for Skills:
       <Container id="project-tags" fluid>
-        {project.skills.map((tag) => (
+        {position.skills.map((tag) => (
           <Badge
             className="mx-1"
             key={tag}
@@ -105,4 +110,4 @@ const ProjectInfo = async ({ params }: { params: { id: string; } }) => {
   );
 };
 
-export default ProjectInfo;
+export default OpeningInfo;
