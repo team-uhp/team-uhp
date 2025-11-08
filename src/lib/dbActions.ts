@@ -1,81 +1,247 @@
 'use server';
 
-import { Stuff, Condition } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { Role, Skills } from '@prisma/client';
 import { prisma } from './prisma';
+import authOptions from './authOptions';
 
 /**
- * Adds a new stuff to the database.
- * @param stuff, an object with the following properties: name, quantity, owner, condition.
+ * Adds a new project to the database.
+ * @param project, an object with the following
+ * properties: image, title, descrip, duedate.
  */
-export async function addStuff(stuff: { name: string; quantity: number; owner: string; condition: string }) {
-  // console.log(`addStuff data: ${JSON.stringify(stuff, null, 2)}`);
-  let condition: Condition = 'good';
-  if (stuff.condition === 'poor') {
-    condition = 'poor';
-  } else if (stuff.condition === 'excellent') {
-    condition = 'excellent';
-  } else {
-    condition = 'fair';
-  }
-  await prisma.stuff.create({
+export async function addProject(project: { image: string, title: string, descrip: string, duedate: string }) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) throw new Error('No authenticated user');
+
+  const user = await prisma.user.findUnique({ where: { email: session.user.email } });
+  if (!user) throw new Error('User not found');
+
+  const userId = user.id;
+  // console.log(`addProject data: ${JSON.stringify(stuff, null, 2)}`);
+  await prisma.project.create({
     data: {
-      name: stuff.name,
-      quantity: stuff.quantity,
-      owner: stuff.owner,
-      condition,
+      image: project.image,
+      title: project.title,
+      descrip: project.descrip,
+      members: [userId],
+      admins: [userId],
+      duedate: project.duedate,
     },
   });
   // After adding, redirect to the list page
-  redirect('/list');
+  redirect('/project-list');
 }
 
 /**
- * Edits an existing stuff in the database.
- * @param stuff, an object with the following properties: id, name, quantity, owner, condition.
+ * Edits an existing project in the database.
+ * @param project, an object with the following
+ * properties: id, image, title, descrip,
+ * positions, members, admins, duedate, skills.
  */
-export async function editStuff(stuff: Stuff) {
-  // console.log(`editStuff data: ${JSON.stringify(stuff, null, 2)}`);
-  await prisma.stuff.update({
-    where: { id: stuff.id },
+export async function editProject(project: {
+  id: number,
+  image: string,
+  title: string,
+  descrip: string,
+  positions: number[],
+  members: number[],
+  admins: number[],
+  duedate: string,
+  skills: Skills[],
+}) {
+  // console.log(`editStuff data: ${JSON.stringify(project, null, 2)}`);
+  await prisma.project.update({
+    where: { id: project.id },
     data: {
-      name: stuff.name,
-      quantity: stuff.quantity,
-      owner: stuff.owner,
-      condition: stuff.condition,
+      id: project.id,
+      image: project.image,
+      title: project.title,
+      descrip: project.descrip,
+      positions: project.positions,
+      members: project.members,
+      admins: project.admins,
+      duedate: project.duedate,
+      skills: project.skills,
     },
   });
   // After updating, redirect to the list page
-  redirect('/list');
+  redirect('/project-list');
 }
 
 /**
- * Deletes an existing stuff from the database.
- * @param id, the id of the stuff to delete.
+ * Deletes an existing project from the database.
+ * @param id, the id of the project to delete.
  */
-export async function deleteStuff(id: number) {
-  // console.log(`deleteStuff id: ${id}`);
-  await prisma.stuff.delete({
+export async function deleteProject(id: number) {
+  // console.log(`deleteProject id: ${id}`);
+  await prisma.project.delete({
     where: { id },
   });
   // After deleting, redirect to the list page
-  redirect('/list');
+  redirect('/project-list');
+}
+
+/**
+ * Adds a new position to the database.
+ * @param position, an object with the following
+ * properties: image, title, descrip, skills,
+ * datestart, dateend, project.
+ */
+export async function addPosition(position: {
+  image: string,
+  title: string,
+  descrip: string,
+  skills: Skills[],
+  datestart: string,
+  dateend: string,
+  project: number
+}) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) throw new Error('No authenticated user');
+
+  const user = await prisma.user.findUnique({ where: { email: session.user.email } });
+  if (!user) throw new Error('User not found');
+
+  const userId = user.id;
+  // console.log(`addPosition data: ${JSON.stringify(stuff, null, 2)}`);
+  await prisma.position.create({
+    data: {
+      image: position.image,
+      title: position.title,
+      descrip: position.descrip,
+      skills: position.skills,
+      datestart: position.datestart,
+      dateend: position.dateend,
+      admins: [userId],
+      project: position.project,
+    },
+  });
+  // After adding, redirect to the list page
+  redirect('/project-list');
+}
+
+/**
+ * Edits an existing project in the database.
+ * @param position, an object with the following
+ * properties: id, image, title, descrip,
+ * positions, members, admins, duedate, skills.
+ */
+export async function editPosition(position: {
+  id: number,
+  image: string,
+  title: string,
+  descrip: string,
+  skills: Skills[],
+  datestart: string,
+  dateend: string,
+  project: number,
+  admins: number[],
+  member: number,
+}) {
+  // console.log(`editStuff data: ${JSON.stringify(project, null, 2)}`);
+  await prisma.position.update({
+    where: { id: position.id },
+    data: {
+      id: position.id,
+      image: position.image,
+      title: position.title,
+      descrip: position.descrip,
+      skills: position.skills,
+      datestart: position.datestart,
+      dateend: position.dateend,
+      project: position.project,
+      admins: position.admins,
+      member: position.member,
+    },
+  });
+  // After updating, redirect to the list page
+  redirect('/project-list');
+}
+
+/**
+ * Deletes an existing position from the database.
+ * @param id, the id of the project to delete.
+ */
+export async function deletePosition(id: number) {
+  // console.log(`deleteProject id: ${id}`);
+  await prisma.position.delete({
+    where: { id },
+  });
+  // After deleting, redirect to the list page
+  redirect('/project-list');
 }
 
 /**
  * Creates a new user in the database.
- * @param credentials, an object with the following properties: email, password.
+ * @param credentials, an object with the following
+ * properties: email, username, password, firstName,
+ * lastName, image, phone.
  */
-export async function createUser(credentials: { email: string; password: string }) {
+export async function createUser(credentials: {
+  email: string;
+  username:string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  image: string;
+  phone: string
+}) {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
   const password = await hash(credentials.password, 10);
   await prisma.user.create({
     data: {
       email: credentials.email,
+      username: credentials.username,
       password,
+      firstName: credentials.firstName,
+      lastName: credentials.lastName,
+      image: credentials.image,
+      phone: credentials.phone,
     },
   });
+}
+
+/**
+ * Edits a user in the database.
+ * @param credentials, an object with the following properties: email, password.
+ */
+export async function editUser(credentials: {
+  id: number;
+  email: string;
+  username:string;
+  password: string;
+  role: Role;
+  firstName: string;
+  lastName: string;
+  image: string;
+  phone: string;
+  skills: Skills[];
+  availability: number[];
+  contacts: number[]
+}) {
+  // console.log(`editStuff data: ${JSON.stringify(project, null, 2)}`);
+  await prisma.user.update({
+    where: { id: credentials.id },
+    data: {
+      id: credentials.id,
+      email: credentials.email,
+      username: credentials.username,
+      password: credentials.password,
+      role: credentials.role,
+      firstName: credentials.firstName,
+      lastName: credentials.lastName,
+      image: credentials.image,
+      phone: credentials.phone,
+      skills: credentials.skills,
+      availability: credentials.availability,
+      contacts: credentials.contacts,
+    },
+  });
+  // After updating, redirect to the list page
+  redirect('/user-profile');
 }
 
 /**
