@@ -7,13 +7,12 @@ import Link from 'next/link';
 import MemberName from './MemberName';
 
 /** Renders the information page for a Project. */
-const OpeningInfo = async ({ params }: { params: { id: string; } }) => {
-  const openingId = parseInt(params.id, 10);
-  if (Number.isNaN(openingId)) {
+const OpeningInfo = async ({ params }: { params: { id: number; } }) => {
+  if (Number.isNaN(Number(params.id))) {
     notFound();
   }
 
-  const position = await prisma.position.findUnique({ where: { id: openingId } });
+  const position = await prisma.position.findUnique({ where: { id: Number(params.id) } });
   if (!position) {
     notFound();
   }
@@ -86,7 +85,7 @@ const OpeningInfo = async ({ params }: { params: { id: string; } }) => {
           {position.descrip}
         </h5>
       </Row>
-      Meet the Team:
+      Position Opening:
       <Container id="project-members" fluid>
         {position.member !== null ? (
           <MemberName key={`User-${position.member}`} userid={position.member} />

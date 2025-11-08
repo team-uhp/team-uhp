@@ -1,3 +1,5 @@
+@import 'react-day-picker/dist/style.css';
+
 html,
 body {
   --bs-light-rgb: 236, 236, 236;

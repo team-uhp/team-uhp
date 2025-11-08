@@ -5,6 +5,7 @@ import { loggedInProtectedPage } from '@/lib/page-protection';
 import authOptions from '@/lib/authOptions';
 import ProjectCard from '@/components/ProjectCard';
 import { PageIDs } from '@/utilities/ids';
+import Link from 'next/link';
 
 /** Render a list of projects for the logged in user. */
 const ProjectListPage = async () => {
@@ -23,6 +24,12 @@ const ProjectListPage = async () => {
       <Row>
         <Col>
           <h2 className="text-center">Projects List</h2>
+          <Link
+            href="/add-project/"
+          >
+            Add Project
+          </Link>
+          <br />
           <br />
           <Row className="g-4">
             {projects.map((project) => (

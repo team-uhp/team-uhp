@@ -10,7 +10,7 @@ import { Container, Row } from 'react-bootstrap';
  * Renders project page.
  * @param params is the project to display.
  */
-const ProjectPage = async ({ params }: { params: { id: string; } }) => {
+const ProjectPage = async ({ params }: { params: { id: number; } }) => {
   // Protect the page, only logged in users can access it.
   const session = await getServerSession(authOptions);
   loggedInProtectedPage(
