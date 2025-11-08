@@ -12,7 +12,14 @@ import authOptions from './authOptions';
  * @param project, an object with the following
  * properties: image, title, descrip, duedate.
  */
-export async function addProject(project: { image: string, title: string, descrip: string, duedate: string }) {
+export async function addProject(project: {
+  image: string,
+  title: string,
+  descrip: string,
+  duedate: string,
+  members: number[],
+  admins: number[]
+}) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) throw new Error('No authenticated user');
 
@@ -28,7 +35,7 @@ export async function addProject(project: { image: string, title: string, descri
       descrip: project.descrip,
       members: [userId],
       admins: [userId],
-      duedate: project.duedate,
+      duedate: new Date(project.duedate).toISOString(),
     },
   });
   // After adding, redirect to the list page

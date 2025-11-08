@@ -49,9 +49,9 @@ const ProjectCard = ({ project }: { project: Project }) => {
                   <h1>{project.title}</h1>
                   <h6>
                     Due date:&nbsp;
-                    {day}
-                    /
                     {mon}
+                    /
+                    {day}
                     /
                     {year}
                   </h6>

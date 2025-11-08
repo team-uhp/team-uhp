@@ -39,10 +39,12 @@ export const EditUserSchema = Yup.object({
 });
 
 export const AddProjectSchema = Yup.object({
-  image: Yup.string(),
+  image: Yup.string().optional(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  duedate: Yup.string().required(),
+  duedate: Yup.string().optional(),
+  members: new Yup.ArraySchema().optional(),
+  admins: new Yup.ArraySchema().optional(),
 });
 
 export const EditProjectSchema = Yup.object({

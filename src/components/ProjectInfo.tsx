@@ -7,13 +7,12 @@ import MemberName from './MemberName';
 import OpeningTitle from './OpeningTitle';
 
 /** Renders the information page for a Project. */
-const ProjectInfo = async ({ params }: { params: { id: string; } }) => {
-  const projectId = parseInt(params.id, 10);
-  if (Number.isNaN(projectId)) {
+const ProjectInfo = async ({ params }: { params: { id: number } }) => {
+  if (Number.isNaN(Number(params.id))) {
     notFound();
   }
 
-  const project = await prisma.project.findUnique({ where: { id: projectId } });
+  const project = await prisma.project.findUnique({ where: { id: Number(params.id) } });
   if (!project) {
     notFound();
   }
