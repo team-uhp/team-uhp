@@ -12,7 +12,6 @@ import { AddProjectSchema } from '@/lib/validationSchemas';
 import { useState, useEffect } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DayPicker } from 'react-day-picker';
-import Link from 'next/link';
 
 type ProjectFormValues = {
   image?: string;
@@ -88,17 +87,12 @@ const AddProjectForm: React.FC = () => {
   }
 
   return (
-    <Container className="py-3" fluid>
+    <Container className="py-3">
       <Row className="justify-content-center">
         <Col>
           <Col className="text-center">
             <h2>Add Project</h2>
           </Col>
-          <Link
-            href="/project-list/"
-          >
-            Back to Project List
-          </Link>
           <Card>
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
@@ -120,7 +114,6 @@ const AddProjectForm: React.FC = () => {
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
-                <br />
                 <Form.Group>
                   <Form.Label>Due Date</Form.Label>
                   <DayPicker

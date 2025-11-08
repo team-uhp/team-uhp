@@ -14,6 +14,6 @@
   ],
 
   "defaultPosition": [
-    { "id": 1, "image": "replaceme.png", "title": "Programmer", "descrip": "Write code, ????, profit.", "skills": [ "programming" ], "datestart": "2025-11-06T14:27:00Z", "dateend": "2025-12-12T23:55:00Z", "project-id": 2, "admins": [ 1, 2, 3, 4, 5 ], "member": [] }
+    { "id": 1, "image": "replaceme.png", "title": "Programmer", "descrip": "Write code, ????, profit.", "skills": [ "programming" ], "datestart": "2025-11-06T14:27:00Z", "dateend": "2025-12-12T23:55:00Z", "project-id": 1, "admins": [ 1, 2, 3, 4, 5 ], "member": [] }
   ]
 }
