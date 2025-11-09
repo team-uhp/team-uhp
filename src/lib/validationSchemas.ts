@@ -64,8 +64,8 @@ export const AddPositionSchema = Yup.object({
   title: Yup.string().required(),
   descrip: Yup.string().required(),
   skills: new Yup.ArraySchema(),
-  datestart: Yup.string().required(),
-  dateend: Yup.string().required(),
+  datestart: Yup.string().optional(),
+  dateend: Yup.string().optional(),
   project: Yup.number().required(),
   admins: new Yup.ArraySchema().required(),
 });
