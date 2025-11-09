@@ -1,6 +1,6 @@
 html,
 body {
-  background: url('/UHManoaTemplateImage.jpg') no-repeat center center fixed;
+  background: url('/UhManoaImage2.jpg') no-repeat center;
   background-size: cover;
   --bs-light-rgb: 236, 236, 236;
   box-sizing: border-box;
@@ -36,7 +36,19 @@ body {
   to { opacity: 1; }
 }
 
-#TopBar {
-height: 200px;
-color:rgb(14, 58, 17)
+#Topbar {
+  height: 500px;             
+  background-color: rgb(14, 58, 17); 
+  color: white;              
+  display: flex;            
+  align-items: center;
+  width: 1000;
+}
+
+#Footer {
+  height: 200px;             
+  background-color: rgb(14, 58, 17); 
+  color: white;              
+  display: flex;            
+  align-items: center;
 }

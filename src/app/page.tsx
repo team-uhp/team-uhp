@@ -1,5 +1,4 @@
 import { Col, Container, Row } from 'react-bootstrap';
-import Header from '@/components/Header';
 
 /** The Home page. */
 const Home = () => (
