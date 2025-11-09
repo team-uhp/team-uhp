@@ -1,0 +1,49 @@
+html,
+body {
+  --bs-light-rgb: 236, 236, 236;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+.wrapper {
+  box-sizing: border-box;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+html,
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+body {
+    background: url('/wod-banyans-background.png') no-repeat center center fixed;
+}
+
+#topMenu {
+    background-color: #fafafa;
+    color: black;
+    padding-bottom: 15px;
+}
+
+#centerText {
+    color: white;
+    height: 500px;
+}
+
+#bottomMenu {
+    background-color: #1c1c1c;
+    color: #fafafa;
+}
+
+#bottomMenu input {
+    margin: 5px;
+}
+
+.nav {
+    --bs-nav-link-color: black;
+}
+
