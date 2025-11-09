@@ -194,7 +194,7 @@ export async function createUser(credentials: {
   firstName: string;
   lastName: string;
   image: string;
-  phone: string
+  phone: string;
 }) {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
   const password = await hash(credentials.password, 10);
@@ -223,11 +223,11 @@ export async function editUser(credentials: {
   role: Role;
   firstName: string;
   lastName: string;
-  image: string;
-  phone: string;
+  image: string | null;
+  phone: string | null;
   skills: Skills[];
   availability: number[];
-  contacts: number[]
+  contacts: number[];
 }) {
   // console.log(`editStuff data: ${JSON.stringify(project, null, 2)}`);
   await prisma.user.update({

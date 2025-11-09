@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Role } from '@prisma/client';
 
 export const AddStuffSchema = Yup.object({
   name: Yup.string().required(),
@@ -28,11 +29,11 @@ export const EditUserSchema = Yup.object({
   email: Yup.string().required(),
   username: Yup.string().required(),
   password: Yup.string().required(),
-  role: Yup.string().required(),
+  role: Yup.mixed<Role>().oneOf(Object.values(Role)).required(),
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  image: Yup.string(),
-  phone: Yup.string(),
+  image: Yup.string().nullable().default(null),
+  phone: Yup.string().nullable().default(null),
   skills: new Yup.ArraySchema().required(),
   availability: new Yup.ArraySchema().required(),
   contacts: new Yup.ArraySchema().required(),
