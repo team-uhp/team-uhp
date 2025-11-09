@@ -114,7 +114,7 @@ export async function addPosition(position: {
 
   const userId = user.id;
   // console.log(`addPosition data: ${JSON.stringify(stuff, null, 2)}`);
-  await prisma.position.create({
+  const posit = await prisma.position.create({
     data: {
       image: position.image,
       title: position.title,
@@ -124,6 +124,15 @@ export async function addPosition(position: {
       dateend: position.dateend,
       admins: [userId],
       project: position.project,
+    },
+  });
+
+  await prisma.project.update({
+    where: { id: position.project },
+    data: {
+      positions: {
+        push: posit.id,
+      },
     },
   });
   // After adding, redirect to the list page
