@@ -196,28 +196,27 @@ export async function deletePosition(id: number) {
  * properties: email, username, password, firstName,
  * lastName, image, phone.
  */
-export async function createUser(credentials: {
+export async function createUser(data: {
   email: string;
-  username:string;
   password: string;
-  firstName: string;
-  lastName: string;
-  image: string;
-  phone: string
 }) {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
-  const password = await hash(credentials.password, 10);
-  await prisma.user.create({
+  const { email, password } = data;
+  const hashedPassword = await hash(password, 10);
+  const user = await prisma.user.create({
     data: {
-      email: credentials.email,
-      username: credentials.username,
-      password,
-      firstName: credentials.firstName,
-      lastName: credentials.lastName,
-      image: credentials.image,
-      phone: credentials.phone,
+      email,
+      password: hashedPassword,
+      role: 'USER',
+      username: email.split('@')[0],
+      firstName: 'Change',
+      lastName: 'Me',
+      image: '',
+      phone: '',
     },
   });
+
+  return user;
 }
 
 /**
