@@ -1,33 +1,42 @@
 'use client';
 
 import React, { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { Button, Form, Card } from 'react-bootstrap';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
 
-    const result = await signIn('credentials', {
-      redirect: false, // prevent automatic redirect so we can handle errors
-      email,
-      password,
-      callbackUrl,
-    });
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
 
-    if (result?.error) {
-      setError('Invalid email or password');
-    } else {
-      router.push(callbackUrl);
+    try {
+      const res = await fetch('/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (res.ok) {
+        setSuccess(true);
+        setTimeout(() => router.push('/signin-page'), 1500);
+      } else {
+        const data = await res.json();
+        setError(data.message || 'Sign up failed.');
+      }
+    } catch (err) {
+      setError('An error occurred while creating your account.');
     }
   };
 
@@ -59,7 +68,7 @@ export default function SignInPage() {
               marginBottom: '1.5rem',
             }}
           >
-            UH Mānoa Sign In
+            UH Mānoa Sign Up
           </h1>
 
           <Form className="text-start" onSubmit={handleSubmit}>
@@ -73,10 +82,11 @@ export default function SignInPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 style={{ borderColor: '#024731' }}
+                required
               />
             </Form.Group>
 
-            <Form.Group className="mb-4">
+            <Form.Group className="mb-3">
               <Form.Label style={{ color: '#024731', fontWeight: 600 }}>
                 Password
               </Form.Label>
@@ -86,12 +96,32 @@ export default function SignInPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{ borderColor: '#024731' }}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label style={{ color: '#024731', fontWeight: 600 }}>
+                Confirm Password
+              </Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Re-enter password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                style={{ borderColor: '#024731' }}
+                required
               />
             </Form.Group>
 
             {error && (
               <p style={{ color: 'red', textAlign: 'center', marginBottom: '1rem' }}>
                 {error}
+              </p>
+            )}
+            {success && (
+              <p style={{ color: 'green', textAlign: 'center', marginBottom: '1rem' }}>
+                Account created! Redirecting…
               </p>
             )}
 
@@ -107,7 +137,7 @@ export default function SignInPage() {
               onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#035a40')}
               onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#024731')}
             >
-              Sign In
+              Sign Up
             </Button>
           </Form>
 
@@ -117,14 +147,8 @@ export default function SignInPage() {
               color: '#024731',
             }}
           >
-            <a href="/signup-page" style={{ color: '#024731', fontWeight: 600 }}>
-              Create account
-            </a>
-            {' '}
-            |
-            {' '}
-            <a href="/forgot-password" style={{ color: '#F8C100', fontWeight: 600 }}>
-              Forgot password?
+            <a href="/signin-page" style={{ color: '#F8C100', fontWeight: 600 }}>
+              Already have an account? Sign In
             </a>
           </div>
         </Card.Body>

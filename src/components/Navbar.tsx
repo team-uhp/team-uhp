@@ -56,7 +56,7 @@ const NavBar: React.FC = () => {
                   <PersonFill />
                   Sign in
                 </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-sign-up" href="/auth/signup">
+                <NavDropdown.Item id="login-dropdown-sign-up" href="/signup-page">
                   <PersonPlusFill />
                   Sign up
                 </NavDropdown.Item>
