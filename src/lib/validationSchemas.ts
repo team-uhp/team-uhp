@@ -1,20 +1,5 @@
 import * as Yup from 'yup';
 
-export const AddStuffSchema = Yup.object({
-  name: Yup.string().required(),
-  quantity: Yup.number().positive().required(),
-  condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
-  owner: Yup.string().required(),
-});
-
-export const EditStuffSchema = Yup.object({
-  id: Yup.number().required(),
-  name: Yup.string().required(),
-  quantity: Yup.number().positive().required(),
-  condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
-  owner: Yup.string().required(),
-});
-
 export const AddUserSchema = Yup.object({
   email: Yup.string().required(),
   username: Yup.string().required(),
@@ -63,11 +48,11 @@ export const AddPositionSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  skills: new Yup.ArraySchema(),
+  skills: Yup.array().of(Yup.string()),
   datestart: Yup.string().optional(),
   dateend: Yup.string().optional(),
   project: Yup.number().required(),
-  admins: new Yup.ArraySchema().required(),
+  admins: Yup.array().of(Yup.number()).required(),
 });
 
 export const EditPositionSchema = Yup.object({
@@ -75,10 +60,10 @@ export const EditPositionSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  skills: new Yup.ArraySchema(),
+  skills: Yup.array().of(Yup.string()),
   datestart: Yup.string().required(),
   dateend: Yup.string().required(),
   project: Yup.number().required(),
-  admins: new Yup.ArraySchema().required(),
-  member: Yup.number(),
+  admins: Yup.array().of(Yup.string()).required(),
+  member: Yup.number().optional().nullable(),
 });

@@ -11,7 +11,7 @@ import { Container, Row } from 'react-bootstrap';
  * Renders project page.
  * @param params is the project to display.
  */
-const ProjectPage = async ({ params }: { params: { id: string; } }) => {
+const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => {
   // Protect the page, only logged in users can access it.
   const session = await getServerSession(authOptions) as {
     user: { email: string; id: string; randomKey: string };
@@ -19,10 +19,9 @@ const ProjectPage = async ({ params }: { params: { id: string; } }) => {
   loggedInProtectedPage(session);
 
   const userId = Number(session?.user?.id);
-  const project = await prisma.project.findUnique({ where: { id: Number(params.id) } });
+  const project = await prisma.project.findUnique({ where: { id: Number((await params).id) } });
 
   if (project && session?.user && project.admins.includes(userId)) {
-  // console.log(projects);
     return (
       <Container id={PageIDs.projectPage} fluid className="py-3">
         <Link href="/project-list">Back to List of Projects</Link>
@@ -30,12 +29,12 @@ const ProjectPage = async ({ params }: { params: { id: string; } }) => {
           <ProjectInfo
             key={`Project-${params}`}
             params={{
-              id: Number(params.id),
+              id: Number((await params).id),
             }}
           />
         </Row>
         <Link
-          href={`/add-opening/${params.id}`}
+          href={`/add-opening/${(await params).id}`}
           key={`Project-${params}`}
         >
           Recruit for Opening
@@ -50,7 +49,7 @@ const ProjectPage = async ({ params }: { params: { id: string; } }) => {
         <ProjectInfo
           key={`Project-${params}`}
           params={{
-            id: Number(params.id),
+            id: Number((await params).id),
           }}
         />
       </Row>

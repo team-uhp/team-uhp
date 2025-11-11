@@ -74,7 +74,10 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
       Meet the Team:
       <Container id="project-members" fluid>
         {project.members.map((member) => (
-          <MemberName key={`User-${member}`} userid={member} />
+          <MemberName
+            key={`User-${member}`}
+            userid={member}
+          />
         ))}
       </Container>
       Project Openings:
