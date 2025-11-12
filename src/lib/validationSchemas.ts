@@ -65,5 +65,5 @@ export const EditPositionSchema = Yup.object({
   dateend: Yup.string().required(),
   project: Yup.number().required(),
   admins: Yup.array().of(Yup.string()).required(),
-  member: Yup.number().optional().nullable(),
+  member: Yup.number().optional(),
 });
