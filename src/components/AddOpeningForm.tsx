@@ -1,32 +1,47 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+/* eslint-disable react/prop-types */
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
-import { redirect } from 'next/navigation';
-import { addProject } from '@/lib/dbActions';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import { AddProjectSchema } from '@/lib/validationSchemas';
+import { addPosition } from '@/lib/dbActions';
+import { AddPositionSchema } from '@/lib/validationSchemas';
 import { useState, useEffect } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { DayPicker } from 'react-day-picker';
+import { DateRange, DayPicker } from 'react-day-picker';
 import Link from 'next/link';
+import { Skills } from '@prisma/client';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
-type ProjectFormValues = {
+type PositionFormValues = {
   image?: string;
   title: string;
   descrip: string;
-  duedate?: string;
-  members?: number[] | null;
-  admins?: number[] | null;
+  skills: Skills[];
+  datestart?: string;
+  dateend?: string;
+  project: number;
+  admins: number[];
 };
 
-const AddProjectForm: React.FC = () => {
-  const { status } = useSession();
-  const [userId] = useState<number>(0);
-  const [selected, setSelected] = useState<Date | undefined>(undefined);
+type AddOpeningFormProps = {
+  projectId: number;
+};
+
+const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [userId, setUserId] = useState<number>(0);
+  const [selected, setSelected] = useState<DateRange | undefined>(undefined);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (session?.user && 'id' in session.user) {
+      setUserId(session.user.id as number);
+    }
+  }, [session]);
 
   const {
     register,
@@ -34,65 +49,71 @@ const AddProjectForm: React.FC = () => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<ProjectFormValues>({
-    resolver: yupResolver(AddProjectSchema),
+  } = useForm<PositionFormValues>({
+    resolver: yupResolver(AddPositionSchema) as any,
     defaultValues: {
       title: '',
       descrip: '',
-      duedate: new Date().toISOString(),
-      members: [],
+      datestart: new Date().toISOString(),
+      dateend: new Date().toISOString(),
       admins: [],
       image: '',
+      skills: [],
+      project: projectId,
     },
   });
 
   useEffect(() => {
-    if (selected) {
-      setValue('duedate', selected.toISOString());
+    if (selected?.from) {
+      setValue('datestart', selected.from.toISOString());
+    }
+    if (selected?.to) {
+      setValue('dateend', selected.to.toISOString());
     }
   }, [selected, setValue]);
 
   useEffect(() => {
     if (userId > 0) {
       setValue('admins', [userId]);
-      setValue('members', [userId]);
     }
   }, [userId, setValue]);
 
-  const onSubmit = async (data: ProjectFormValues) => {
-    if (!selected) {
+  const onSubmit = async (data: PositionFormValues) => {
+    if (!selected?.from) {
       swal('Error', 'Please select a due date', 'error');
       return;
     }
-    const projectData = {
+
+    setIsSubmitting(true);
+
+    const openingData = {
       image: data.image || '',
       title: data.title,
       descrip: data.descrip,
-      duedate: selected.toISOString(),
-      members: [userId],
-      admins: [userId],
+      skills: data.skills,
+      datestart: selected.from.toISOString(),
+      dateend: selected.to?.toISOString() || selected.from.toISOString(),
+      project: projectId,
     };
-    await addProject(projectData);
-    swal('Success', 'Your item has been added', 'success', {
+
+    console.log('Submitting opening data:', openingData);
+
+    await addPosition(openingData);
+    await swal('Success', 'Your item has been added', 'success', {
       timer: 2000,
     });
     reset();
     setSelected(undefined);
+    router.push('/project-list');
+    setIsSubmitting(false);
   };
-
-  if (status === 'loading') {
-    return <LoadingSpinner />;
-  }
-  if (status === 'unauthenticated') {
-    redirect('/auth/signin');
-  }
 
   return (
     <Container className="py-3" fluid>
       <Row className="justify-content-center">
         <Col>
           <Col className="text-center">
-            <h2>Add Project</h2>
+            <h2>Recruit for Opening</h2>
           </Col>
           <Link
             href="/project-list/"
@@ -120,28 +141,27 @@ const AddProjectForm: React.FC = () => {
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
-                <br />
                 <Form.Group>
-                  <Form.Label>Due Date</Form.Label>
                   <DayPicker
-                    mode="single"
+                    mode="range"
                     required
                     disabled={{ before: new Date() }}
                     selected={selected}
                     onSelect={setSelected}
                     footer={
-                      selected ? `Selected: ${selected.toLocaleDateString()}` : 'Pick a day.'
+                      // eslint-disable-next-line max-len
+                      selected?.from ? `Selected: ${selected.from.toLocaleDateString()}${selected.to ? ` - ${selected.to.toLocaleDateString()}` : ''}` : 'Pick a day.'
                     }
                   />
                 </Form.Group>
-                {errors.duedate && (
-                <div className="text-danger mt-2">{errors.duedate.message}</div>
+                {errors.datestart && (
+                <div className="text-danger mt-2">{errors.datestart.message}</div>
                 )}
                 <Form.Group className="form-group">
                   <Row className="pt-3">
                     <Col>
-                      <Button type="submit" variant="primary">
-                        Submit
+                      <Button type="submit" variant="primary" disabled={isSubmitting}>
+                        {isSubmitting ? 'Submitting...' : 'Submit'}
                       </Button>
                     </Col>
                     <Col>
@@ -160,4 +180,4 @@ const AddProjectForm: React.FC = () => {
   );
 };
 
-export default AddProjectForm;
+export default AddOpeningForm;

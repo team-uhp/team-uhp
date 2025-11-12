@@ -114,7 +114,7 @@ export async function addPosition(position: {
 
   const userId = user.id;
   // console.log(`addPosition data: ${JSON.stringify(stuff, null, 2)}`);
-  await prisma.position.create({
+  const posit = await prisma.position.create({
     data: {
       image: position.image,
       title: position.title,
@@ -124,6 +124,15 @@ export async function addPosition(position: {
       dateend: position.dateend,
       admins: [userId],
       project: position.project,
+    },
+  });
+
+  await prisma.project.update({
+    where: { id: position.project },
+    data: {
+      positions: {
+        push: posit.id,
+      },
     },
   });
   // After adding, redirect to the list page
@@ -187,9 +196,8 @@ export async function deletePosition(id: number) {
  * properties: email, username, password, firstName,
  * lastName, image, phone.
  */
-export async function createUser(credentials: {
+export async function createUser(data: {
   email: string;
-  username:string;
   password: string;
   firstName: string;
   lastName: string;
@@ -197,18 +205,22 @@ export async function createUser(credentials: {
   phone: string;
 }) {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
-  const password = await hash(credentials.password, 10);
-  await prisma.user.create({
+  const { email, password } = data;
+  const hashedPassword = await hash(password, 10);
+  const user = await prisma.user.create({
     data: {
-      email: credentials.email,
-      username: credentials.username,
-      password,
-      firstName: credentials.firstName,
-      lastName: credentials.lastName,
-      image: credentials.image,
-      phone: credentials.phone,
+      email,
+      password: hashedPassword,
+      role: 'USER',
+      username: email.split('@')[0],
+      firstName: 'Change',
+      lastName: 'Me',
+      image: '',
+      phone: '',
     },
   });
+
+  return user;
 }
 
 /**

@@ -23,9 +23,6 @@ const NavBar: React.FC = () => {
           <Nav className="me-auto justify-content-start">
             {currentUser
               ? [
-                  <Nav.Link id="add-stuff-nav" href="/add" key="add" active={pathName === '/add'}>
-                    Add Stuff
-                  </Nav.Link>,
                   <Nav.Link id="list-project-nav" href="/project-list" key="list" active={pathName === '/project-list'}>
                     Projects List
                   </Nav.Link>,
@@ -49,7 +46,7 @@ const NavBar: React.FC = () => {
                   <BoxArrowRight />
                   Profile
                 </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
+                <NavDropdown.Item id="login-dropdown-sign-out" href="/signout-page">
                   <BoxArrowRight />
                   Sign Out
                 </NavDropdown.Item>
@@ -60,11 +57,11 @@ const NavBar: React.FC = () => {
               </NavDropdown>
             ) : (
               <NavDropdown id="login-dropdown" title="Login">
-                <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">
+                <NavDropdown.Item id="login-dropdown-sign-in" href="/signin-page">
                   <PersonFill />
                   Sign in
                 </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-sign-up" href="/auth/signup">
+                <NavDropdown.Item id="login-dropdown-sign-up" href="/signup-page">
                   <PersonPlusFill />
                   Sign up
                 </NavDropdown.Item>
