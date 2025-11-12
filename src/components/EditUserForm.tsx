@@ -1,16 +1,24 @@
+/* eslint-disable max-len */
+
 'use client';
 
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { User } from '@prisma/client';
+import { User, Skills } from '@prisma/client';
 import { EditUserSchema } from '@/lib/validationSchemas';
 import { editUser } from '@/lib/dbActions';
+import { useState } from 'react';
+import TagsContainer from './TagsContainer';
 
 const onSubmit = async (data: User) => {
-  // console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
-  await editUser(data);
+  console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
+  const parsedData = data;
+  parsedData.availability = parsedData.availability.map((slot) => Number(slot));
+  parsedData.contacts = parsedData.contacts.map((contact) => Number(contact));
+  parsedData.skills = parsedData.skills.map((skill) => skill);
+  await editUser(parsedData);
   swal('Success', 'Your item has been updated', 'success', {
     timer: 2000,
   });
@@ -25,7 +33,21 @@ const EditUserForm = ({ user }: { user: User }) => {
   } = useForm<User>({
     resolver: yupResolver(EditUserSchema),
   });
-  // console.log(stuff);
+
+  const [tags, setTags] = useState<string[]>(user.skills); // State to store the tags
+  console.log(tags);
+
+  // Function to add a new tag
+  const addTag = (newTag: any) => {
+    if (newTag && !tags.includes(newTag)) { // Prevent adding empty or duplicate tags
+      setTags([...tags, newTag]);
+    }
+  };
+
+  // Function to remove a tag
+  const removeTag = (tagToRemove: any) => {
+    setTags(() => tags.filter(tag => tag !== tagToRemove));
+  };
 
   return (
     <Container className="py-3">
@@ -111,12 +133,37 @@ const EditUserForm = ({ user }: { user: User }) => {
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Skills</Form.Label>
-                  <input
-                    type="text"
-                    {...register('skills')}
-                    defaultValue={user.skills}
-                    className={`form-control ${errors.skills ? 'is-invalid' : ''}`}
-                  />
+                  <Row>
+                    <Col>
+                      <Form.Select>
+                        <option key="default" value="">Select a skill to add</option>
+                        {
+                          Object.values(Skills).map((skill) => {
+                            if (!tags.includes(skill)) {
+                              return <option key={skill} value={skill}>{skill}</option>;
+                            }
+                            return null;
+                          })
+                        }
+                      </Form.Select>
+                      {/* <input
+                        type="text"
+                        {...register('skills')}
+                        onKeyDown={(key) => {
+                          if (key.key === 'Enter') {
+                            addTag(key.currentTarget.value.trim());
+                            // eslint-disable-next-line no-param-reassign
+                            key.currentTarget.value = ''; // Clear the input field
+                          }
+                        }}
+                        className={`form-control ${errors.skills ? 'is-invalid' : ''}`}
+                      /> */}
+                      <Button type="button" onClick={() => { addTag('NewSkill'); }} variant="secondary" className="mt-2">
+                        Add
+                      </Button>
+                    </Col>
+                  </Row>
+                  <TagsContainer tags={user.skills.map((skill) => skill)} removeTag={removeTag} />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
                 </Form.Group>
                 <Form.Group>
@@ -124,9 +171,16 @@ const EditUserForm = ({ user }: { user: User }) => {
                   <input
                     type="text"
                     {...register('availability')}
-                    defaultValue={user.availability.map((slot) => slot.toString()).join(', ')}
+                    onKeyDown={(key) => {
+                      if (key.key === 'Enter') {
+                        addTag(key.currentTarget.value.trim());
+                        // eslint-disable-next-line no-param-reassign
+                        key.currentTarget.value = ''; // Clear the input field
+                      }
+                    }}
                     className={`form-control ${errors.availability ? 'is-invalid' : ''}`}
                   />
+                  <TagsContainer tags={user.availability.map((slot) => slot.toString())} removeTag={removeTag} />
                   <div className="invalid-feedback">{errors.availability?.message}</div>
                 </Form.Group>
                 <Form.Group>
