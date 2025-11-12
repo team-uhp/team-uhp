@@ -56,7 +56,7 @@ const UserProfile = async ({ user }: { user: User }) => {
         </Row>
       </Col>
       <Col>
-        <Button variant="primary" href={`/edit-user/${user.id}`}>Edit Profile</Button>
+        <Button variant="primary" href={`/edit-profile/${user.id}`}>Edit Profile</Button>
       </Col>
     </Row>
   );
