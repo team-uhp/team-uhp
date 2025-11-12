@@ -10,8 +10,6 @@ import { BoxArrowInRight, Lock, Person, PersonPlusFill } from 'react-bootstrap-i
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
   const currentUser = session?.user?.email;
-  const userWithRole = session?.user as { email: string; randomKey: string };
-  const role = userWithRole?.randomKey;
   const pathName = usePathname();
   const user = session as { user: { email: string; id: string; randomKey: string } } | null;
   return (
@@ -23,35 +21,28 @@ const NavBar: React.FC = () => {
           <Nav className="me-auto justify-content-start">
             {currentUser
               ? [
-                  <Nav.Link id="home-page-nav" href="/home-page" key="list" active={pathName === '/home-page'}>
+                  <Nav.Link id="home-page-nav" href="/home-page" key="home" active={pathName === '/home-page'}>
                     Home
                   </Nav.Link>,
                   <Nav.Link id="list-project-nav" href="/project-list" key="list" active={pathName === '/project-list'}>
                     Projects List
                   </Nav.Link>,
-                  <Nav.Link id="contacts-nav" href="/contacts" key="list" active={pathName === '/contacts'}>
+                  <Nav.Link id="contacts-nav" href="/contacts" key="contacts" active={pathName === '/contacts'}>
                     Contacts
                   </Nav.Link>,
                   <Nav.Link
                     id="helpful-tools-nav"
                     href="/helpful-tools"
-                    key="list"
+                    key="tools"
                     active={pathName === '/helpful-tools'}
                   >
                     Helpful Tools
                   </Nav.Link>,
-                  <Nav.Link id="sign-out-nav" href="/signout-page" key="list" active={pathName === '/signout-page'}>
+                  <Nav.Link id="sign-out-nav" href="/signout-page" key="signout" active={pathName === '/signout-page'}>
                     Sign Out
                   </Nav.Link>,
                 ]
               : ''}
-            {currentUser && role === 'ADMIN' ? (
-              <Nav.Link id="admin-stuff-nav" href="/admin" key="admin" active={pathName === '/admin'}>
-                Admin
-              </Nav.Link>
-            ) : (
-              ''
-            )}
           </Nav>
           <Nav>
             {session ? (
