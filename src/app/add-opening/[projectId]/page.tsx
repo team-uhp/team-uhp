@@ -3,8 +3,9 @@ import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import AddOpeningForm from '@/components/AddOpeningForm';
 
-const AddOpening = async ({ params }: { params: { projectId: string } }) => {
-  const projectId = Number(params.projectId);
+const AddOpening = async ({ params }: { params: Promise<{ projectId: string }> }) => {
+  const { projectId } = await params;
+  const projectIdNum = Number(projectId);
   // Protect the page, only logged in users can access it.
   const session = await getServerSession(authOptions);
   loggedInProtectedPage(
@@ -14,7 +15,7 @@ const AddOpening = async ({ params }: { params: { projectId: string } }) => {
   );
   return (
     <main>
-      <AddOpeningForm projectId={projectId} />
+      <AddOpeningForm projectId={projectIdNum} />
     </main>
   );
 };

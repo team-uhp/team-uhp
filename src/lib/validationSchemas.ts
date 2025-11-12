@@ -17,11 +17,11 @@ export const EditUserSchema = Yup.object({
   role: Yup.mixed<Role>().oneOf(Object.values(Role)).required(),
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  image: Yup.string().nullable().default(null),
-  phone: Yup.string().nullable().default(null),
-  skills: new Yup.ArraySchema().required(),
+  image: Yup.string().optional(),
+  phone: Yup.string().optional(),
+  skills: Yup.array().of(Yup.string()),
   availability: new Yup.ArraySchema().required(),
-  contacts: new Yup.ArraySchema().required(),
+  contacts: Yup.array().of(Yup.number()).required(),
 });
 
 export const AddProjectSchema = Yup.object({
@@ -29,8 +29,8 @@ export const AddProjectSchema = Yup.object({
   title: Yup.string().required(),
   descrip: Yup.string().required(),
   duedate: Yup.string().optional(),
-  members: new Yup.ArraySchema().optional(),
-  admins: new Yup.ArraySchema().optional(),
+  members: Yup.array().of(Yup.number()).required(),
+  admins: Yup.array().of(Yup.number()).required(),
 });
 
 export const EditProjectSchema = Yup.object({
@@ -38,22 +38,22 @@ export const EditProjectSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  positions: new Yup.ArraySchema().required(),
-  members: new Yup.ArraySchema().required(),
-  admins: new Yup.ArraySchema().required(),
+  positions: Yup.array().of(Yup.number()).required(),
+  members: Yup.array().of(Yup.number()).required(),
+  admins: Yup.array().of(Yup.number()).required(),
   duedate: Yup.string().required(),
-  skills: new Yup.ArraySchema().required(),
+  skills: Yup.array().of(Yup.string()),
 });
 
 export const AddPositionSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  skills: new Yup.ArraySchema(),
+  skills: Yup.array().of(Yup.string()),
   datestart: Yup.string().optional(),
   dateend: Yup.string().optional(),
   project: Yup.number().required(),
-  admins: new Yup.ArraySchema().required(),
+  admins: Yup.array().of(Yup.number()).required(),
 });
 
 export const EditPositionSchema = Yup.object({
@@ -61,10 +61,10 @@ export const EditPositionSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  skills: new Yup.ArraySchema(),
+  skills: Yup.array().of(Yup.string()),
   datestart: Yup.string().required(),
   dateend: Yup.string().required(),
   project: Yup.number().required(),
-  admins: new Yup.ArraySchema().required(),
-  member: Yup.number(),
+  admins: Yup.array().of(Yup.string()).required(),
+  member: Yup.number().optional().nullable(),
 });
