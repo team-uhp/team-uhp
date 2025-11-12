@@ -161,12 +161,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
       setIsSubmitting(false);
     }
   };
-  useEffect(() => {
-    console.log('Current form errors:', errors);
-  }, [errors]);
-  console.log('Form errors:', errors);
-  console.log('skills:', selectedSkills);
-  console.log('selected date:', selected);
+
   return (
     <Container className="py-3" fluid>
       <Row className="justify-content-center">
