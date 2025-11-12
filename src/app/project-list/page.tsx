@@ -26,7 +26,6 @@ const ProjectListPage = async () => {
     select: { skills: true },
   });
   const userSkills: Skills[] = user?.skills || [];
-  console.log(userSkills);
 
   const sortedProjs: Array<{ project: Project; matches: number }> = [];
 
@@ -37,7 +36,6 @@ const ProjectListPage = async () => {
   ));
 
   sortedProjs.sort((a, b) => b.matches - a.matches);
-  console.log(sortedProjs);
 
   return (
     <Container id={PageIDs.projectsList} fluid className="py-3">

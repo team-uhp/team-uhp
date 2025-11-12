@@ -268,7 +268,7 @@ export async function editUser(credentials: {
   availability: number[];
   contacts: number[]
 }) {
-  // console.log(`editStuff data: ${JSON.stringify(project, null, 2)}`);
+  // console.log(`editUser data: ${JSON.stringify(project, null, 2)}`);
   await prisma.user.update({
     where: { id: credentials.id },
     data: {

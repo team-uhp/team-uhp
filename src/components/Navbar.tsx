@@ -5,7 +5,7 @@
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { BoxArrowRight, Lock, PersonFill, PersonPlusFill } from 'react-bootstrap-icons';
+import { BoxArrowInRight, Lock, Person, PersonPlusFill } from 'react-bootstrap-icons';
 
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -23,8 +23,25 @@ const NavBar: React.FC = () => {
           <Nav className="me-auto justify-content-start">
             {currentUser
               ? [
+                  <Nav.Link id="home-page-nav" href="/home-page" key="list" active={pathName === '/home-page'}>
+                    Home
+                  </Nav.Link>,
                   <Nav.Link id="list-project-nav" href="/project-list" key="list" active={pathName === '/project-list'}>
                     Projects List
+                  </Nav.Link>,
+                  <Nav.Link id="contacts-nav" href="/contacts" key="list" active={pathName === '/contacts'}>
+                    Contacts
+                  </Nav.Link>,
+                  <Nav.Link
+                    id="helpful-tools-nav"
+                    href="/helpful-tools"
+                    key="list"
+                    active={pathName === '/helpful-tools'}
+                  >
+                    Helpful Tools
+                  </Nav.Link>,
+                  <Nav.Link id="sign-out-nav" href="/signout-page" key="list" active={pathName === '/signout-page'}>
+                    Sign Out
                   </Nav.Link>,
                 ]
               : ''}
@@ -43,27 +60,23 @@ const NavBar: React.FC = () => {
                   id="login-dropdown-profile"
                   href={`/user-profile/${user?.user.id}`}
                 >
-                  <BoxArrowRight />
-                  Profile
-                </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-sign-out" href="/signout-page">
-                  <BoxArrowRight />
-                  Sign Out
+                  <Person />
+                  &nbsp;&nbsp;Profile
                 </NavDropdown.Item>
                 <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
                   <Lock />
-                  Change Password
+                  &nbsp;&nbsp;Change Password
                 </NavDropdown.Item>
               </NavDropdown>
             ) : (
               <NavDropdown id="login-dropdown" title="Login">
                 <NavDropdown.Item id="login-dropdown-sign-in" href="/signin-page">
-                  <PersonFill />
-                  Sign in
+                  <BoxArrowInRight />
+                  &nbsp;&nbsp;Sign in
                 </NavDropdown.Item>
                 <NavDropdown.Item id="login-dropdown-sign-up" href="/signup-page">
                   <PersonPlusFill />
-                  Sign up
+                  &nbsp;&nbsp;Sign up
                 </NavDropdown.Item>
               </NavDropdown>
             )}
