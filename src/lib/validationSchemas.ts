@@ -48,11 +48,11 @@ export const AddPositionSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  skills: new Yup.ArraySchema(),
+  skills: Yup.array().of(Yup.string()),
   datestart: Yup.string().optional(),
   dateend: Yup.string().optional(),
   project: Yup.number().required(),
-  admins: new Yup.ArraySchema().required(),
+  admins: Yup.array().of(Yup.number()).required(),
 });
 
 export const EditPositionSchema = Yup.object({
@@ -60,10 +60,10 @@ export const EditPositionSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  skills: new Yup.ArraySchema(),
+  skills: Yup.array().of(Yup.string()),
   datestart: Yup.string().required(),
   dateend: Yup.string().required(),
   project: Yup.number().required(),
-  admins: new Yup.ArraySchema().required(),
-  member: Yup.number(),
+  admins: Yup.array().of(Yup.string()).required(),
+  member: Yup.number().optional().nullable(),
 });

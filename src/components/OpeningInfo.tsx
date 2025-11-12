@@ -64,17 +64,17 @@ const OpeningInfo = async ({ params }: { params: { id: number; } }) => {
       <Row>
         <h6>
           Start date:&nbsp;
-          {sday}
-          /
           {smon}
+          /
+          {sday}
           /
           {syear}
         </h6>
         <h6>
           End date:&nbsp;
-          {eday}
-          /
           {emon}
+          /
+          {eday}
           /
           {eyear}
         </h6>
