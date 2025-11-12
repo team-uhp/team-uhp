@@ -18,7 +18,7 @@ const NavBar: React.FC = () => {
         <Navbar.Brand href="/">Team UHp!</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto justify-content-start">
+          <Nav className="mx-auto">
             {currentUser
               ? [
                   <Nav.Link id="home-page-nav" href="/home-page" key="home" active={pathName === '/home-page'}>
