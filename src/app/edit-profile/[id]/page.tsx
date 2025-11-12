@@ -13,8 +13,10 @@ import { PageIDs } from '@/utilities/ids';
  * Renders the edit page for User profile data.
  * @param params is the profile to display.
  */
-const EditProfilePage = async ({ params }: { params: { id: number; } }) => {
-  if (Number.isNaN(Number(params.id))) {
+const EditProfilePage = async ({ params }: { params: Promise<{ id: number; }> }) => {
+  const { id } = await params;
+
+  if (Number.isNaN(id)) {
     notFound();
   }
   // Protect the page, only logged in users can access it.
@@ -28,7 +30,7 @@ const EditProfilePage = async ({ params }: { params: { id: number; } }) => {
   // console.log(id);
   const user: User | null = await prisma.user.findUnique({
     where: {
-      id: Number(params.id),
+      id: Number(id),
     },
   });
   if (!user) {
