@@ -234,20 +234,28 @@ export async function createUser(data: {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
   const { email, password } = data;
   const hashedPassword = await hash(password, 10);
-  const user = await prisma.user.create({
-    data: {
-      email,
-      password: hashedPassword,
-      role: 'USER',
-      username: email.split('@')[0],
-      firstName: 'Change',
-      lastName: 'Me',
-      image: '',
-      phone: '',
-    },
-  });
 
-  return user;
+  try {
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        role: 'USER',
+        username: email.split('@')[0],
+        firstName: 'Change',
+        lastName: 'Me',
+        image: '',
+        phone: '',
+      },
+    });
+
+    return user;
+  } catch (error: any) {
+    if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
+      throw new Error('Email already registered. ');
+    }
+    throw error;
+  }
 }
 
 /**

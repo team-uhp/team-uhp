@@ -1,61 +1,127 @@
 'use client';
 
+import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Form, Card } from 'react-bootstrap';
+import { useRouter } from 'next/navigation';
 
-/** The sign in page. */
-const SignIn = () => {
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+export default function SignInPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const target = e.target as typeof e.target & {
-      email: { value: string };
-      password: { value: string };
-    };
-    const email = target.email.value;
-    const password = target.password.value;
+
     const result = await signIn('credentials', {
-      callbackUrl: '/list',
+      redirect: false,
       email,
       password,
+      callbackUrl: '/list',
     });
 
     if (result?.error) {
-      console.error('Sign in failed: ', result.error);
+      setError('Invalid email or password');
+    } else {
+      router.push('/list');
     }
   };
 
   return (
-    <main>
-      <Container>
-        <Row className="justify-content-center">
-          <Col xs={5}>
-            <h1 className="text-center">Sign In</h1>
-            <Card>
-              <Card.Body>
-                <Form method="post" onSubmit={handleSubmit}>
-                  <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email</Form.Label>
-                    <input name="email" type="text" className="form-control" />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Password</Form.Label>
-                    <input name="password" type="password" className="form-control" />
-                  </Form.Group>
-                  <Button type="submit" className="mt-3">
-                    Signin
-                  </Button>
-                </Form>
-              </Card.Body>
-              <Card.Footer>
-                Don&apos;t have an account?
-                <a href="/auth/signup">Sign up</a>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </main>
-  );
-};
+    <div
+      style={{
+        backgroundColor: '#f5f5f5',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}
+    >
+      <Card
+        style={{
+          width: '420px',
+          border: '2px solid #024731',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+          borderRadius: '1rem',
+        }}
+      >
+        <Card.Body>
+          <h1
+            style={{
+              color: '#024731',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              marginBottom: '1.5rem',
+            }}
+          >
+            UH Mānoa Sign In
+          </h1>
 
-export default SignIn;
+          <Form className="text-start" onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label style={{ color: '#024731', fontWeight: 600 }}>
+                Email address
+              </Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ borderColor: '#024731' }}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-4">
+              <Form.Label style={{ color: '#024731', fontWeight: 600 }}>
+                Password
+              </Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{ borderColor: '#024731' }}
+                required
+              />
+            </Form.Group>
+
+            {error && (
+              <p style={{ color: 'red', textAlign: 'center', marginBottom: '1rem' }}>
+                {error}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              style={{
+                backgroundColor: '#024731',
+                borderColor: '#024731',
+                width: '100%',
+                fontWeight: 'bold',
+              }}
+              onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#035a40')}
+              onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#024731')}
+            >
+              Sign In
+            </Button>
+          </Form>
+
+          <div className="mt-4 text-center" style={{ color: '#024731' }}>
+            <a href="/auth/signup" style={{ color: '#024731', fontWeight: 600 }}>
+              Create account
+            </a>
+            {' '}
+            |
+            {' '}
+            <a href="/forgot-password" style={{ color: '#F8C100', fontWeight: 600 }}>
+              Forgot password?
+            </a>
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+}
