@@ -1,27 +1,96 @@
 'use client';
 
+import React from 'react';
 import { signOut } from 'next-auth/react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { useRouter } from 'next/navigation';
 
-/** After the user clicks the "SignOut" link in the NavBar, log them out and display this page. */
-const SignOut = () => (
-  <Col id="signout-page" className="text-center py-3">
-    <h2>Do you want to sign out?</h2>
-    <Row>
-      <Col xs={4} />
-      <Col>
-        <Button variant="danger" onClick={() => signOut({ callbackUrl: '/', redirect: true })}>
-          Sign Out
-        </Button>
-      </Col>
-      <Col>
-        <Button variant="secondary" href="/">
-          Cancel
-        </Button>
-      </Col>
-      <Col xs={4} />
-    </Row>
-  </Col>
-);
+export default function SignOutPage() {
+  const router = useRouter();
 
-export default SignOut;
+  return (
+    <div
+      style={{
+        backgroundColor: '#f5f5f5',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}
+    >
+      <Card
+        style={{
+          width: '420px',
+          border: '2px solid #024731',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+          borderRadius: '1rem',
+        }}
+      >
+        <Card.Body>
+          <h1
+            style={{
+              color: '#024731',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              marginBottom: '1.5rem',
+            }}
+          >
+            Sign Out
+          </h1>
+
+          <p
+            style={{
+              textAlign: 'center',
+              color: '#024731',
+              fontSize: '1.05rem',
+              marginBottom: '2rem',
+            }}
+          >
+            Are you sure you want to sign out of your UH Mānoa account?
+          </p>
+
+          <Container>
+            <Row className="justify-content-center text-center" style={{ gap: '1rem' }}>
+              <Col xs={12}>
+                <Button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  style={{
+                    backgroundColor: '#024731',
+                    borderColor: '#024731',
+                    width: '100%',
+                    fontWeight: 'bold',
+                    color: 'white',
+                  }}
+                  onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#035a40')}
+                  onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#024731')}
+                >
+                  Yes, Sign Out
+                </Button>
+              </Col>
+
+              <Col xs={12}>
+                <Button
+                  variant="outline-success"
+                  type="button"
+                  onClick={() => router.push('/')}
+                  style={{
+                    borderColor: '#024731',
+                    color: '#024731',
+                    width: '100%',
+                    fontWeight: 'bold',
+                  }}
+                  onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#e6f3ec')}
+                  onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = 'white')}
+                >
+                  Cancel
+                </Button>
+              </Col>
+            </Row>
+          </Container>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+}
