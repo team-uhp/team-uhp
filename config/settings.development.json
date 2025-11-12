@@ -1,6 +1,6 @@
 {
   "defaultAccounts": [
-    { "id": 1, "email": "admin1@hawaii.edu", "username": "admin1", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min1", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 2, 3 ] },
+    { "id": 1, "email": "admin1@hawaii.edu", "username": "admin1", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min1", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming", "other", "C", "CPP" ], "availability": [], "contacts": [ 2, 3 ] },
     { "id": 2, "email": "admin2@hawaii.edu", "username": "admin2", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min2", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 3, 4 ] },
     { "id": 3, "email": "admin3@hawaii.edu", "username": "admin3", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min3", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 4, 5 ]  },
     { "id": 4, "email": "admin4@hawaii.edu", "username": "admin4", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min4", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 1, 5 ]  },

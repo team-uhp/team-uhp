@@ -127,16 +127,21 @@ export async function addPosition(position: {
     },
   });
 
+  const projectData = await prisma.project.findUnique({
+    where: { id: position.project },
+  });
+
+  const setSkills = Array.from(new Set([...projectData?.skills || [], ...posit.skills]));
+
   await prisma.project.update({
     where: { id: position.project },
     data: {
       positions: {
         push: posit.id,
       },
+      skills: setSkills,
     },
   });
-  // After adding, redirect to the list page
-  redirect('/project-list');
 }
 
 /**
@@ -155,7 +160,7 @@ export async function editPosition(position: {
   dateend: string,
   project: number,
   admins: number[],
-  member: number,
+  member: number | null,
 }) {
   // console.log(`editStuff data: ${JSON.stringify(project, null, 2)}`);
   await prisma.position.update({
@@ -169,12 +174,10 @@ export async function editPosition(position: {
       datestart: position.datestart,
       dateend: position.dateend,
       project: position.project,
-      admins: position.admins,
+      admins: position.admins as number[],
       member: position.member,
     },
   });
-  // After updating, redirect to the list page
-  redirect('/project-list');
 }
 
 /**
@@ -183,11 +186,39 @@ export async function editPosition(position: {
  */
 export async function deletePosition(id: number) {
   // console.log(`deleteProject id: ${id}`);
+  const position = await prisma.position.findUnique({ where: { id } });
+  if (!position) {
+    redirect('/project-list/');
+  }
+  const project = await prisma.project.findUnique({ where: { id: position.project } });
+  if (!project) {
+    redirect('/project-list/');
+  }
+  const updatedPositions = project?.positions.filter(p => p !== id) || [];
+  await prisma.project.update({
+    where: { id: position.project },
+    data: {
+      positions: {
+        set: updatedPositions,
+      },
+    },
+  });
   await prisma.position.delete({
     where: { id },
   });
-  // After deleting, redirect to the list page
-  redirect('/project-list');
+
+  const remainingPositions = await prisma.position.findMany({
+    where: { id: { in: updatedPositions } },
+  });
+
+  const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
+
+  await prisma.project.update({
+    where: { id: position.project },
+    data: {
+      skills: updatedSkills,
+    },
+  });
 }
 
 /**
@@ -237,7 +268,7 @@ export async function editUser(credentials: {
   availability: number[];
   contacts: number[]
 }) {
-  // console.log(`editStuff data: ${JSON.stringify(project, null, 2)}`);
+  // console.log(`editUser data: ${JSON.stringify(project, null, 2)}`);
   await prisma.user.update({
     where: { id: credentials.id },
     data: {

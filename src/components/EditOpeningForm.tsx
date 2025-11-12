@@ -5,18 +5,19 @@ import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
-import { addPosition } from '@/lib/dbActions';
-import { AddPositionSchema } from '@/lib/validationSchemas';
+import { editPosition, deletePosition } from '@/lib/dbActions';
+import { EditPositionSchema } from '@/lib/validationSchemas';
 import { useState, useEffect } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DateRange, DayPicker } from 'react-day-picker';
 import Link from 'next/link';
-import { Skills } from '@prisma/client';
+import { Position, Skills } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import SkillSelect from './SkillSelect';
 
 type PositionFormValues = {
+  id: number;
   image?: string;
   title: string;
   descrip: string;
@@ -25,13 +26,14 @@ type PositionFormValues = {
   dateend?: string;
   project: number;
   admins: number[];
+  member: number | null;
 };
 
-type AddOpeningFormProps = {
-  projectId: number;
+type EditOpeningFormProps = {
+  position: Position;
 };
 
-const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
+const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [userId, setUserId] = useState<number>(0);
@@ -45,6 +47,16 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
     }
   }, [session]);
 
+  useEffect(() => {
+    if (position.skills && position.skills.length > 0) {
+      const initialSkills = position.skills.reduce((acc, skill) => ({
+        ...acc,
+        [skill]: true,
+      }), {} as Record<string, boolean>);
+      setSelectedSkills(initialSkills);
+    }
+  }, [session, position.skills]);
+
   const {
     register,
     handleSubmit,
@@ -52,18 +64,31 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
     setValue,
     formState: { errors },
   } = useForm<PositionFormValues>({
-    resolver: yupResolver(AddPositionSchema) as any,
+    resolver: yupResolver(EditPositionSchema) as any,
     defaultValues: {
-      title: '',
-      descrip: '',
-      datestart: new Date().toISOString(),
-      dateend: new Date().toISOString(),
-      admins: [],
-      image: '',
-      skills: [],
-      project: projectId,
+      id: position.id,
+      title: position.title,
+      descrip: position.descrip,
+      datestart: position.datestart,
+      dateend: position.dateend,
+      admins: Array.isArray(position.admins)
+        ? position.admins.map(id => Number(id))
+        : [],
+      member: position.member ?? undefined,
+      image: position.image ?? undefined,
+      skills: position.skills,
+      project: position.project,
     },
   });
+
+  useEffect(() => {
+    if (position.datestart && position.dateend) {
+      setSelected({
+        from: new Date(position.datestart),
+        to: new Date(position.dateend),
+      });
+    }
+  }, [position.datestart, position.dateend]);
 
   useEffect(() => {
     const skillsArray = Object.entries(selectedSkills)
@@ -90,7 +115,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
 
   useEffect(() => {
     if (userId > 0) {
-      setValue('admins', [userId]);
+      setValue('admins', [Number(userId)]);
     }
   }, [userId, setValue]);
 
@@ -103,51 +128,51 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
     setIsSubmitting(true);
 
     const openingData = {
+      id: position.id,
       image: data.image || '',
       title: data.title,
       descrip: data.descrip,
       skills: data.skills,
       datestart: selected.from.toISOString(),
       dateend: selected.to?.toISOString() || selected.from.toISOString(),
-      project: projectId,
+      project: position.project,
+      admins: data.admins.map(id => Number(id)),
+      member: data.member ?? null,
     };
 
     console.log('Submitting opening data:', openingData);
 
     try {
-      await addPosition(openingData);
-      await swal('Success', 'Your position has been added', 'success', {
+      await editPosition(openingData);
+      await swal('Success', 'Your position has been edited', 'success', {
         timer: 2000,
       });
       reset();
       setSelected(undefined);
-      router.push(`/project-page/${projectId}`);
+      router.push(`/project-opening/${position.id}`);
     } catch (error) {
       if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
         return;
       }
-      await swal('Failure', 'Your position was not added');
+      await swal('Error', 'Your position was not edited', 'error', {
+        timer: 2000,
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
-  useEffect(() => {
-    console.log('Current form errors:', errors);
-  }, [errors]);
-  console.log('Form errors:', errors);
-  console.log('skills:', selectedSkills);
-  console.log('selected date:', selected);
+
   return (
     <Container className="py-3" fluid>
       <Row className="justify-content-center">
         <Col>
           <Col className="text-center">
-            <h2>Recruit for Opening</h2>
+            <h2>Edit Opening</h2>
           </Col>
           <Link
-            href="/project-list/"
+            href={`/project-opening/${position.id}`}
           >
-            Back to Project List
+            Back to Opening
           </Link>
           <Card>
             <Card.Body>
@@ -220,6 +245,39 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
                         Reset
                       </Button>
                     </Col>
+                    <Col>
+                      <Button
+                        type="button"
+                        onClick={async (event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          const willDelete = await swal({
+                            title: 'Are you sure you want to delete?',
+                            text: 'This action cannot be undone.',
+                            icon: 'warning',
+                            buttons: ['Cancel', 'Delete'],
+                            dangerMode: true,
+                          });
+
+                          if (willDelete) {
+                            const proj = position.project;
+                            await deletePosition(position.id);
+                            swal('Success!', 'Position deleted.', 'success', {
+                              timer: 2000,
+                            });
+                            router.push(`/project-page/${proj}`);
+                          } else {
+                            swal('Cancelled', 'Position was not deleted', 'info', {
+                              timer: 2000,
+                            });
+                          }
+                        }}
+                        variant="danger"
+                        className="float-right"
+                      >
+                        DELETE
+                      </Button>
+                    </Col>
                   </Row>
                 </Form.Group>
               </Form>
@@ -231,4 +289,4 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
   );
 };
 
-export default AddOpeningForm;
+export default EditOpeningForm;
