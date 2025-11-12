@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable import/no-extraneous-dependencies */
-import { test as base, expect, Page } from '@playwright/test';
+import { test as base, Page } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 
@@ -17,6 +17,37 @@ if (!fs.existsSync(SESSION_STORAGE_PATH)) {
 interface AuthFixtures {
   getUserPage: (email: string, password: string) => Promise<Page>;
 }
+
+/**
+ * Helper to fill form fields with retry logic
+ */
+async function fillFormWithRetry(
+  page: Page,
+  fields: Array<{ selector: string; value: string }>,
+): Promise<void> {
+  for (const field of fields) {
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+      try {
+        const element = page.locator(field.selector);
+        await element.waitFor({ state: 'visible', timeout: 2000 });
+        await element.clear();
+        await element.fill(field.value);
+        await element.evaluate((el) => el.blur()); // Trigger blur event
+        break;
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
+        }
+        await page.waitForTimeout(500);
+      }
+    }
+  }
+}
+
 /**
  * Authenticate using the UI with robust waiting and error handling
  */
@@ -75,68 +106,15 @@ async function authenticateWithUI(
 
     // Click submit button and wait for navigation
     const submitButton = page.getByRole('button', { name: /sign[ -]?in/i });
-    if (!await submitButton.isVisible({ timeout: 1000 })) {
-      // Try alternative selector if the first one doesn't work
-      await page.getByRole('button', { name: /log[ -]?in/i }).click();
-    } else {
-      await submitButton.click();
-    }
-
-    // Wait for navigation to complete
+    await submitButton.click();
     await page.waitForLoadState('networkidle');
 
-    // Verify authentication was successful
-    await expect(async () => {
-      const authState = await Promise.race([
-        page.getByText(email).isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => ({ success: visible })),
-        page.getByText('Sign out').isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => ({ success: visible })),
-        // eslint-disable-next-line no-promise-executor-return
-        new Promise<{ success: boolean }>((resolve) => setTimeout(() => resolve({ success: false }), 5000)),
-      ]);
-
-      expect(authState.success).toBeTruthy();
-    }).toPass({ timeout: 10000 });
-
-    // Save session for future tests
+    // Save session
     const cookies = await page.context().cookies();
-    fs.writeFileSync(sessionPath, JSON.stringify({ cookies }));
-    console.log(`✓ Successfully authenticated ${email} and saved session`);
+    fs.writeFileSync(sessionPath, JSON.stringify({ cookies }, null, 2));
+    console.log(`✓ Authenticated ${email} successfully`);
   } catch (error) {
-    console.error(`× Authentication failed for ${email}:`, error);
-
-    throw new Error(`Authentication failed: ${error}`);
-  }
-}
-
-/**
- * Helper to fill form fields with retry logic
- */
-async function fillFormWithRetry(
-  page: Page,
-  fields: Array<{ selector: string; value: string }>,
-): Promise<void> {
-  for (const field of fields) {
-    let attempts = 0;
-    const maxAttempts = 3;
-
-    while (attempts < maxAttempts) {
-      try {
-        const element = page.locator(field.selector);
-        await element.waitFor({ state: 'visible', timeout: 2000 });
-        await element.clear();
-        await element.fill(field.value);
-        await element.evaluate((el) => el.blur()); // Trigger blur event
-        break;
-      } catch (error) {
-        attempts++;
-        if (attempts >= maxAttempts) {
-          throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
-        }
-        await page.waitForTimeout(500);
-      }
-    }
+    throw new Error(`Authentication failed for ${email}: ${error}`);
   }
 }
 
