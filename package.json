@@ -7,7 +7,8 @@
     "dev-https": "next dev --experimental-https",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "playwright-development": "npx playwright test"
   },
   "prisma": {
@@ -16,7 +17,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
     "@ngneat/falso": "^7.2.0",
-    "@prisma/client": "^5.16.1",
+    "@prisma/client": "^6.19.0",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "multiselect-react-dropdown": "^2.0.25",
@@ -33,20 +34,28 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@eslint/css": "^0.14.1",
+    "@eslint/js": "^9.39.1",
+    "@eslint/json": "^0.14.0",
+    "@eslint/markdown": "^7.5.1",
     "@playwright/test": "^1.48.2",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^22.5.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
+    "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
-    "eslint-config-next": "14.2.10",
+    "eslint-config-next": "^14.2.10",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.5.0",
     "ignore-loader": "^0.1.2",
+    "jiti": "^2.6.1",
     "prettier": "^3.3.1",
     "prettier-eslint": "^16.3.0",
-    "prisma": "^5.19.1",
-    "typescript": "^5.4.5"
+    "prisma": "^6.19.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^8.46.4"
   }
 }
