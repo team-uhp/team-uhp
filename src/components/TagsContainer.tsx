@@ -4,16 +4,18 @@ import { Skills } from '@prisma/client';
 import { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 
-const TagsContainer = ({ tags, removeTag, addTag, forceUpdate }: {
-  tags: any[],
-  removeTag: (tag: any) => void,
-  addTag: (tag: any) => void,
+const TagsContainer = <T extends React.Key>({ defaultValue, type, tags, removeTag, addTag, forceUpdate }: {
+  defaultValue: string,
+  type: string,
+  tags: T[],
+  removeTag: (tag: T) => void,
+  addTag: (tag: T) => void,
   forceUpdate: () => void
 }) => {
-  const [newTag, setNewTag] = useState<any>('');
+  const [newTag, setNewTag] = useState<T>('' as unknown as T);
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTag = e.target.value;
-    setNewTag(selectedTag);
+    setNewTag(selectedTag as unknown as T);
   };
 
   return (
@@ -21,11 +23,27 @@ const TagsContainer = ({ tags, removeTag, addTag, forceUpdate }: {
       <Row>
         <Col>
           <Form.Select onChange={onChange}>
-            <option key="default" value="">Select a skill to add</option>
+            <option key="default" value="">{defaultValue}</option>
             {
-              Object.values(Skills).map((skill) => {
-                if (!tags.includes(skill)) {
-                  return <option key={skill} value={skill}>{skill}</option>;
+              type === 'skills' && Object.values(Skills).map((item) => {
+                if (!tags.includes(item as unknown as T)) {
+                  return <option key={item} value={item}>{item}</option>;
+                }
+                return null;
+              })
+            }
+            {
+              type === 'availability' && Array.from({ length: 14 }, (_, i) => i + 1).map((item) => {
+                if (!tags.includes(item as unknown as T)) {
+                  return <option key={item} value={item}>{`Slot ${item}`}</option>;
+                }
+                return null;
+              })
+            }
+            {
+              type === 'contacts' && Array.from({ length: 5 }, (_, i) => i + 1).map((item) => {
+                if (!tags.includes(item as unknown as T)) {
+                  return <option key={item} value={item}>{`Contact ${item}`}</option>;
                 }
                 return null;
               })

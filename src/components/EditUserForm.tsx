@@ -44,6 +44,8 @@ const EditUserForm = ({ user }: { user: User }) => {
   const [availabilityTags, setAvailabilityTags] = useState<number[]>(user.availability); // State to store the tags
   const [contactTags, setContactTags] = useState<number[]>(user.contacts); // State to store the tags
   console.log(skillTags);
+  console.log(availabilityTags);
+  console.log(contactTags);
   // Function to add a new tag
   const addTag = (newTag: any, tags: any[], setTags: (tags: any[]) => void) => {
     if (newTag && !tags.includes(newTag)) { // Prevent adding empty or duplicate tags
@@ -141,6 +143,8 @@ const EditUserForm = ({ user }: { user: User }) => {
                 <Form.Group onClick={forceUpdate}>
                   <Form.Label>Skills</Form.Label>
                   <TagsContainer
+                    defaultValue="Select a skill to add"
+                    type="skills"
                     tags={skillTags.map((skill) => skill)}
                     removeTag={(tag: any) => removeTag(tag, skillTags, setSkillTags)}
                     addTag={(tag: any) => addTag(tag, skillTags, setSkillTags)}
@@ -149,10 +153,12 @@ const EditUserForm = ({ user }: { user: User }) => {
                   />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
                 </Form.Group>
-                <Form.Group>
+                <Form.Group onClick={forceUpdate}>
                   <Form.Label>Availability</Form.Label>
                   <TagsContainer
-                    tags={user.availability.map((slot) => slot.toString())}
+                    defaultValue="Select an availability slot to add"
+                    type="availability"
+                    tags={availabilityTags}
                     removeTag={(tag: any) => removeTag(tag, availabilityTags, setAvailabilityTags)}
                     addTag={(tag: any) => addTag(tag, availabilityTags, setAvailabilityTags)}
                     forceUpdate={forceUpdate}
@@ -160,10 +166,12 @@ const EditUserForm = ({ user }: { user: User }) => {
                   />
                   <div className="invalid-feedback">{errors.availability?.message}</div>
                 </Form.Group>
-                <Form.Group>
+                <Form.Group onClick={forceUpdate}>
                   <Form.Label>Contacts</Form.Label>
                   <TagsContainer
-                    tags={user.contacts.map((slot) => slot.toString())}
+                    defaultValue="Select a contact to add"
+                    type="contacts"
+                    tags={contactTags}
                     removeTag={(tag: any) => removeTag(tag, contactTags, setContactTags)}
                     addTag={(tag: any) => addTag(tag, contactTags, setContactTags)}
                     forceUpdate={forceUpdate}
