@@ -152,8 +152,8 @@ export default async function TestDBPage() {
         <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
           <h3 className="font-semibold mb-2">📋 Instructions</h3>
           <ul className="text-sm space-y-1 list-disc list-inside">
-            <li>If connected, you'll see a green checkmark and user count</li>
-            <li>If there's an error, check your DATABASE_URL in .env</li>
+            <li>If connected, you&apos;ll see a green checkmark and user count</li>
+            <li>If there&apos;s an error, check your DATABASE_URL in .env</li>
             <li>
               Make sure Prisma Client is generated:
               <code className="bg-gray-200 px-1">npx prisma generate</code>
