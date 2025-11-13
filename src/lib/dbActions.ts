@@ -278,7 +278,7 @@ export async function editUser(credentials: {
     data: {
       id: credentials.id,
       email: credentials.email,
-      username: credentials.username,
+      username: credentials.username || credentials.email.split('@')[0],
       password: credentials.password,
       role: credentials.role,
       firstName: credentials.firstName,

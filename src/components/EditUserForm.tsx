@@ -14,15 +14,19 @@ import TagsContainer from './TagsContainer';
 
 const onSubmit = async (data: User) => {
   console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
-  const parsedData = data;
-  parsedData.availability = parsedData.availability.map((slot) => Number(slot));
-  parsedData.contacts = parsedData.contacts.map((contact) => Number(contact));
-  parsedData.skills = parsedData.skills.map((skill) => skill);
-  await editUser(parsedData);
+  await editUser(data);
   swal('Success', 'Your item has been updated', 'success', {
     timer: 2000,
   });
 };
+
+function useForceUpdate() {
+  const [value, setValue] = useState(0); // integer state
+  console.log(`forceUpdate value: ${value}`);
+  return () => setValue(() => value + 1); // update state to force render
+  // A function that increment 👆🏻 the previous state like here
+  // is better than directly setting `setValue(value + 1)`
+}
 
 const EditUserForm = ({ user }: { user: User }) => {
   const {
@@ -32,21 +36,22 @@ const EditUserForm = ({ user }: { user: User }) => {
     formState: { errors },
   } = useForm<User>({
     resolver: yupResolver(EditUserSchema),
+    defaultValues: user,
   });
+  const forceUpdate = useForceUpdate();
 
-  const [tags, setTags] = useState<string[]>(user.skills); // State to store the tags
-  console.log(tags);
-
+  const [skillTags, setSkillTags] = useState<Skills[]>(user.skills); // State to store the tags
+  console.log(skillTags);
   // Function to add a new tag
-  const addTag = (newTag: any) => {
+  const addTag = (newTag: any, tags: any[], setTags: (tags: any[]) => void) => {
     if (newTag && !tags.includes(newTag)) { // Prevent adding empty or duplicate tags
       setTags([...tags, newTag]);
     }
   };
 
   // Function to remove a tag
-  const removeTag = (tagToRemove: any) => {
-    setTags(() => tags.filter(tag => tag !== tagToRemove));
+  const removeTag = (tagToRemove: any, tags: any[], setTags: (tags: any[]) => void) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
   return (
@@ -76,7 +81,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                   <input
                     type="text"
                     {...register('username')}
-                    defaultValue={user.username}
+                    defaultValue={user.username ? user.username : ''}
                     className={`form-control ${errors.username ? 'is-invalid' : ''}`}
                   />
                   <div className="invalid-feedback">{errors.username?.message}</div>
@@ -131,67 +136,37 @@ const EditUserForm = ({ user }: { user: User }) => {
                   />
                   <div className="invalid-feedback">{errors.phone?.message}</div>
                 </Form.Group>
-                <Form.Group>
+                <Form.Group onClick={forceUpdate}>
                   <Form.Label>Skills</Form.Label>
-                  <Row>
-                    <Col>
-                      <Form.Select>
-                        <option key="default" value="">Select a skill to add</option>
-                        {
-                          Object.values(Skills).map((skill) => {
-                            if (!tags.includes(skill)) {
-                              return <option key={skill} value={skill}>{skill}</option>;
-                            }
-                            return null;
-                          })
-                        }
-                      </Form.Select>
-                      {/* <input
-                        type="text"
-                        {...register('skills')}
-                        onKeyDown={(key) => {
-                          if (key.key === 'Enter') {
-                            addTag(key.currentTarget.value.trim());
-                            // eslint-disable-next-line no-param-reassign
-                            key.currentTarget.value = ''; // Clear the input field
-                          }
-                        }}
-                        className={`form-control ${errors.skills ? 'is-invalid' : ''}`}
-                      /> */}
-                      <Button type="button" onClick={() => { addTag('NewSkill'); }} variant="secondary" className="mt-2">
-                        Add
-                      </Button>
-                    </Col>
-                  </Row>
-                  <TagsContainer tags={user.skills.map((skill) => skill)} removeTag={removeTag} />
+                  <TagsContainer
+                    tags={skillTags.map((skill) => skill)}
+                    removeTag={removeTag}
+                    addTag={addTag}
+                    forceUpdate={forceUpdate}
+                    {...register('skills')}
+                  />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Availability</Form.Label>
-                  <input
-                    type="text"
+                  <TagsContainer
+                    tags={user.availability.map((slot) => slot.toString())}
+                    removeTag={removeTag}
+                    addTag={addTag}
+                    forceUpdate={forceUpdate}
                     {...register('availability')}
-                    onKeyDown={(key) => {
-                      if (key.key === 'Enter') {
-                        addTag(key.currentTarget.value.trim());
-                        // eslint-disable-next-line no-param-reassign
-                        key.currentTarget.value = ''; // Clear the input field
-                      }
-                    }}
-                    className={`form-control ${errors.availability ? 'is-invalid' : ''}`}
                   />
-                  <TagsContainer tags={user.availability.map((slot) => slot.toString())} removeTag={removeTag} />
                   <div className="invalid-feedback">{errors.availability?.message}</div>
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Contacts</Form.Label>
-                  <input
-                    type="text"
+                  <TagsContainer
+                    tags={user.availability.map((slot) => slot.toString())}
+                    removeTag={removeTag}
+                    addTag={addTag}
+                    forceUpdate={forceUpdate}
                     {...register('contacts')}
-                    defaultValue={user.contacts.map((contact) => contact.toString()).join(', ')}
-                    className={`form-control ${errors.contacts ? 'is-invalid' : ''}`}
                   />
-                  <div className="invalid-feedback">{errors.contacts?.message}</div>
                 </Form.Group>
                 <Form.Group className="form-group">
                   <Row className="pt-3">

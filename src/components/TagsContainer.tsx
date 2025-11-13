@@ -1,28 +1,50 @@
 'use client';
 
+import { Skills } from '@prisma/client';
 import { useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 
-function useForceUpdate() {
-  const [value, setValue] = useState(0); // integer state
-  return () => setValue(() => value + 1); // update state to force render
-  // A function that increment 👆🏻 the previous state like here
-  // is better than directly setting `setValue(value + 1)`
-}
-
-const TagsContainer = ({ tags, removeTag }: {
+const TagsContainer = ({ tags, removeTag, addTag, forceUpdate }: {
   tags: any[],
-  removeTag: (tag: any) => void, }) => {
-  const forceUpdate = useForceUpdate();
+  removeTag: (tag: any) => void,
+  addTag: (tag: any) => void,
+  forceUpdate: () => void
+}) => {
+  const [newTag, setNewTag] = useState<any>('');
+  const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedTag = e.target.value;
+    setNewTag(selectedTag);
+  };
+
   return (
-    <Container fluid className="tags-container" onClick={forceUpdate}>
-      {tags.map((tag) => (
-        <div key={tag} className="tag">
-          {tag}
-          <button type="button" onClick={() => removeTag(tag)}>x</button>
-        </div>
-      ))}
-    </Container>
+    <>
+      <Row>
+        <Col>
+          <Form.Select onChange={onChange}>
+            <option key="default" value="">Select a skill to add</option>
+            {
+              Object.values(Skills).map((skill) => {
+                if (!tags.includes(skill)) {
+                  return <option key={skill} value={skill}>{skill}</option>;
+                }
+                return null;
+              })
+            }
+          </Form.Select>
+          <Button type="button" onClick={() => { addTag(newTag); }} variant="secondary" className="mt-2">
+            Add
+          </Button>
+        </Col>
+      </Row>
+      <Container fluid className="tags-container" onClick={forceUpdate}>
+        {tags.map((tag) => (
+          <div key={tag} className="tag">
+            {tag}
+            <button type="button" onClick={() => removeTag(tag)}>x</button>
+          </div>
+        ))}
+      </Container>
+    </>
   );
 };
 
