@@ -41,6 +41,8 @@ const EditUserForm = ({ user }: { user: User }) => {
   const forceUpdate = useForceUpdate();
 
   const [skillTags, setSkillTags] = useState<Skills[]>(user.skills); // State to store the tags
+  const [availabilityTags, setAvailabilityTags] = useState<number[]>(user.availability); // State to store the tags
+  const [contactTags, setContactTags] = useState<number[]>(user.contacts); // State to store the tags
   console.log(skillTags);
   // Function to add a new tag
   const addTag = (newTag: any, tags: any[], setTags: (tags: any[]) => void) => {
@@ -140,8 +142,8 @@ const EditUserForm = ({ user }: { user: User }) => {
                   <Form.Label>Skills</Form.Label>
                   <TagsContainer
                     tags={skillTags.map((skill) => skill)}
-                    removeTag={removeTag}
-                    addTag={addTag}
+                    removeTag={(tag: any) => removeTag(tag, skillTags, setSkillTags)}
+                    addTag={(tag: any) => addTag(tag, skillTags, setSkillTags)}
                     forceUpdate={forceUpdate}
                     {...register('skills')}
                   />
@@ -151,8 +153,8 @@ const EditUserForm = ({ user }: { user: User }) => {
                   <Form.Label>Availability</Form.Label>
                   <TagsContainer
                     tags={user.availability.map((slot) => slot.toString())}
-                    removeTag={removeTag}
-                    addTag={addTag}
+                    removeTag={(tag: any) => removeTag(tag, availabilityTags, setAvailabilityTags)}
+                    addTag={(tag: any) => addTag(tag, availabilityTags, setAvailabilityTags)}
                     forceUpdate={forceUpdate}
                     {...register('availability')}
                   />
@@ -161,9 +163,9 @@ const EditUserForm = ({ user }: { user: User }) => {
                 <Form.Group>
                   <Form.Label>Contacts</Form.Label>
                   <TagsContainer
-                    tags={user.availability.map((slot) => slot.toString())}
-                    removeTag={removeTag}
-                    addTag={addTag}
+                    tags={user.contacts.map((slot) => slot.toString())}
+                    removeTag={(tag: any) => removeTag(tag, contactTags, setContactTags)}
+                    addTag={(tag: any) => addTag(tag, contactTags, setContactTags)}
                     forceUpdate={forceUpdate}
                     {...register('contacts')}
                   />
