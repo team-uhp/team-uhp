@@ -16,9 +16,20 @@ const NavBar: React.FC = () => {
   return (
     <Navbar id="Topbar">
       <Container>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+         <Navbar.Brand href="/">
+          <img
+            id="Logo"
+            src="/LogoMockup.png"
+            alt="Site Logo"
+            height="50"
+            className="align-middle"
+          />
+         </Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto justify-content-start">
+          <Nav className="ms-auto">
+            <Nav.Link href="https://team-uhp.github.io/#user-guide">
+              User Guide
+            </Nav.Link>
             {currentUser
               ? [
                   <Nav.Link id="add-stuff-nav" href="/add" key="add" active={pathName === '/add'}>

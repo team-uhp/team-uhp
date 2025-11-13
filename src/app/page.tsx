@@ -1,14 +1,14 @@
-import { Col, Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 /** The Home page. */
 const Home = () => (
   <main>
-    <Container id="landing-page" fluid className="py-3">
-      <Row className="align-middle text-center">
-        <Col position="middle">
-          <p className="display-3 fw-bold fade-in">Welcome to TeamUHp</p>
-        </Col>
-      </Row>
+    <Container
+      id="page-Name"
+      fluid
+      className="d-flex flex-column justify-content-center align-items-center text-center"
+    >
+      <p className="display-3 fw-bold fade-in">Welcome to TeamUHp</p>
     </Container>
   </main>
 );
