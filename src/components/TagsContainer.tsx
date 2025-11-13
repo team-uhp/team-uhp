@@ -12,7 +12,9 @@ const TagsContainer = <T extends React.Key>({ defaultValue, type, tags, removeTa
   addTag: (tag: T) => void,
   forceUpdate: () => void
 }) => {
+  // State to store the new tag to be added
   const [newTag, setNewTag] = useState<T>('' as unknown as T);
+  // Handler for dropdown selection changes; updates the newTag state
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTag = e.target.value;
     setNewTag(selectedTag as unknown as T);
