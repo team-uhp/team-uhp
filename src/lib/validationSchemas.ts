@@ -25,12 +25,12 @@ export const EditUserSchema = Yup.object({
 });
 
 export const AddProjectSchema = Yup.object({
+  title: Yup.string().required('Title is required'),
+  descrip: Yup.string().required('Description is required'),
+  members: Yup.array().of(Yup.number()).optional(),
+  admins: Yup.array().of(Yup.number()).optional(),
   image: Yup.string().optional(),
-  title: Yup.string().required(),
-  descrip: Yup.string().required(),
   duedate: Yup.string().optional(),
-  members: Yup.array().of(Yup.number()).required(),
-  admins: Yup.array().of(Yup.number()).required(),
 });
 
 export const EditProjectSchema = Yup.object({
@@ -66,5 +66,5 @@ export const EditPositionSchema = Yup.object({
   dateend: Yup.string().required(),
   project: Yup.number().required(),
   admins: Yup.array().of(Yup.string()).required(),
-  member: Yup.number().optional().nullable(),
+  member: Yup.number().optional(),
 });

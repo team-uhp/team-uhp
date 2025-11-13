@@ -38,7 +38,7 @@ const NavBar: React.FC = () => {
                   >
                     Helpful Tools
                   </Nav.Link>,
-                  <Nav.Link id="sign-out-nav" href="/signout-page" key="signout" active={pathName === '/signout-page'}>
+                  <Nav.Link id="sign-out-nav" href="/auth/signout" key="signout" active={pathName === '/auth/signout'}>
                     Sign Out
                   </Nav.Link>,
                 ]
@@ -61,11 +61,11 @@ const NavBar: React.FC = () => {
               </NavDropdown>
             ) : (
               <NavDropdown id="login-dropdown" title="Login">
-                <NavDropdown.Item id="login-dropdown-sign-in" href="/signin-page">
+                <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">
                   <BoxArrowInRight />
                   &nbsp;&nbsp;Sign in
                 </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-sign-up" href="/signup-page">
+                <NavDropdown.Item id="login-dropdown-sign-up" href="/auth/signup">
                   <PersonPlusFill />
                   &nbsp;&nbsp;Sign up
                 </NavDropdown.Item>
