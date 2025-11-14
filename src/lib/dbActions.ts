@@ -230,6 +230,10 @@ export async function deletePosition(id: number) {
 export async function createUser(data: {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
+  image: string;
+  phone: string;
 }) {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
   const { email, password } = data;
@@ -270,11 +274,11 @@ export async function editUser(credentials: {
   role: Role;
   firstName: string;
   lastName: string;
-  image: string;
-  phone: string;
+  image: string | null;
+  phone: string | null;
   skills: Skills[];
   availability: number[];
-  contacts: number[]
+  contacts: number[];
 }) {
   // console.log(`editUser data: ${JSON.stringify(project, null, 2)}`);
   await prisma.user.update({
@@ -282,7 +286,7 @@ export async function editUser(credentials: {
     data: {
       id: credentials.id,
       email: credentials.email,
-      username: credentials.username,
+      username: credentials.username || credentials.email.split('@')[0],
       password: credentials.password,
       role: credentials.role,
       firstName: credentials.firstName,
