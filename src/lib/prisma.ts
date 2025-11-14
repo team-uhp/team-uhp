@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { withAccelerate } from '@prisma/extension-accelerate';
 
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit.
@@ -14,6 +16,6 @@ export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
     log: ['query'], // CAM: is this the right level of logging?
-  });
+  }).$extends(withAccelerate());
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
