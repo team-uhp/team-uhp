@@ -11,10 +11,9 @@ generator client {
 datasource db {
   provider = "postgresql"
   // for local development
-   url      = "postgresql://ackerr:ackerrpassword@localhost:5432/team-uhp?schema=public"
-  // for Vercel
-  //url       = env("DATABASE_URL")
-  //directUrl = env("POSTGRES_URL")
+  url       = env("DATABASE_URL")
+  // for Vercel, uncomment
+  directUrl = env("POSTGRES_URL")
 }
 
 enum Role {
