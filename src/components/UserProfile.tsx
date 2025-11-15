@@ -52,7 +52,12 @@ const UserProfile = async ({ user }: { user: User }) => {
       <Col lg={9}>
         <Row>
           <h2>Projects</h2>
-          {projects.map((project) => <ProjectCard project={project} />)}
+          {projects.map((project) => (
+            <ProjectCard
+              key={user.id}
+              project={project}
+            />
+          ))}
         </Row>
       </Col>
       <Col>

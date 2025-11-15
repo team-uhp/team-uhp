@@ -1,19 +1,19 @@
 {
   "defaultAccounts": [
-    { "id": 1, "email": "admin1@hawaii.edu", "username": "admin1", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min1", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming", "other", "C", "CPP" ], "availability": [], "contacts": [ 2, 3 ] },
-    { "id": 2, "email": "admin2@hawaii.edu", "username": "admin2", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min2", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 3, 4 ] },
-    { "id": 3, "email": "admin3@hawaii.edu", "username": "admin3", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min3", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 4, 5 ]  },
-    { "id": 4, "email": "admin4@hawaii.edu", "username": "admin4", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min4", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 1, 5 ]  },
-    { "id": 5, "email": "admin5@hawaii.edu", "username": "admin5", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min5", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 1, 2 ]  },
-    { "id": 6, "email": "john@hawaii.edu", "username": "john", "password": "changeme", "role": "", "firstName": "John", "lastName": "Smith", "image": "replaceme.png", "phone": "808-867-5309", "skills": [], "availability": [], "contacts": []  }
+    { "email": "admin1@hawaii.edu", "username": "admin1", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min1", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming", "other", "C", "CPP" ], "availability": [], "contacts": [ 2, 3 ] },
+    { "email": "admin2@hawaii.edu", "username": "admin2", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min2", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 3, 4 ] },
+    { "email": "admin3@hawaii.edu", "username": "admin3", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min3", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 4, 5 ]  },
+    { "email": "admin4@hawaii.edu", "username": "admin4", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min4", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 1, 5 ]  },
+    { "email": "admin5@hawaii.edu", "username": "admin5", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min5", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming" ], "availability": [], "contacts": [ 1, 2 ]  },
+    { "email": "john@hawaii.edu", "username": "john", "password": "changeme", "role": "", "firstName": "John", "lastName": "Smith", "image": "replaceme.png", "phone": "808-867-5309", "skills": [], "availability": [], "contacts": []  }
   ],
 
   "defaultProject": [
-    { "id": 1, "image": "", "title": "Example Project", "descrip": "Not a real project, just initial filler.", "positions": [], "members": [ 1, 2, 3, 4, 5 ], "admins": [ 1, 2, 3 ], "duedate": "2025-12-12T23:55:00Z", "skills": [ "programming" ] },
-    { "id": 2, "image": "replaceme.png", "title": "Example Project2", "descrip": "The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20-meter shuttle run will begin in 30 seconds. Line up at the start. The second time you fail to complete a lap before the sound, you are out. The test is a lot of fun. Good luck.", "positions": [ 1 ], "members": [ 1, 2, 3, 4, 5 ], "admins": [ 1, 2, 3 ], "duedate": "2025-12-12T23:55:00Z", "skills": [ "programming" ] }
+    { "image": "", "title": "Example Project", "descrip": "Not a real project, just initial filler.", "positions": [], "members": [ 1, 2, 3, 4, 5 ], "admins": [ 1, 2, 3 ], "duedate": "2025-12-12T23:55:00Z", "skills": [ "programming" ] },
+    { "image": "replaceme.png", "title": "Example Project2", "descrip": "The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20-meter shuttle run will begin in 30 seconds. Line up at the start. The second time you fail to complete a lap before the sound, you are out. The test is a lot of fun. Good luck.", "positions": [ 1 ], "members": [ 1, 2, 3, 4, 5 ], "admins": [ 1, 2, 3 ], "duedate": "2025-12-12T23:55:00Z", "skills": [ "programming" ] }
   ],
 
   "defaultPosition": [
-    { "id": 1, "image": "replaceme.png", "title": "Programmer", "descrip": "Write code, ????, profit.", "skills": [ "programming" ], "datestart": "2025-11-06T14:27:00Z", "dateend": "2025-12-12T23:55:00Z", "project-id": 2, "admins": [ 1, 2, 3, 4, 5 ], "member": [] }
+    { "image": "replaceme.png", "title": "Programmer", "descrip": "Write code, ????, profit.", "skills": [ "programming" ], "datestart": "2025-11-06T14:27:00Z", "dateend": "2025-12-12T23:55:00Z", "project-id": 2, "admins": [ 1, 2, 3, 4, 5 ], "member": [] }
   ]
 }
