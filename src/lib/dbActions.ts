@@ -178,6 +178,33 @@ export async function editPosition(position: {
       member: position.member,
     },
   });
+
+  const project = await prisma.project.findUnique({ where: { id: position.project } });
+  if (!project) {
+    redirect('/project-list/');
+  }
+  const updatedPositions = project?.positions.filter(p => p !== position.id) || [];
+  await prisma.project.update({
+    where: { id: position.project },
+    data: {
+      positions: {
+        set: updatedPositions,
+      },
+    },
+  });
+
+  const remainingPositions = await prisma.position.findMany({
+    where: { id: { in: updatedPositions } },
+  });
+
+  const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
+
+  await prisma.project.update({
+    where: { id: position.project },
+    data: {
+      skills: updatedSkills,
+    },
+  });
 }
 
 /**
