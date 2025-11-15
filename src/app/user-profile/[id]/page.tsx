@@ -12,12 +12,13 @@ import { User } from '@prisma/client';
  * Renders User's profile page.
  * @param params is the project to display.
  */
-const ProfilePage = async ({ params }: { params: { id: number; } }) => {
-  if (Number.isNaN(Number(params.id))) {
+const ProfilePage = async ({ params }: { params: Promise<{ id: number; }> }) => {
+  const resolvedParams = await params;
+  if (Number.isNaN(Number(resolvedParams.id))) {
     notFound();
   }
   // Protect the page, only logged in users can access it.
-  console.log(params.id);
+  console.log(resolvedParams.id);
   const session = await getServerSession(authOptions);
   loggedInProtectedPage(
     session as {
@@ -25,9 +26,8 @@ const ProfilePage = async ({ params }: { params: { id: number; } }) => {
       // eslint-disable-next-line @typescript-eslint/comma-dangle
     } | null,
   );
-
   // Get the profile data from database using the id from params
-  const profile: User | null = await prisma.user.findUnique({ where: { id: Number(params.id) } });
+  const profile: User | null = await prisma.user.findUnique({ where: { id: Number(resolvedParams.id) } });
   if (!profile) {
     notFound();
   }

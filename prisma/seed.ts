@@ -18,7 +18,6 @@ async function main() {
       where: { email: account.email },
       update: {},
       create: {
-        id: account.id,
         email: account.email,
         username: account.username,
         password,
@@ -42,7 +41,6 @@ async function main() {
       where: { id: config.defaultProject.indexOf(project) + 1 },
       update: {},
       create: {
-        id: project.id,
         image: project.image,
         title: project.title,
         descrip: project.descrip,
@@ -62,7 +60,6 @@ async function main() {
       where: { id: config.defaultPosition.indexOf(position) + 1 },
       update: {},
       create: {
-        id: position.id,
         image: position.image,
         title: position.title,
         descrip: position.descrip,
