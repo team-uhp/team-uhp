@@ -12,6 +12,8 @@ type SignUpForm = {
   email: string;
   password: string;
   confirmPassword: string;
+  firstName: string;
+  lastName: string;
 };
 
 // Validation schema
@@ -24,6 +26,8 @@ const validationSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .required('Confirm Password is required')
     .oneOf([Yup.ref('password')], 'Passwords do not match'),
+  firstName: Yup.string().required(),
+  lastName: Yup.string().required(),
 });
 
 export default function SignUpPage() {
@@ -48,6 +52,8 @@ export default function SignUpPage() {
       await createUser({
         email: data.email,
         password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
       });
 
       // If it doesn't throw, assume success
@@ -136,6 +142,34 @@ export default function SignUpPage() {
               <div className="text-danger small">
                 {errors.confirmPassword?.message}
               </div>
+            </Form.Group>
+
+            {/* First name */}
+            <Form.Group className="mb-3">
+              <Form.Label style={{ color: '#024731', fontWeight: 600 }}>
+                First Name
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter first name"
+                {...register('firstName')}
+                style={{ borderColor: '#024731' }}
+              />
+              <div className="text-danger small">{errors.firstName?.message}</div>
+            </Form.Group>
+
+            {/* Last name */}
+            <Form.Group className="mb-3">
+              <Form.Label style={{ color: '#024731', fontWeight: 600 }}>
+                Last Name
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter last name"
+                {...register('lastName')}
+                style={{ borderColor: '#024731' }}
+              />
+              <div className="text-danger small">{errors.lastName?.message}</div>
             </Form.Group>
 
             {/* Server messages */}
