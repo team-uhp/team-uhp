@@ -11,7 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   // for local development
-  // url      = "postgresql://ackerr:ackerrpassword@localhost:5432/team-uhp?schema=public"
+  // url      = env("DATABASE_URL")
   // for Vercel
   url       = env("DATABASE_URL")
   directUrl = env("POSTGRES_URL")
@@ -68,7 +68,7 @@ enum Skills {
 model User {
   id            Int       @id @default(autoincrement())
   email         String    @unique
-  username      String?    @unique
+  username      String    @unique
   password      String
   role          Role      @default(USER)
   firstName     String    @default("Change")

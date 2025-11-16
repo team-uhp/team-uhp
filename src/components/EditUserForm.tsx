@@ -23,7 +23,7 @@ const onSubmit = async (data: User) => {
 function useForceUpdate() {
   const [value, setValue] = useState(0); // integer state
   console.log(`forceUpdate value: ${value}`);
-  return () => setValue(() => value + 1); // update state to force render
+  return () => setValue(v => v + 1); // update state to force render
   // A function that increment 👆🏻 the previous state like here
   // is better than directly setting `setValue(value + 1)`
 }

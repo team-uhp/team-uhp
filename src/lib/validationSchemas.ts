@@ -12,7 +12,7 @@ export const AddUserSchema = Yup.object({
 export const EditUserSchema = Yup.object({
   id: Yup.number().required(),
   email: Yup.string().email().required(),
-  username: Yup.string().nullable().required(),
+  username: Yup.string().required(),
   password: Yup.string().required(),
   role: Yup.string<Role>().oneOf(Object.values(Role)).required(),
   firstName: Yup.string().required(),
