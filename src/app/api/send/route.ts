@@ -10,7 +10,7 @@ interface EmailRequest {
 
 export const dynamic = 'force-dynamic';
 
-export default async function POST(
+export async function POST(
   request: { json: () => Promise<EmailRequest> },
 ) {
   try {
