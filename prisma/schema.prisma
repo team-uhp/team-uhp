@@ -77,6 +77,8 @@ model User {
   skills        Skills[]  @default([])
   availability  Int[]     @default([])
   contacts      Int[]     @default([])
+  validation    String?
+  validcheck    String?
 }
 
 model Project {
