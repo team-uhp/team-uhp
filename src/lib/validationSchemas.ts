@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Role, Skills } from '@prisma/client';
 
 export const AddUserSchema = Yup.object({
   email: Yup.string().required(),
@@ -10,17 +11,17 @@ export const AddUserSchema = Yup.object({
 
 export const EditUserSchema = Yup.object({
   id: Yup.number().required(),
-  email: Yup.string().required(),
+  email: Yup.string().email().required(),
   username: Yup.string().required(),
   password: Yup.string().required(),
-  role: Yup.string().required(),
+  role: Yup.string<Role>().oneOf(Object.values(Role)).required(),
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  image: Yup.string().optional(),
-  phone: Yup.string().optional(),
-  skills: Yup.array().of(Yup.string()),
-  availability: new Yup.ArraySchema().required(),
-  contacts: Yup.array().of(Yup.number()).required(),
+  image: Yup.string().nullable().optional().default(null),
+  phone: Yup.string().nullable().optional().default(null),
+  skills: Yup.array().of(Yup.string<Skills>().oneOf(Object.values(Skills)).defined()).defined().default([]),
+  availability: Yup.array().of(Yup.number().defined()).defined().default([]),
+  contacts: Yup.array().of(Yup.number().integer().defined()).defined().default([]),
 });
 
 export const AddProjectSchema = Yup.object({

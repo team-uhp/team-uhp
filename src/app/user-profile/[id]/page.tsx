@@ -10,7 +10,7 @@ import { User } from '@prisma/client';
 
 /**
  * Renders User's profile page.
- * @param params is the project to display.
+ * @param params is the profile to display.
  */
 const ProfilePage = async ({ params }: { params: Promise<{ id: number; }> }) => {
   const resolvedParams = await params;

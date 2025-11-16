@@ -52,16 +52,11 @@ const UserProfile = async ({ user }: { user: User }) => {
       <Col lg={9}>
         <Row>
           <h2>Projects</h2>
-          {projects.map((project) => (
-            <ProjectCard
-              key={user.id}
-              project={project}
-            />
-          ))}
+          {projects.map((project) => <ProjectCard key={project.id} project={project} />)}
         </Row>
       </Col>
       <Col>
-        <Button variant="primary" href={`/edit-user/${user.id}`}>Edit Profile</Button>
+        <Button variant="primary" href={`/edit-profile/${user.id}`}>Edit Profile</Button>
       </Col>
     </Row>
   );
