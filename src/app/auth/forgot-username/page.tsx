@@ -74,7 +74,7 @@ export default function ForgotUsername() {
                         onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#035a40')}
                         onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#024731')}
                       >
-                        Reset Username
+                        Find Username
                       </Button>
                     </div>
                   </Form>
@@ -87,7 +87,7 @@ export default function ForgotUsername() {
                     Please Check Your Email
                   </h3>
                   <p style={{ paddingBottom: '0.5rem' }}>
-                    Your account details have been sent to the email address you provided.
+                    Your username details have been sent to the email address you provided.
                   </p>
                   <a
                     href="/auth/signin"
