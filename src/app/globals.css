@@ -53,12 +53,26 @@ body {
   color: white !important;  /* override Bootstrap defaults */
 }
 
+a.footLink {
+  color: rgb(255, 255, 255);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a.footLink:Hover {
+  color: rgb(51, 151, 187);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+
+
 #Footer {
-  height: 100px;             
+  height: fit-content;             
   background-color: rgb(14, 58, 17); 
   color: white;              
   display: flex;            
-  align-items: center;
+  align-items: left;
 }
 
 

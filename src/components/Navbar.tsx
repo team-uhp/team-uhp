@@ -27,9 +27,6 @@ const NavBar: React.FC = () => {
          </Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link href="https://team-uhp.github.io/#user-guide">
-              User Guide
-            </Nav.Link>
             {currentUser
               ? [
                   <Nav.Link id="add-stuff-nav" href="/add" key="add" active={pathName === '/add'}>
@@ -70,6 +67,10 @@ const NavBar: React.FC = () => {
                   <PersonPlusFill />
                   Sign up
                 </NavDropdown.Item>
+              <NavDropdown.Item id="login-dropdown" title="Profile">
+              <PersonFill />
+                  My Profile
+              </NavDropdown.Item>
               </NavDropdown>
             )}
           </Nav>
