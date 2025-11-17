@@ -178,6 +178,33 @@ export async function editPosition(position: {
       member: position.member,
     },
   });
+
+  const project = await prisma.project.findUnique({ where: { id: position.project } });
+  if (!project) {
+    redirect('/project-list/');
+  }
+  const updatedPositions = project?.positions.filter(p => p !== position.id) || [];
+  await prisma.project.update({
+    where: { id: position.project },
+    data: {
+      positions: {
+        set: updatedPositions,
+      },
+    },
+  });
+
+  const remainingPositions = await prisma.position.findMany({
+    where: { id: { in: updatedPositions } },
+  });
+
+  const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
+
+  await prisma.project.update({
+    where: { id: position.project },
+    data: {
+      skills: updatedSkills,
+    },
+  });
 }
 
 /**
@@ -230,9 +257,11 @@ export async function deletePosition(id: number) {
 export async function createUser(data: {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
 }) {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
-  const { email, password } = data;
+  const { email, password, firstName, lastName } = data;
   const hashedPassword = await hash(password, 10);
 
   try {
@@ -242,8 +271,8 @@ export async function createUser(data: {
         password: hashedPassword,
         role: 'USER',
         username: email.split('@')[0],
-        firstName: 'Change',
-        lastName: 'Me',
+        firstName,
+        lastName,
         image: '',
         phone: '',
       },
@@ -270,11 +299,11 @@ export async function editUser(credentials: {
   role: Role;
   firstName: string;
   lastName: string;
-  image: string;
-  phone: string;
+  image: string | null;
+  phone: string | null;
   skills: Skills[];
   availability: number[];
-  contacts: number[]
+  contacts: number[];
 }) {
   // console.log(`editUser data: ${JSON.stringify(project, null, 2)}`);
   await prisma.user.update({
@@ -282,7 +311,7 @@ export async function editUser(credentials: {
     data: {
       id: credentials.id,
       email: credentials.email,
-      username: credentials.username,
+      username: credentials.username || credentials.email.split('@')[0],
       password: credentials.password,
       role: credentials.role,
       firstName: credentials.firstName,
@@ -296,6 +325,17 @@ export async function editUser(credentials: {
   });
   // After updating, redirect to the list page
   redirect('/user-profile');
+}
+
+/**
+ * Deletes an existing user from the database.
+ * @param id, the id of the user to delete.
+ */
+export async function deleteUser(id: number) {
+  // console.log(`deleteProject id: ${id}`);
+  await prisma.user.delete({
+    where: { id },
+  });
 }
 
 /**
