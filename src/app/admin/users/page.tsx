@@ -1,16 +1,18 @@
 import { getServerSession } from 'next-auth';
-import { Col, Container, Row, Table } from 'react-bootstrap';
-import { prisma } from '@/lib/prisma';
 import { adminProtectedPage } from '@/lib/page-protection';
 import authOptions from '@/lib/authOptions';
+import UserList from '@/components/UserList';
+import { Container, Row, Col, Table } from 'react-bootstrap';
+import { prisma } from '@/lib/prisma';
 
-const AdminPage = async () => {
+const UsersAdminPage = async () => {
   const session = await getServerSession(authOptions);
   adminProtectedPage(
     session as {
       user: { email: string; id: string; randomKey: string };
     } | null,
   );
+
   const users = await prisma.user.findMany({});
 
   return (
@@ -18,36 +20,23 @@ const AdminPage = async () => {
       <Container id="list" fluid className="py-3">
         <Row>
           <Col>
-            <h1>List Stuff Admin</h1>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Quantity</th>
-                  <th>Condition</th>
-                  <th>Owner</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-            </Table>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
             <h1>List Users Admin</h1>
             <Table striped bordered hover>
               <thead>
                 <tr>
+                  <th>Id #</th>
+                  <th>Username</th>
                   <th>Email</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
                   <th>Role</th>
+                  <th>Image</th>
+                  <th>Edit</th>
                 </tr>
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.email}</td>
-                    <td>{user.role}</td>
-                  </tr>
+                  <UserList key={user.id} {...user} />
                 ))}
               </tbody>
             </Table>
@@ -58,4 +47,4 @@ const AdminPage = async () => {
   );
 };
 
-export default AdminPage;
+export default UsersAdminPage;

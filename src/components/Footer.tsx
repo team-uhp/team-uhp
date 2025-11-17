@@ -30,9 +30,9 @@ const Footer = () => {
           <br />
           {currentUser && role === 'ADMIN' ? (
             <>
-              <a href="admin-users/">User Admin</a>
+              <a href="/admin/users">User Admin</a>
               <br />
-              <a href="admin-projects/">Project Admin</a>
+              <a href="/admin/projects">Project Admin</a>
               <br />
             </>
           )
