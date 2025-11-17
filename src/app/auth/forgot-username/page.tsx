@@ -87,7 +87,7 @@ export default function ForgotUsername() {
                     Please Check Your Email
                   </h3>
                   <p style={{ paddingBottom: '0.5rem' }}>
-                    Instructions have been sent to reset your username at the email address you provided.
+                    Your account details have been sent to the email address you provided.
                   </p>
                   <a
                     href="/auth/signin"
