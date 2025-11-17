@@ -17,6 +17,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ id: number; }> }) => 
   if (Number.isNaN(Number(resolvedParams.id))) {
     notFound();
   }
+
   // Protect the page, only logged in users can access it.
   console.log(resolvedParams.id);
   const session = await getServerSession(authOptions);
