@@ -116,7 +116,7 @@ export default function SignInPage() {
             {' '}
             |
             {' '}
-            <a href="/auth/forgot-password" style={{ color: '#F8C100', fontWeight: 600 }}>
+            <a href="/forgot-password" style={{ color: '#F8C100', fontWeight: 600 }}>
               Forgot password?
             </a>
           </div>
