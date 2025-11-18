@@ -88,7 +88,7 @@ a.footLink:Hover {
   padding-right: 30px;
 }
 
-nav-bottom {
+.nav-bottom {
   position: absolute;
   bottom: 0;
   width: 100%;
