@@ -50,7 +50,7 @@ export default function ForgotUsername() {
                       textAlign: 'left',
                     }}
                   >
-                    Enter the UH email address associated with your account to reset your username.
+                    Enter the UH email address associated with your account to find your username.
                   </p>
                   <Form onSubmit={handleSubmit(onSubmit)}>
                     <Form.Group className="form-group">
@@ -87,7 +87,7 @@ export default function ForgotUsername() {
                     Please Check Your Email
                   </h3>
                   <p style={{ paddingBottom: '0.5rem' }}>
-                    Your username details have been sent to the email address you provided.
+                    Your account details have been sent to the email address you provided.
                   </p>
                   <a
                     href="/auth/signin"
