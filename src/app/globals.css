@@ -88,3 +88,13 @@ a.footLink:Hover {
   padding-right: 30px;
 }
 
+nav-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 10px 0;
+  box-sizing: border-box; /* Include padding in the element's total width and height */
+}

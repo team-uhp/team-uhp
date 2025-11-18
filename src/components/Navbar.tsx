@@ -25,14 +25,20 @@ const NavBar: React.FC = () => {
           />
       </Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
+          <Nav id="TopbarLeft" className="ms-auto">
             {currentUser
               ? [
-                  <Nav.Link id="add-stuff-nav" href="/add" key="add" active={pathName === '/add'}>
-                    Add Stuff
+                  <Nav.Link>
+                    Contacts
                   </Nav.Link>,
-                  <Nav.Link id="list-stuff-nav" href="/list" key="list" active={pathName === '/list'}>
-                    List Stuff
+                  <Nav.Link>
+                    Project Listings
+                  </Nav.Link>,
+                  <Nav.Link>
+                    Time Urgent
+                  </Nav.Link>,
+                  <Nav.Link>
+                    Open Source Projects
                   </Nav.Link>,
                 ]
               : ''}
