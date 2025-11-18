@@ -5,11 +5,12 @@ import { Badge, Button, Col, Row } from 'react-bootstrap';
 import Image from 'next/image';
 import { Project, User } from '@prisma/client';
 import ProjectCard from './ProjectCard';
+import role from @prisma/client
 
 /** Renders the information page for a Project. */
 const UserProfile = async ({ user }: { user: User }) => {
   const session = await getServerSession(authOptions) as {
-    user: { email: string; id: string; randomKey: string };
+    user: { email: string; id: string; role: string };
   } | null;
 
   // Check if the user is a member of any projects
