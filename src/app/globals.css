@@ -1,13 +1,14 @@
-html,
-body {
-  background: url('/UhManoaImage2.jpg') no-repeat center;
-  background-size: cover;
-  --bs-light-rgb: 236, 236, 236;
-  box-sizing: border-box;
-  height: fit-content;
-  padding: 0;
+html, body {
+  height: 100%;
   margin: 0;
+  padding: 0;
+  background-color: rgb(230, 230, 230);
+  color: rgb(0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
+
 .wrapper {
   box-sizing: border-box;
   min-height: 100%;
@@ -23,9 +24,8 @@ body {
   text-align: center;      
   font-size: 4rem;  
   font-weight: 800;  
-  color: rgb(255, 255, 255);      
+  color: rgb(0, 0, 0);      
 }
-
 
 .fade-in {
   opacity: 0;
@@ -39,18 +39,25 @@ body {
 
 #Topbar {
   height: 75px;             
-  background-color: rgb(14, 58, 17); 
+  background-color: rgb(33, 33, 33); 
   color: white;              
   display: flex;            
   justify-content: flex-end;
   align-items: center;
-  width: 1000;
+  width: 100%;
   padding: 1-p;
+  top:0;
+  position: fixed;
 }
 
 #Topbar .nav-link,
 #Topbar .nav-dropdown-toggle{
   color: white !important;  /* override Bootstrap defaults */
+}
+
+#TopbarLeft {
+  display: flex;
+  gap: 30px;
 }
 
 a.footLink {
@@ -65,15 +72,19 @@ a.footLink:Hover {
   text-decoration: none;
 }
 
-
-
 #Footer {
   height: fit-content;             
-  background-color: rgb(14, 58, 17); 
-  color: white;              
-  display: flex;            
-  align-items: left;
+  background-color: rgb(33, 33, 33); 
+  color: white;    
+  width:100%;  
+  position:fixed;
+  bottom:0;                  
 }
 
-
+#Logo {
+  float: left;
+  left: 0;
+  padding-left: 15px;
+  padding-right: 30px;
+}
 

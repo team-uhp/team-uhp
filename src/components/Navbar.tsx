@@ -16,15 +16,14 @@ const NavBar: React.FC = () => {
   return (
     <Navbar id="Topbar">
       <Container>
-         <Navbar.Brand href="/">
+      <Navbar.Brand href="/">
           <img
             id="Logo"
             src="/LogoMockup.png"
             alt="Site Logo"
             height="50"
-            className="align-middle"
           />
-         </Navbar.Brand>
+      </Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             {currentUser
