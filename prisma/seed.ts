@@ -29,6 +29,7 @@ async function main() {
         skills: account.skills.map(s => s as Skills) || [],
         availability: account.availability,
         contacts: account.contacts,
+        validation: account.validation,
       },
     });
     // console.log(`  Created user: ${user.email} with role: ${user.role}`);

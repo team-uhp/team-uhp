@@ -10,11 +10,14 @@ import { User, Skills } from '@prisma/client';
 import { EditUserSchema } from '@/lib/validationSchemas';
 import { editUser } from '@/lib/dbActions';
 import { useState } from 'react';
+import { InferType } from 'yup';
 import TagsContainer from './TagsContainer';
 
-const onSubmit = async (data: User) => {
+type EditUserFormData = InferType<typeof EditUserSchema>;
+
+const onSubmit = async (data: EditUserFormData) => {
   console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
-  await editUser(data);
+  await editUser(data as User);
   swal('Success', 'Your item has been updated', 'success', {
     timer: 2000,
   });
@@ -24,19 +27,14 @@ function useForceUpdate() {
   const [value, setValue] = useState(0); // integer state
   console.log(`forceUpdate value: ${value}`);
   return () => setValue(v => v + 1); // update state to force render
-  // A function that increment 👆🏻 the previous state like here
-  // is better than directly setting `setValue(value + 1)`
 }
-
-const EditUserForm = ({ user }: { user: User }) => {
+  // A function that increment 👆🏻 the previous state like here
+function EditUserForm({ user }: { user: User; }) {
   const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<User>({
+    register, handleSubmit, reset, formState: { errors },
+  } = useForm<EditUserFormData>({
     resolver: yupResolver(EditUserSchema),
-    defaultValues: user,
+    defaultValues: user as EditUserFormData,
   });
   const forceUpdate = useForceUpdate();
 
@@ -76,8 +74,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     {...register('email')}
                     defaultValue={user.email}
                     required
-                    className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                  />
+                    className={`form-control ${errors.email ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.email?.message}</div>
                 </Form.Group>
                 <Form.Group>
@@ -86,8 +83,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     type="text"
                     {...register('username')}
                     defaultValue={user.username ? user.username : ''}
-                    className={`form-control ${errors.username ? 'is-invalid' : ''}`}
-                  />
+                    className={`form-control ${errors.username ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.username?.message}</div>
                 </Form.Group>
                 <Form.Group>
@@ -96,8 +92,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     type="password"
                     {...register('password')}
                     defaultValue={user.password}
-                    className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                  />
+                    className={`form-control ${errors.password ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.password?.message}</div>
                 </Form.Group>
                 <Form.Group>
@@ -106,8 +101,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     type="text"
                     {...register('firstName')}
                     defaultValue={user.firstName}
-                    className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
-                  />
+                    className={`form-control ${errors.firstName ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.firstName?.message}</div>
                 </Form.Group>
                 <Form.Group>
@@ -116,8 +110,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     type="text"
                     {...register('lastName')}
                     defaultValue={user.lastName}
-                    className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
-                  />
+                    className={`form-control ${errors.lastName ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.lastName?.message}</div>
                 </Form.Group>
                 <Form.Group>
@@ -126,8 +119,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     type="text"
                     {...register('image')}
                     defaultValue={user.image ? user.image : ''}
-                    className={`form-control ${errors.image ? 'is-invalid' : ''}`}
-                  />
+                    className={`form-control ${errors.image ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.image?.message}</div>
                 </Form.Group>
                 <Form.Group>
@@ -136,8 +128,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     type="text"
                     {...register('phone')}
                     defaultValue={user.phone ? user.phone?.toString() : ''}
-                    className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                  />
+                    className={`form-control ${errors.phone ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.phone?.message}</div>
                 </Form.Group>
                 <Form.Group onClick={forceUpdate}>
@@ -149,8 +140,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     removeTag={(tag: any) => removeTag(tag, skillTags, setSkillTags)}
                     addTag={(tag: any) => addTag(tag, skillTags, setSkillTags)}
                     forceUpdate={forceUpdate}
-                    {...register('skills')}
-                  />
+                    {...register('skills')} />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
                 </Form.Group>
                 <Form.Group onClick={forceUpdate}>
@@ -162,8 +152,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     removeTag={(tag: any) => removeTag(tag, availabilityTags, setAvailabilityTags)}
                     addTag={(tag: any) => addTag(tag, availabilityTags, setAvailabilityTags)}
                     forceUpdate={forceUpdate}
-                    {...register('availability')}
-                  />
+                    {...register('availability')} />
                   <div className="invalid-feedback">{errors.availability?.message}</div>
                 </Form.Group>
                 <Form.Group onClick={forceUpdate}>
@@ -175,8 +164,7 @@ const EditUserForm = ({ user }: { user: User }) => {
                     removeTag={(tag: any) => removeTag(tag, contactTags, setContactTags)}
                     addTag={(tag: any) => addTag(tag, contactTags, setContactTags)}
                     forceUpdate={forceUpdate}
-                    {...register('contacts')}
-                  />
+                    {...register('contacts')} />
                 </Form.Group>
                 <Form.Group className="form-group">
                   <Row className="pt-3">
@@ -199,6 +187,6 @@ const EditUserForm = ({ user }: { user: User }) => {
       </Row>
     </Container>
   );
-};
+}
 
 export default EditUserForm;
