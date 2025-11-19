@@ -5,7 +5,7 @@
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { BoxArrowInRight, Lock, Person, PersonPlusFill } from 'react-bootstrap-icons';
+import { BoxArrowInRight, Lock, Person, PersonPlusFill, BoxArrowRight } from 'react-bootstrap-icons';
 
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -21,7 +21,7 @@ const NavBar: React.FC = () => {
           <Nav className="mx-auto">
             {currentUser
               ? [
-                  <Nav.Link id="home-page-nav" href="/home-page" key="home" active={pathName === '/home-page'}>
+                  <Nav.Link id="home-page-nav" href="/" key="home" active={pathName === '/'}>
                     Home
                   </Nav.Link>,
                   <Nav.Link id="list-project-nav" href="/project-list" key="list" active={pathName === '/project-list'}>
@@ -37,9 +37,6 @@ const NavBar: React.FC = () => {
                     active={pathName === '/helpful-tools'}
                   >
                     Helpful Tools
-                  </Nav.Link>,
-                  <Nav.Link id="sign-out-nav" href="/auth/signout" key="signout" active={pathName === '/auth/signout'}>
-                    Sign Out
                   </Nav.Link>,
                 ]
               : ''}
@@ -57,6 +54,16 @@ const NavBar: React.FC = () => {
                 <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
                   <Lock />
                   &nbsp;&nbsp;Change Password
+                </NavDropdown.Item>
+                <NavDropdown.Item
+                  id="sign-out-nav"
+                  href="/auth/signout"
+                  key="signout"
+                  active={pathName === '/auth/signout'}
+                >
+                  <BoxArrowRight />
+                  &nbsp;&nbsp;
+                  Sign Out
                 </NavDropdown.Item>
               </NavDropdown>
             ) : (
