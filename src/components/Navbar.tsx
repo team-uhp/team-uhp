@@ -42,9 +42,6 @@ const NavBar: React.FC = () => {
                     >
                     Helpful Tools
                     </Nav.Link>,
-                  <Nav.Link id="sign-out-nav" href="/auth/signout" key="signout" active={pathName === '/auth/signout'}>
-                    Sign Out
-                  </Nav.Link>,
                 ]
               : ''}
           </Nav>
@@ -62,6 +59,9 @@ const NavBar: React.FC = () => {
                   <Lock />
                   &nbsp;&nbsp;Change Password
                 </NavDropdown.Item>
+                <NavDropdown.Item id="sign-out-nav" href="/auth/signout" key="signout" active={pathName === '/auth/signout'}>
+                    Sign Out
+                  </NavDropdown.Item>,
               </NavDropdown>
             ) : (
               <NavDropdown id="login-dropdown" title="Login">
