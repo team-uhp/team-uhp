@@ -47,7 +47,6 @@ html, body {
   width: 100%;
   padding: 1-p;
   top:0;
-  position: fixed;
 }
 
 #Topbar .nav-link,
@@ -77,7 +76,6 @@ a.footLink:Hover {
   background-color: rgb(33, 33, 33); 
   color: white;    
   width:100%;  
-  position:fixed;
   bottom:0;                  
 }
 
