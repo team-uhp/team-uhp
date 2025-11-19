@@ -22,11 +22,9 @@ const Footer = () => {
           <br />
           <a href="http://team-uhp.github.io">About Us</a>
           <br />
-          <a href="/about-uhp/">About Team UHp!</a>
+          <a href="https://team-uhp.github.io/#user-guide">How-To Guides</a>
           <br />
-          <a href="/how-to/">How-To Guides</a>
-          <br />
-          <a href="/contact-us/">Support / Contact Us</a>
+          <a href="mailto:team.uhp.automation@gmail.com">Support / Contact Us</a>
           <br />
           {currentUser && role === 'ADMIN' ? (
             <>

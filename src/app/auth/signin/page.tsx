@@ -18,13 +18,13 @@ export default function SignInPage() {
       redirect: false,
       email,
       password,
-      callbackUrl: '/list',
+      callbackUrl: '/',
     });
 
     if (result?.error) {
       setError('Invalid email or password, or account not verified');
     } else {
-      router.push('/list');
+      router.push('/');
     }
   };
 
