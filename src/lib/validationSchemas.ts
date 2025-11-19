@@ -7,6 +7,7 @@ export const AddUserSchema = Yup.object({
   password: Yup.string().required(),
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
+  validation: Yup.boolean().required(),
 });
 
 export const EditUserSchema = Yup.object({
@@ -22,6 +23,8 @@ export const EditUserSchema = Yup.object({
   skills: Yup.array().of(Yup.string<Skills>().oneOf(Object.values(Skills)).defined()).defined().default([]),
   availability: Yup.array().of(Yup.number().defined()).defined().default([]),
   contacts: Yup.array().of(Yup.number().integer().defined()).defined().default([]),
+  validation: Yup.boolean().required().default(false),
+  validcheck: Yup.string().optional(),
 });
 
 export const AddProjectSchema = Yup.object({
