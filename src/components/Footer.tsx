@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
 import { useSession } from 'next-auth/react';
-import { Col, Container } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 
 /** The Footer appears at the bottom of every page. Rendered by the App Layout component. */
 const Footer = () => {
@@ -11,34 +11,44 @@ const Footer = () => {
   const role = userWithRole?.randomKey;
 
   return (
-    <footer className="mt-auto py-3 bg-light">
+    <footer id="Footer" className="mt-auto py-1">
       <Container>
-        <Col className="text-center">
-          Team UHp!
-          <br />
-          University of Hawaii at Manoa
-          <br />
-          Honolulu, HI 96822
-          <br />
-          <a href="http://team-uhp.github.io">About Us</a>
-          <br />
-          <a href="https://team-uhp.github.io/#user-guide">How-To Guides</a>
-          <br />
-          <a href="mailto:team.uhp.automation@gmail.com">Support / Contact Us</a>
-          <br />
-          {currentUser && role === 'ADMIN' ? (
-            <>
-              <a href="/admin/users">User Admin</a>
-              <br />
-              <a href="/admin/projects">Project Admin</a>
-              <br />
-            </>
-          )
-            : ''}
-        </Col>
+        <Row className="justify-content-center text-center">
+          <Col xs={3} md={4}>
+            <br />
+            <u>About</u>
+            <br />
+            <a className="footLink" href="https://team-uhp.github.io/#team">About the devs</a>
+            <br />
+            <a className="footLink" href="https://team-uhp.github.io/#overview">About Team-UHp</a>
+          </Col>
+
+          <Col xs={12} md={4}>
+            <br />
+            <u>Help</u>
+            <br />
+            <a className="footLink" href="https://team-uhp.github.io/#user-guide">User Guide</a>
+            <br />
+            <a className="footLink" href="https://team-uhp.github.io/">Support/Contact Us</a>
+          </Col>
+
+          <Col xs={7} md={4}>
+            {currentUser && role === 'ADMIN' ? (
+              <>
+                <a href="/admin/users">User Admin</a>
+                <br />
+                <a href="/admin/projects">Project Admin</a>
+                <br />
+              </>
+            )
+              : ''}
+          </Col>
+
+        </Row>
       </Container>
     </footer>
   );
 };
 
 export default Footer;
+

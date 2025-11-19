@@ -33,8 +33,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
-, "email-sender.js"  ],
+    ".next/dev/types/**/*.ts",
+    "email-sender.js"
+  ],
   "exclude": [
     "node_modules"
   ]
