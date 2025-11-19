@@ -24,7 +24,7 @@ export const EditUserSchema = Yup.object({
   availability: Yup.array().of(Yup.number().defined()).defined().default([]),
   contacts: Yup.array().of(Yup.number().integer().defined()).defined().default([]),
   validation: Yup.boolean().required().default(false),
-  validcheck: Yup.string().optional(),
+  validcheck: Yup.string().optional().nullable(),
 });
 
 export const AddProjectSchema = Yup.object({
