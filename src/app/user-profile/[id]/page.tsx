@@ -10,13 +10,14 @@ import { User } from '@prisma/client';
 
 /**
  * Renders User's profile page.
- * @param params is the project to display.
+ * @param params is the profile to display.
  */
 const ProfilePage = async ({ params }: { params: Promise<{ id: number; }> }) => {
   const resolvedParams = await params;
   if (Number.isNaN(Number(resolvedParams.id))) {
     notFound();
   }
+
   // Protect the page, only logged in users can access it.
   console.log(resolvedParams.id);
   const session = await getServerSession(authOptions);
