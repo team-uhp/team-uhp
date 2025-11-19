@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { Button, Form, Card, Row, Col } from 'react-bootstrap';
+import { Button, Form, Card } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 
 export default function SignInPage() {
@@ -109,42 +109,17 @@ export default function SignInPage() {
             </Button>
           </Form>
 
-          <Row style={{ marginTop: '10px' }}>
-            <Col>
-              <div className="mt-4 text-center" style={{ color: '#024731' }}>
-                <a href="/auth/signup" style={{ color: '#024731', fontWeight: 600 }}>
-                  Create account
-                </a>
-                {' '}
-              </div>
-            </Col>
-            <Col>
-              <Row>
-                <Col xs="auto" className="d-flex justify-content-center">
-                  <div
-                    style={{
-                      width: '2px',
-                      backgroundColor: '#024731',
-                      height: '55px',
-                      marginTop: '15px',
-                    }}
-                  />
-                </Col>
-                <Col className="text-start" style={{ marginTop: '10px' }}>
-                  <div>
-                    <a href="/auth/forgot-password" style={{ color: '#F8C100', fontWeight: 500 }}>
-                      Forgot Password?
-                    </a>
-                  </div>
-                  <div style={{ marginTop: '0.5rem' }}>
-                    <a href="/auth/forgot-username" style={{ color: '#F8C100', fontWeight: 500 }}>
-                      Forgot Username?
-                    </a>
-                  </div>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
+          <div className="mt-4 text-center" style={{ color: '#024731' }}>
+            <a href="/auth/signup" style={{ color: '#024731', fontWeight: 600 }}>
+              Create account
+            </a>
+            {' '}
+            |
+            {' '}
+            <a href="/auth/forgot-password" style={{ color: '#F8C100', fontWeight: 600 }}>
+              Forgot password?
+            </a>
+          </div>
         </Card.Body>
       </Card>
     </div>
