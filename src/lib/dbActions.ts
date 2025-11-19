@@ -1,6 +1,6 @@
 'use server';
 
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { Role, Skills } from '@prisma/client';
@@ -305,6 +305,7 @@ export async function createUser(data: {
     );
 
     return user;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
       throw new Error('Email already registered. ');
@@ -366,15 +367,34 @@ export async function deleteUser(id: number) {
 
 /**
  * Changes the password of an existing user in the database.
- * @param credentials, an object with the following properties: email, password.
+ * @param credentials, an object with: email, oldpassword, password.
  */
-export async function changePassword(credentials: { email: string; password: string }) {
-  // console.log(`changePassword data: ${JSON.stringify(credentials, null, 2)}`);
-  const password = await hash(credentials.password, 10);
+export async function changePassword(credentials: {
+  email: string;
+  oldpassword: string;
+  password: string;
+}) {
+  const { email, oldpassword, password } = credentials;
+
+  // Find the user by email
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    throw new Error('User not found.');
+  }
+
+  // Check old password
+  const isMatch = await compare(oldpassword, user.password);
+  if (!isMatch) {
+    throw new Error('Old password is incorrect.');
+  }
+
+  // Updatenew password
+  const hashedPassword = await hash(password, 10);
   await prisma.user.update({
-    where: { email: credentials.email },
+    where: { email },
     data: {
-      password,
+      password: hashedPassword,
     },
   });
+
 }
