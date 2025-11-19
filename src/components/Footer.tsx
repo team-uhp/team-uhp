@@ -35,9 +35,12 @@ const Footer = () => {
           <Col xs={7} md={4}>
             {currentUser && role === 'ADMIN' ? (
               <>
-                <a href="/admin/users">User Admin</a>
                 <br />
-                <a href="/admin/projects">Project Admin</a>
+                <u>Admin</u>
+                <br />
+                <a className="footLink" href="/admin/users">User Admin</a>
+                <br />
+                <a className="footLink" href="/admin/projects">Project Admin</a>
                 <br />
               </>
             )
