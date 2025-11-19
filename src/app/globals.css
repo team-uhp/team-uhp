@@ -47,7 +47,6 @@ html, body {
   width: 100%;
   padding: 1-p;
   top:0;
-  position: fixed;
 }
 
 #Topbar .nav-link,
