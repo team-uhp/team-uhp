@@ -22,7 +22,7 @@ export default function SignInPage() {
     });
 
     if (result?.error) {
-      setError('Invalid email or password');
+      setError('Invalid email or password, or account not verified');
     } else {
       router.push('/list');
     }

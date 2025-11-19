@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createUser } from '@/lib/dbActions';
-import sendAutoEmail from '@/lib/email';
 
 type SignUpForm = {
   email: string;
@@ -60,13 +59,6 @@ export default function SignUpPage() {
       // If it doesn't throw, assume success
       setSuccess(true);
       reset();
-
-      await sendAutoEmail(
-        data.email,
-        'Team UHp! verification link.',
-        '<h1>Team UHp! welcomes you!</h1><br /><h3><a href="/">Click here to verify your account.</a></h3><br />'
-        + 'If you did not create an account at team-uhp.vercel.app, ignore this email.',
-      );
 
       // Redirect after short delay
       setTimeout(() => router.push('/auth/signin'), 1500);

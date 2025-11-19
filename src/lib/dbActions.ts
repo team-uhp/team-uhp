@@ -6,6 +6,8 @@ import { getServerSession } from 'next-auth';
 import { Role, Skills } from '@prisma/client';
 import { prisma } from './prisma';
 import authOptions from './authOptions';
+import sendAutoEmail from './email';
+import keyGen from './keygen';
 
 /**
  * Adds a new project to the database.
@@ -265,6 +267,7 @@ export async function createUser(data: {
   const hashedPassword = await hash(password, 10);
 
   try {
+    const key = await keyGen();
     const user = await prisma.user.create({
       data: {
         email,
@@ -275,8 +278,31 @@ export async function createUser(data: {
         lastName,
         image: '',
         phone: '',
+        validcheck: key,
       },
     });
+
+    await sendAutoEmail(
+      data.email,
+      'Team UHp! verification link.',
+      `<!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+      </head>
+      <body>
+        <h1>Team UHp! welcomes you!</h1>
+        <br />
+        <h3>
+          <a href="https://team-uhp.vercel.app/verify?token=${key}">
+            Click here to verify your account.
+          </a>
+        </h3>
+        <br />
+        <p>If you did not create an account at team-uhp.vercel.app, ignore this email.</p>
+        </body>
+        </html>`,
+    );
 
     return user;
   } catch (error: any) {

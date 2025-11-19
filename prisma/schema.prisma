@@ -13,7 +13,7 @@ datasource db {
   // for local development
   url       = env("DATABASE_URL")
   // for Vercel, uncomment
-  directUrl = env("POSTGRES_URL")
+  //directUrl = env("POSTGRES_URL")
 }
 
 enum Role {
@@ -77,7 +77,7 @@ model User {
   skills        Skills[]  @default([])
   availability  Int[]     @default([])
   contacts      Int[]     @default([])
-  validation    String?
+  validation    Boolean   @default(false)
   validcheck    String?
 }
 
