@@ -32,6 +32,10 @@ const authOptions: NextAuthOptions = {
           return null;
         }
 
+        if (!user.validation) {
+          return null;
+        }
+
         const isPasswordValid = await compare(credentials.password, user.password);
         if (!isPasswordValid) {
           return null;

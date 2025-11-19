@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Form, Card } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
