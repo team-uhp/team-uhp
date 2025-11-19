@@ -25,7 +25,7 @@ const NavBar: React.FC = () => {
           <Nav id="TopbarLeft" className="ms-auto">
             {currentUser
               ? [
-                   <Nav.Link id="home-page-nav" href="/home-page" key="home" active={pathName === '/home-page'}>
+                   <Nav.Link id="home-page-nav" href="/" key="home" active={pathName === '/'}>
                     Home
                    </Nav.Link>,
                   <Nav.Link id="list-project-nav" href="/project-list" key="list" active={pathName === '/project-list'}>
