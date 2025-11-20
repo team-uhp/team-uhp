@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useSession } from 'next-auth/react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -10,7 +11,6 @@ import { addProject } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddProjectSchema } from '@/lib/validationSchemas';
 import { useState, useEffect } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { DayPicker } from 'react-day-picker';
 import Link from 'next/link';
 

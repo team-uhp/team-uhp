@@ -1,3 +1,4 @@
+import React from 'react';
 import { getServerSession } from 'next-auth';
 import { Col, Container, Row } from 'react-bootstrap';
 import { prisma } from '@/lib/prisma';
@@ -15,7 +16,6 @@ const ProjectListPage = async () => {
   loggedInProtectedPage(
     session as {
       user: { email: string; id: string; randomKey: string, skills: Skills[] };
-      // eslint-disable-next-line @typescript-eslint/comma-dangle
     } | null,
   );
   const projects = await prisma.project.findMany();

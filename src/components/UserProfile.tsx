@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/authOptions';
+import React from 'react';
 import { Badge, Button, Col, Row } from 'react-bootstrap';
 import Image from 'next/image';
 import { Project, User } from '@prisma/client';

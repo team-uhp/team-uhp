@@ -1,14 +1,13 @@
 'use client';
 
-/* eslint-disable react/prop-types */
+import React from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
-import { useForm } from 'react-hook-form';
+import { useForm, Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
 import { addPosition } from '@/lib/dbActions';
 import { AddPositionSchema } from '@/lib/validationSchemas';
 import { useState, useEffect } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { DateRange, DayPicker } from 'react-day-picker';
 import Link from 'next/link';
 import { Skills } from '@prisma/client';
@@ -52,7 +51,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
     setValue,
     formState: { errors },
   } = useForm<PositionFormValues>({
-    resolver: yupResolver(AddPositionSchema) as any,
+    resolver: yupResolver(AddPositionSchema) as Resolver<PositionFormValues>,
     defaultValues: {
       title: '',
       descrip: '',
@@ -178,7 +177,6 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
                     selected={selected}
                     onSelect={setSelected}
                     footer={
-                      // eslint-disable-next-line max-len
                       selected?.from ? `Selected: ${selected.from.toLocaleDateString()}${selected.to ? ` - ${selected.to.toLocaleDateString()}` : ''}` : 'Pick a day.'
                     }
                   />

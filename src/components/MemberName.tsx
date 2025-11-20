@@ -1,3 +1,4 @@
+import React from 'react';
 import { prisma } from '@/lib/prisma';
 import { Button } from 'react-bootstrap';
 import { notFound } from 'next/navigation';
