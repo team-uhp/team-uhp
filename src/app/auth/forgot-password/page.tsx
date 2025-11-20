@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { forgotPasswordEmail } from '@/lib/dbActions';
+import React, { useState } from 'react';
 import { Container, Col, Row, Form, Button, Card } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 
@@ -15,6 +16,7 @@ export default function ForgotPassword() {
   const onSubmit = (data: ForgotPasswordForm) => {
     console.log(data);
     setSubmitted(true);
+    forgotPasswordEmail(data.email);
   };
 
   return (

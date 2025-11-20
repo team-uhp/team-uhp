@@ -1,3 +1,4 @@
+import React from 'react';
 import UserProfile from '@/components/UserProfile';
 import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
@@ -24,7 +25,6 @@ const ProfilePage = async ({ params }: { params: Promise<{ id: number; }> }) => 
   loggedInProtectedPage(
     session as {
       user: { email: string; id: string; randomKey: string };
-      // eslint-disable-next-line @typescript-eslint/comma-dangle
     } | null,
   );
   // Get the profile data from database using the id from params

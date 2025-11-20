@@ -1,3 +1,4 @@
+import React from 'react';
 import { prisma } from '@/lib/prisma';
 import { Container } from 'react-bootstrap';
 
@@ -19,7 +20,7 @@ export default async function VerifyEmail({
       <Container>
         <h1>Invalid verification link</h1>
         <p>
-          The verification link is invalid or expired, or you have previously
+          The verification link is invalid, expired, or you have previously
           been verified. Contact us via the email below for assistance, or&nbsp;
         </p>
         <a href="/auth/signup">signup for an account</a>

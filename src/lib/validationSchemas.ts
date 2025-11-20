@@ -25,6 +25,8 @@ export const EditUserSchema = Yup.object({
   contacts: Yup.array().of(Yup.number().integer().defined()).defined().default([]),
   validation: Yup.boolean().required().default(false),
   validcheck: Yup.string().optional().nullable(),
+  passchgcanx: Yup.string().optional().nullable(),
+  validpasschg: Yup.string().optional().nullable(),
 });
 
 export const AddProjectSchema = Yup.object({
@@ -64,7 +66,7 @@ export const EditPositionSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  skills: Yup.array().of(Yup.string()),
+  skills: Yup.array().of(Yup.string()).required(),
   datestart: Yup.string().required(),
   dateend: Yup.string().required(),
   project: Yup.number().required(),

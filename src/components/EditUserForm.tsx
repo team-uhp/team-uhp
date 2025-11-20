@@ -1,7 +1,6 @@
-/* eslint-disable max-len */
-
 'use client';
 
+import React from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
@@ -45,14 +44,13 @@ function EditUserForm({ user }: { user: User; }) {
   console.log(availabilityTags);
   console.log(contactTags);
   // Function to add a new tag
-  const addTag = (newTag: any, tags: any[], setTags: (tags: any[]) => void) => {
+  const addTag = <T,>(newTag: T, tags: T[], setTags: (tags: T[]) => void) => {
     if (newTag && !tags.includes(newTag)) { // Prevent adding empty or duplicate tags
       setTags([...tags, newTag]);
     }
   };
 
-  // Function to remove a tag
-  const removeTag = (tagToRemove: any, tags: any[], setTags: (tags: any[]) => void) => {
+  const removeTag = <T,>(tagToRemove: T, tags: T[], setTags: (tags: T[]) => void) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
@@ -137,8 +135,8 @@ function EditUserForm({ user }: { user: User; }) {
                     defaultValue="Select a skill to add"
                     type="skills"
                     tags={skillTags.map((skill) => skill)}
-                    removeTag={(tag: any) => removeTag(tag, skillTags, setSkillTags)}
-                    addTag={(tag: any) => addTag(tag, skillTags, setSkillTags)}
+                    removeTag={(tag: Skills) => removeTag(tag, skillTags, setSkillTags)}
+                    addTag={(tag: Skills) => addTag(tag, skillTags, setSkillTags)}
                     forceUpdate={forceUpdate}
                     {...register('skills')} />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
@@ -149,8 +147,8 @@ function EditUserForm({ user }: { user: User; }) {
                     defaultValue="Select an availability slot to add"
                     type="availability"
                     tags={availabilityTags}
-                    removeTag={(tag: any) => removeTag(tag, availabilityTags, setAvailabilityTags)}
-                    addTag={(tag: any) => addTag(tag, availabilityTags, setAvailabilityTags)}
+                    removeTag={(tag: number) => removeTag(tag, availabilityTags, setAvailabilityTags)}
+                    addTag={(tag: number) => addTag(tag, availabilityTags, setAvailabilityTags)}
                     forceUpdate={forceUpdate}
                     {...register('availability')} />
                   <div className="invalid-feedback">{errors.availability?.message}</div>
@@ -161,8 +159,8 @@ function EditUserForm({ user }: { user: User; }) {
                     defaultValue="Select a contact to add"
                     type="contacts"
                     tags={contactTags}
-                    removeTag={(tag: any) => removeTag(tag, contactTags, setContactTags)}
-                    addTag={(tag: any) => addTag(tag, contactTags, setContactTags)}
+                    removeTag={(tag: number) => removeTag(tag, contactTags, setContactTags)}
+                    addTag={(tag: number) => addTag(tag, contactTags, setContactTags)}
                     forceUpdate={forceUpdate}
                     {...register('contacts')} />
                 </Form.Group>

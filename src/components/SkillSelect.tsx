@@ -1,4 +1,5 @@
 /* Renders a single skill for selection. See project-page/page.tsx. */
+import React from 'react';
 
 const SkillSelect = ({ skill, value, onChange }: { skill: string, value: boolean, onChange: () => void }) => (
   <label

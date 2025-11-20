@@ -1,3 +1,4 @@
+import React from 'react';
 import ProjectInfo from '@/components/ProjectInfo';
 import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
