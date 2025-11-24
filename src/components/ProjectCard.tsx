@@ -1,3 +1,4 @@
+import React from 'react';
 import { Project } from '@prisma/client';
 import Link from 'next/link';
 import { Badge, Card, CardBody, CardFooter, CardHeader, CardText, Col, Container, Row } from 'react-bootstrap';

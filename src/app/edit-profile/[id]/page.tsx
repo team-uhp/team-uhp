@@ -1,4 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import { User } from '@prisma/client';

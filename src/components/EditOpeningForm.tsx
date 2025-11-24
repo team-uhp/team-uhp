@@ -1,32 +1,32 @@
 'use client';
 
-/* eslint-disable react/prop-types */
+import React from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
 import { editPosition, deletePosition } from '@/lib/dbActions';
 import { EditPositionSchema } from '@/lib/validationSchemas';
 import { useState, useEffect } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { DateRange, DayPicker } from 'react-day-picker';
 import Link from 'next/link';
 import { Position, Skills } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import SkillSelect from './SkillSelect';
+import type { SubmitHandler } from 'react-hook-form';
 
 type PositionFormValues = {
   id: number;
   image?: string;
   title: string;
   descrip: string;
-  skills: Skills[];
-  datestart?: string;
-  dateend?: string;
+  skills: string[];
+  datestart: string;
+  dateend: string;
   project: number;
-  admins: number[];
-  member: number | null;
+  admins: string[];
+  member?: number;
 };
 
 type EditOpeningFormProps = {
@@ -64,7 +64,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
     setValue,
     formState: { errors },
   } = useForm<PositionFormValues>({
-    resolver: yupResolver(EditPositionSchema) as any,
+    resolver: yupResolver(EditPositionSchema) as unknown as Resolver<PositionFormValues>,
     defaultValues: {
       id: position.id,
       title: position.title,
@@ -72,11 +72,13 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
       datestart: position.datestart,
       dateend: position.dateend,
       admins: Array.isArray(position.admins)
-        ? position.admins.map(id => Number(id))
+        ? position.admins.filter((id): id is number => id !== undefined && id !== null).map(id => String(id))
         : [],
       member: position.member ?? undefined,
       image: position.image ?? undefined,
-      skills: position.skills,
+      skills: Array.isArray(position.skills)
+        ? position.skills.filter((skill): skill is Skills => typeof skill === 'string')
+        : [],
       project: position.project,
     },
   });
@@ -93,7 +95,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
   useEffect(() => {
     const skillsArray = Object.entries(selectedSkills)
       .filter(([, isSelected]) => isSelected)
-      .map(([skill]) => skill as Skills);
+      .map(([skill]) => skill);
     setValue('skills', skillsArray);
   }, [selectedSkills, setValue]);
 
@@ -115,11 +117,11 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
 
   useEffect(() => {
     if (userId > 0) {
-      setValue('admins', [Number(userId)]);
+      setValue('admins', [String(userId)]);
     }
   }, [userId, setValue]);
 
-  const onSubmit = async (data: PositionFormValues) => {
+  const onSubmit: SubmitHandler<PositionFormValues> = async (data) => {
     if (!selected?.from) {
       swal('Error', 'Please select a due date', 'error');
       return;
@@ -132,7 +134,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
       image: data.image || '',
       title: data.title,
       descrip: data.descrip,
-      skills: data.skills,
+      skills: data.skills.map(skill => skill as Skills),
       datestart: selected.from.toISOString(),
       dateend: selected.to?.toISOString() || selected.from.toISOString(),
       project: position.project,
@@ -203,7 +205,6 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                     selected={selected}
                     onSelect={setSelected}
                     footer={
-                      // eslint-disable-next-line max-len
                       selected?.from ? `Selected: ${selected.from.toLocaleDateString()}${selected.to ? ` - ${selected.to.toLocaleDateString()}` : ''}` : 'Pick a day.'
                     }
                   />

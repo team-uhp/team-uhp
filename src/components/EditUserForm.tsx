@@ -68,7 +68,6 @@ function EditUserForm({ user }: { user: User }) {
     }
   };
 
-  // Function to remove a tag
   const removeTag = <T,>(tagToRemove: T, tags: T[], setTags: (tags: T[]) => void) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };

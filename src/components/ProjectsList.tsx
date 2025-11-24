@@ -1,3 +1,4 @@
+import React from 'react';
 import { Project } from '@prisma/client';
 
 const ProjectList = ({ id, title, descrip, duedate, image }: Project) => (

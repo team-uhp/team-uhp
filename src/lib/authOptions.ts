@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import { compare } from 'bcrypt';
 import { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -71,7 +70,7 @@ const authOptions: NextAuthOptions = {
     jwt: ({ token, user }) => {
       // console.log('JWT Callback', { token, user })
       if (user) {
-        const u = user as unknown as any;
+        const u = user as { id: string; email: string; randomKey: string };
         return {
           ...token,
           id: u.id,

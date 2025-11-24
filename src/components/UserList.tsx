@@ -1,3 +1,4 @@
+import React from 'react';
 import { User } from '@prisma/client';
 
 const UserList = ({ id, username, email, firstName, lastName, role, image }: User) => (

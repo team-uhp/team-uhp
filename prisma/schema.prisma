@@ -79,6 +79,8 @@ model User {
   contacts      Int[]     @default([])
   validation    Boolean   @default(false)
   validcheck    String?
+  passchgcanx   String?
+  validpasschg  String?
 }
 
 model Project {

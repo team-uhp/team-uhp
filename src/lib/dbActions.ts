@@ -294,7 +294,7 @@ export async function createUser(data: {
         <h1>Team UHp! welcomes you!</h1>
         <br />
         <h3>
-          <a href="https://team-uhp.vercel.app/verify?token=${key}">
+          <a href="https://team-uhp.vercel.app/verify/signup?token=${key}">
             Click here to verify your account.
           </a>
         </h3>
@@ -373,6 +373,7 @@ export async function changePassword(credentials: {
   password: string;
 }) {
   const { email, oldpassword, password } = credentials;
+  const key = await keyGen();
 
   // Find the user by email
   const user = await prisma.user.findUnique({ where: { email } });
@@ -392,7 +393,145 @@ export async function changePassword(credentials: {
     where: { email },
     data: {
       password: hashedPassword,
+      validation: true,
+      passchgcanx: key,
     },
   });
 
+  await sendAutoEmail(
+    user.email,
+    'Team UHp! password change notification.',
+    `<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+    </head>
+    <body>
+      <h1>Team UHp!</h1>
+      <br />
+      <h3>
+        Your password was recently changed. If you did not make this change,&nbsp;
+        <a href="https://team-uhp.vercel.app/verify/passchange?token=${key}">
+          click here to lock your account.
+        </a>
+      </h3>
+      <br />
+      <p>After locking the account, follow the instructions on screen or click Forgot Password to reset your password.</p>
+      </body>
+      </html>`,
+  );
+}
+
+export async function changeForgotPassword(credentials: { email: string, password: string }) {
+  const user = await prisma.user.findUnique({ where: { email: credentials.email } });
+  if (!user) {
+    throw new Error('User not found.');
+  }
+  const key = await keyGen();
+  const hashedPassword = await hash(credentials.password, 10);
+  await prisma.user.update({
+    where: { email: credentials.email },
+    data: {
+      password: hashedPassword,
+      validation: true,
+      validpasschg: key,
+    },
+  });
+
+  await sendAutoEmail(
+    user.email,
+    'Team UHp! password change notification.',
+    `<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+    </head>
+    <body>
+      <h1>Team UHp!</h1>
+      <br />
+      <h3>
+        Your password was recently changed. If you did not make this change,&nbsp;
+        <a href="https://team-uhp.vercel.app/verify/passchgcanx?token=${key}">
+          click here to lock your account.
+        </a>
+      </h3>
+      <br />
+      <p>After locking the account, follow the instructions on screen or click Forgot Password to reset your password.</p>
+      </body>
+      </html>`,
+  );
+}
+
+export async function forgotPasswordEmail(email: string) {
+  const key = await keyGen();
+  await prisma.user.update({
+    where: { email },
+    data: {
+      validation: false,
+      validpasschg: key,
+    },
+  });
+  sendAutoEmail(
+      email,
+      'Team UHp! password change notification.',
+      `<!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+      </head>
+      <body>
+        <h1>Team UHp!</h1>
+        <br />
+        <h3>
+          <p>
+            You recently requested a password reset.
+          </p>
+        </h3>
+        <br />
+        <h3>
+          <a href="https://team-uhp.vercel.app/verify/forgotpassword?token=${key}">
+            Click here to set a new password.
+          </a>
+        </h3>
+        <br />
+        <p>
+          If you did not make this request, please use the link above to reset your password.
+        </p>
+        <br />
+        <p>
+          If you do not have an account with Team UHp!, please disregard this email.
+        </p>
+        </body>
+        </html>`,
+      );
+}
+
+export async function forgotUsernameEmail(email: string) {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    throw new Error('User not found.');
+  }
+
+  await sendAutoEmail(
+    email,
+    'Team UHp! username reminder.',
+    `<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+    </head>
+    <body>
+      <h1>Team UHp!</h1>
+      <br />
+      <h3>
+        <p>
+          Your Team UHp! username is: ${user.username}.
+        </p>
+      </h3>
+      <p>
+        If you did not make this request, please disregard this email.
+      </p>
+      </body>
+      </html>`,
+  );
 }

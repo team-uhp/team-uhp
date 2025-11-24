@@ -1,3 +1,4 @@
+import React from 'react';
 import { prisma } from '@/lib/prisma';
 import { ComponentIDs } from '@/utilities/ids';
 import { notFound } from 'next/navigation';

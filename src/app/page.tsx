@@ -1,4 +1,5 @@
-import { Col, Container, Image, Row } from 'react-bootstrap';
+import React from 'react';
+import { Container } from 'react-bootstrap';
 
 const Home = () => (
   <main>

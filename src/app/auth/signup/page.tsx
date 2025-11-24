@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Card } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
@@ -62,9 +62,13 @@ export default function SignUpPage() {
 
       // Redirect after short delay
       setTimeout(() => router.push('/auth/signin'), 1500);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Signup error:', err);
-      setServerError(err.message || 'Failed to create account. ');
+      if (err instanceof Error) {
+        setServerError(err.message || 'Failed to create account. ');
+      } else {
+        setServerError('Failed to create account. ');
+      }
     }
   };
 
