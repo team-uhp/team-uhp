@@ -1,36 +1,37 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
-import { useForm } from 'react-hook-form';
-import swal from 'sweetalert';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { User, Skills } from '@prisma/client';
-import { EditUserSchema } from '@/lib/validationSchemas';
-import { editUser } from '@/lib/dbActions';
-import { useState } from 'react';
-import { InferType } from 'yup';
-import TagsContainer from './TagsContainer';
+import React, { useEffect, useState } from "react";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import swal from "sweetalert";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { User, Skills } from "@prisma/client";
+import { EditUserSchema } from "@/lib/validationSchemas";
+import { editUser } from "@/lib/dbActions";
+import { InferType } from "yup";
+import TagsContainer from "./TagsContainer";
 
 type EditUserFormData = InferType<typeof EditUserSchema>;
 
 const onSubmit = async (data: EditUserFormData) => {
   console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
   await editUser(data as User);
-  swal('Success', 'Your item has been updated', 'success', {
-    timer: 2000,
-  });
+  swal("Success", "Your item has been updated", "success", { timer: 2000 });
 };
 
 function useForceUpdate() {
-  const [value, setValue] = useState(0); // integer state
+  const [value, setValue] = useState(0);
   console.log(`forceUpdate value: ${value}`);
-  return () => setValue(v => v + 1); // update state to force render
+  return () => setValue((v) => v + 1);
 }
-  // A function that increment 👆🏻 the previous state like here
-function EditUserForm({ user }: { user: User; }) {
+
+function EditUserForm({ user }: { user: User }) {
   const {
-    register, handleSubmit, reset, formState: { errors },
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
   } = useForm<EditUserFormData>({
     resolver: yupResolver(EditUserSchema),
     defaultValues: user as EditUserFormData,
@@ -40,9 +41,26 @@ function EditUserForm({ user }: { user: User; }) {
   const [skillTags, setSkillTags] = useState<Skills[]>(user.skills); // State to store the tags
   const [availabilityTags, setAvailabilityTags] = useState<number[]>(user.availability); // State to store the tags
   const [contactTags, setContactTags] = useState<number[]>(user.contacts); // State to store the tags
-  console.log(skillTags);
-  console.log(availabilityTags);
-  console.log(contactTags);
+
+  // Register array fields so setValue works without inputs
+  useEffect(() => {
+    register("skills");
+    register("availability");
+    register("contacts");
+  }, [register]);
+
+  // Keep RHF values in sync with local state
+  useEffect(() => {
+    setValue("skills", skillTags, { shouldDirty: true, shouldValidate: true });
+  }, [skillTags, setValue]);
+
+  useEffect(() => {
+    setValue("availability", availabilityTags, { shouldDirty: true, shouldValidate: true });
+  }, [availabilityTags, setValue]);
+
+  useEffect(() => {
+    setValue("contacts", contactTags, { shouldDirty: true, shouldValidate: true });
+  }, [contactTags, setValue]);
   // Function to add a new tag
   const addTag = <T,>(newTag: T, tags: T[], setTags: (tags: T[]) => void) => {
     if (newTag && !tags.includes(newTag)) { // Prevent adding empty or duplicate tags
@@ -65,6 +83,7 @@ function EditUserForm({ user }: { user: User; }) {
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
                 <input type="hidden" {...register('id')} value={user.id} />
+                <input type="hidden" {...register('password')} value={user.password} />
                 <Form.Group>
                   <Form.Label>Email</Form.Label>
                   <input
@@ -84,33 +103,30 @@ function EditUserForm({ user }: { user: User; }) {
                     className={`form-control ${errors.username ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.username?.message}</div>
                 </Form.Group>
-                <Form.Group>
-                  <Form.Label>Password</Form.Label>
-                  <input
-                    type="password"
-                    {...register('password')}
-                    defaultValue={user.password}
-                    className={`form-control ${errors.password ? 'is-invalid' : ''}`} />
-                  <div className="invalid-feedback">{errors.password?.message}</div>
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label>First Name</Form.Label>
-                  <input
-                    type="text"
-                    {...register('firstName')}
-                    defaultValue={user.firstName}
-                    className={`form-control ${errors.firstName ? 'is-invalid' : ''}`} />
-                  <div className="invalid-feedback">{errors.firstName?.message}</div>
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label>Last Name</Form.Label>
-                  <input
-                    type="text"
-                    {...register('lastName')}
-                    defaultValue={user.lastName}
-                    className={`form-control ${errors.lastName ? 'is-invalid' : ''}`} />
-                  <div className="invalid-feedback">{errors.lastName?.message}</div>
-                </Form.Group>
+                <Row>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>First Name</Form.Label>
+                      <input
+                        type="text"
+                        {...register('firstName')}
+                        defaultValue={user.firstName}
+                        className={`form-control ${errors.firstName ? 'is-invalid' : ''}`} />
+                      <div className="invalid-feedback">{errors.firstName?.message}</div>
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Last Name</Form.Label>
+                      <input
+                        type="text"
+                        {...register('lastName')}
+                        defaultValue={user.lastName}
+                        className={`form-control ${errors.lastName ? 'is-invalid' : ''}`} />
+                      <div className="invalid-feedback">{errors.lastName?.message}</div>
+                    </Form.Group>
+                  </Col>
+                </Row>
                 <Form.Group>
                   <Form.Label>Profile Image</Form.Label>
                   <input
@@ -134,11 +150,11 @@ function EditUserForm({ user }: { user: User; }) {
                   <TagsContainer
                     defaultValue="Select a skill to add"
                     type="skills"
-                    tags={skillTags.map((skill) => skill)}
-                    removeTag={(tag: Skills) => removeTag(tag, skillTags, setSkillTags)}
-                    addTag={(tag: Skills) => addTag(tag, skillTags, setSkillTags)}
+                    tags={skillTags}
+                    removeTag={(tag) => removeTag(tag, skillTags, setSkillTags)}
+                    addTag={(tag) => addTag(tag, skillTags, setSkillTags)}
                     forceUpdate={forceUpdate}
-                    {...register('skills')} />
+                  />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
                 </Form.Group>
                 <Form.Group onClick={forceUpdate}>
@@ -147,10 +163,9 @@ function EditUserForm({ user }: { user: User; }) {
                     defaultValue="Select an availability slot to add"
                     type="availability"
                     tags={availabilityTags}
-                    removeTag={(tag: number) => removeTag(tag, availabilityTags, setAvailabilityTags)}
-                    addTag={(tag: number) => addTag(tag, availabilityTags, setAvailabilityTags)}
-                    forceUpdate={forceUpdate}
-                    {...register('availability')} />
+                    removeTag={(tag) => removeTag(tag, availabilityTags, setAvailabilityTags)}
+                    addTag={(tag) => addTag(tag, availabilityTags, setAvailabilityTags)}
+                    forceUpdate={forceUpdate} />
                   <div className="invalid-feedback">{errors.availability?.message}</div>
                 </Form.Group>
                 <Form.Group onClick={forceUpdate}>
@@ -159,10 +174,9 @@ function EditUserForm({ user }: { user: User; }) {
                     defaultValue="Select a contact to add"
                     type="contacts"
                     tags={contactTags}
-                    removeTag={(tag: number) => removeTag(tag, contactTags, setContactTags)}
-                    addTag={(tag: number) => addTag(tag, contactTags, setContactTags)}
-                    forceUpdate={forceUpdate}
-                    {...register('contacts')} />
+                    removeTag={(tag) => removeTag(tag, contactTags, setContactTags)}
+                    addTag={(tag) => addTag(tag, contactTags, setContactTags)}
+                    forceUpdate={forceUpdate} />
                 </Form.Group>
                 <Form.Group className="form-group">
                   <Row className="pt-3">

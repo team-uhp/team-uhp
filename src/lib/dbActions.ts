@@ -350,8 +350,6 @@ export async function editUser(credentials: {
       contacts: credentials.contacts,
     },
   });
-  // After updating, redirect to the list page
-  redirect('/user-profile');
 }
 
 /**
