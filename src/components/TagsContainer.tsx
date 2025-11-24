@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Skills } from '@prisma/client';
 import { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';

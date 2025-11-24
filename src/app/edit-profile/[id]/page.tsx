@@ -1,4 +1,4 @@
-/* eslint-disable import/extensions */
+/* eslint-disable react/react-in-jsx-scope */
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import { User } from '@prisma/client';
@@ -24,7 +24,6 @@ const EditProfilePage = async ({ params }: { params: Promise<{ id: number; }> })
   loggedInProtectedPage(
     session as {
       user: { email: string; id: string; randomKey: string };
-      // eslint-disable-next-line @typescript-eslint/comma-dangle
     } | null,
   );
   // console.log(id);
