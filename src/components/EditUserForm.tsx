@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import swal from "sweetalert";
@@ -10,22 +11,15 @@ import { EditUserSchema } from "@/lib/validationSchemas";
 import { editUser } from "@/lib/dbActions";
 import { InferType } from "yup";
 import TagsContainer from "./TagsContainer";
-
 type EditUserFormData = InferType<typeof EditUserSchema>;
-
-const onSubmit = async (data: EditUserFormData) => {
-  console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
-  await editUser(data as User);
-  swal("Success", "Your item has been updated", "success", { timer: 2000 });
-};
 
 function useForceUpdate() {
   const [value, setValue] = useState(0);
   console.log(`forceUpdate value: ${value}`);
   return () => setValue((v) => v + 1);
 }
-
-function EditUserForm({ user }: { user: User }) {
+  // A function that increment the previous state like here
+function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   const {
     register,
     handleSubmit,
@@ -37,10 +31,11 @@ function EditUserForm({ user }: { user: User }) {
     defaultValues: user as EditUserFormData,
   });
   const forceUpdate = useForceUpdate();
+  const router = useRouter();
 
-  const [skillTags, setSkillTags] = useState<Skills[]>(user.skills); // State to store the tags
-  const [availabilityTags, setAvailabilityTags] = useState<number[]>(user.availability); // State to store the tags
-  const [contactTags, setContactTags] = useState<number[]>(user.contacts); // State to store the tags
+  const [skillTags, setSkillTags] = useState<Skills[]>(user.skills ?? []); // State to store the tags
+  const [availabilityTags, setAvailabilityTags] = useState<number[]>(user.availability ?? []); // State to store the tags
+  const [contactTags, setContactTags] = useState<number[]>(user.contacts ?? []); // State to store the tags
 
   // Register array fields so setValue works without inputs
   useEffect(() => {
@@ -70,6 +65,27 @@ function EditUserForm({ user }: { user: User }) {
 
   const removeTag = <T,>(tagToRemove: T, tags: T[], setTags: (tags: T[]) => void) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
+  };
+  const onSubmit = async (data: EditUserFormData) => {
+    console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
+    await editUser({
+      id: data.id,
+      email: data.email,
+      username: data.username,
+      password: data.password,
+      role: data.role,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      image: data.image ?? null,
+      phone: data.phone ?? null,
+      skills: skillTags,
+      availability: availabilityTags,
+      contacts: contactTags,
+    });
+    swal('Success', 'Your item has been updated', 'success', {
+      timer: 2000,
+    });
+    router.push(`/user-profile/${user.id}`);
   };
 
   return (

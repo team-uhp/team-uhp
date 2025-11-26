@@ -73,3 +73,9 @@ export const EditPositionSchema = Yup.object({
   admins: Yup.array().of(Yup.string()).required(),
   member: Yup.number().optional(),
 });
+
+export const ApplyPositionSchema = Yup.object({
+  userId: Yup.number().required(),
+  positionId: Yup.number().required(),
+  application: Yup.string().optional(),
+})
