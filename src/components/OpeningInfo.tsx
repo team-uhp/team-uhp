@@ -58,7 +58,7 @@ const OpeningInfo = async ({ params }: { params: { id: number; } }) => {
           )}
         </div>
         <h1>
-          Project:&nbsp;
+          Position:&nbsp;
           {position.title}
         </h1>
       </Row>

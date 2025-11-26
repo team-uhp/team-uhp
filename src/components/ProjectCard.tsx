@@ -46,7 +46,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                     </div>
                   )}
                 </div>
-                <Col id="proj-title">
+                <Col id="proj-title" className="truncate-text">
                   <h1>{project.title}</h1>
                   <h6>
                     Due date:&nbsp;
@@ -60,7 +60,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
               </Row>
             </CardHeader>
             <CardBody>
-              <CardText id="proj-descrip">
+              <CardText id="proj-descrip" className="truncate-text">
                 {project.descrip}
               </CardText>
             </CardBody>
