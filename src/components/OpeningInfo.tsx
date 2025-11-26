@@ -88,14 +88,14 @@ const OpeningInfo = async ({ params }: { params: { id: number; } }) => {
       </Row>
       Position Opening:
       <Container id="project-members" fluid>
-        {position.member !== null ? (
-          <MemberName key={`User-${position.member}`} userid={position.member} />
+        {position.memberId != null && position.memberId !== 0 ? (
+          <MemberName key={`User-${position.memberId}`} userid={position.memberId} />
         ) : (
-          <Link href="/">Apply for opening</Link>
+          <Link href={`/project-opening/apply-opening/${position.id}?id=${position.id}`}>Apply for opening</Link>
         )}
       </Container>
       Looking for Skills:
-      <Container id="project-tags" fluid>
+      <Container id="opening-tags" fluid>
         {position.skills.map((tag) => (
           <Badge
             className="mx-1"

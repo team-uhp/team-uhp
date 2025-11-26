@@ -36,6 +36,7 @@ export const ComponentIDs = {
 
 export const PageIDs = {
   addProjectPage: 'addProjectPage',
+  applicationPage: 'applicationPage',
   filterPage: 'filterPage',
   homePage: 'homePage',
   interestsPage: 'interestsPage',

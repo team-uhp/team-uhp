@@ -35,12 +35,19 @@ export async function addProject(project: {
       image: project.image,
       title: project.title,
       descrip: project.descrip,
-      members: [userId],
-      admins: [userId],
-      duedate: new Date(project.duedate).toISOString(),
+      duedate: project.duedate || new Date().toISOString(),
+      members: {
+        create: [{
+          user: { connect: { id: userId } },
+          role: 'admin',
+        }],
+      },
+      admins: {
+        connect: [{ id: userId }],
+      },
     },
   });
-  // After adding, redirect to the list page
+
   redirect('/project-list');
 }
 
@@ -65,18 +72,28 @@ export async function editProject(project: {
   await prisma.project.update({
     where: { id: project.id },
     data: {
-      id: project.id,
       image: project.image,
       title: project.title,
       descrip: project.descrip,
-      positions: project.positions,
-      members: project.members,
-      admins: project.admins,
-      duedate: project.duedate,
+      positions: {
+        set: project.positions.map((id) => ({ id })),
+      },
+      members: {
+        deleteMany: {},
+        create: project.members?.map(userId => ({
+          user: { connect: { id: userId } },
+          role: 'member',
+        })) || [],
+      },
+      admins: {
+        set: [],
+        connect: project.admins.map((id) => ({ id })),
+      },
+      duedate: new Date(project.duedate).toISOString(),
       skills: project.skills,
     },
   });
-  // After updating, redirect to the list page
+
   redirect('/project-list');
 }
 
@@ -89,7 +106,7 @@ export async function deleteProject(id: number) {
   await prisma.project.delete({
     where: { id },
   });
-  // After deleting, redirect to the list page
+
   redirect('/project-list');
 }
 
@@ -106,7 +123,7 @@ export async function addPosition(position: {
   skills: Skills[],
   datestart: string,
   dateend: string,
-  project: number
+  project: number,
 }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) throw new Error('No authenticated user');
@@ -115,7 +132,7 @@ export async function addPosition(position: {
   if (!user) throw new Error('User not found');
 
   const userId = user.id;
-  // console.log(`addPosition data: ${JSON.stringify(stuff, null, 2)}`);
+
   const posit = await prisma.position.create({
     data: {
       image: position.image,
@@ -124,8 +141,8 @@ export async function addPosition(position: {
       skills: position.skills,
       datestart: position.datestart,
       dateend: position.dateend,
-      admins: [userId],
-      project: position.project,
+      admins: { connect: [{ id: userId }] },
+      project: { connect: { id: position.project } },
     },
   });
 
@@ -133,17 +150,19 @@ export async function addPosition(position: {
     where: { id: position.project },
   });
 
-  const setSkills = Array.from(new Set([...projectData?.skills || [], ...posit.skills]));
+  const setSkills = Array.from(new Set([...(projectData?.skills || []), ...posit.skills]));
 
   await prisma.project.update({
     where: { id: position.project },
     data: {
       positions: {
-        push: posit.id,
+        connect: { id: posit.id },
       },
       skills: setSkills,
     },
   });
+
+  return posit;
 }
 
 /**
@@ -168,29 +187,28 @@ export async function editPosition(position: {
   await prisma.position.update({
     where: { id: position.id },
     data: {
-      id: position.id,
       image: position.image,
       title: position.title,
       descrip: position.descrip,
       skills: position.skills,
       datestart: position.datestart,
       dateend: position.dateend,
-      project: position.project,
-      admins: position.admins as number[],
-      member: position.member,
+      project: { connect: { id: position.project } },
+      admins: { set: position.admins.map((id) => ({ id })) },
+      member: position.member ? { connect: { id: position.member } } : { disconnect: true },
     },
   });
 
-  const project = await prisma.project.findUnique({ where: { id: position.project } });
+  const project = await prisma.project.findUnique({ where: { id: position.project }, include: { positions: true } });
   if (!project) {
     redirect('/project-list/');
   }
-  const updatedPositions = project?.positions.filter(p => p !== position.id) || [];
+  const updatedPositions = (project.positions || []).map(p => p.id).filter(id => id !== position.id);
   await prisma.project.update({
     where: { id: position.project },
     data: {
       positions: {
-        set: updatedPositions,
+        set: updatedPositions.map(id => ({ id })),
       },
     },
   });
@@ -215,39 +233,124 @@ export async function editPosition(position: {
  */
 export async function deletePosition(id: number) {
   // console.log(`deleteProject id: ${id}`);
-  const position = await prisma.position.findUnique({ where: { id } });
-  if (!position) {
-    redirect('/project-list/');
-  }
-  const project = await prisma.project.findUnique({ where: { id: position.project } });
-  if (!project) {
-    redirect('/project-list/');
-  }
-  const updatedPositions = project?.positions.filter(p => p !== id) || [];
-  await prisma.project.update({
-    where: { id: position.project },
-    data: {
-      positions: {
-        set: updatedPositions,
+    const position = await prisma.position.findUnique({ where: { id } });
+    if (!position) {
+      redirect('/project-list/');
+    }
+  
+    if (position.projectId == null) {
+      redirect('/project-list/');
+    }
+  
+    const project = await prisma.project.findUnique({ where: { id: position.projectId }, include: { positions: true } });
+    if (!project) {
+      redirect('/project-list/');
+    }
+    const updatedPositions = (project.positions || []).map(p => p.id).filter(pid => pid !== id);
+    await prisma.project.update({
+      where: { id: position.projectId },
+      data: {
+        positions: {
+          set: updatedPositions.map(pid => ({ id: pid })),
+        },
       },
-    },
-  });
-  await prisma.position.delete({
-    where: { id },
-  });
+    });
+    await prisma.position.delete({
+      where: { id },
+    });
+  
+    const remainingPositions = await prisma.position.findMany({
+      where: { id: { in: updatedPositions } },
+    });
+  
+    const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
+  
+    await prisma.project.update({
+      where: { id: position.projectId },
+      data: {
+        skills: updatedSkills,
+      },
+    });
+}
 
-  const remainingPositions = await prisma.position.findMany({
-    where: { id: { in: updatedPositions } },
-  });
+/**
+ * Creates an application for a position.
+ * @param applic, an object with the following
+ * properties: userid, positionid, application.
+ */
+export async function applyCreate(applic: {
+  userId: number,
+  positionId: number,
+  application: string,
+}) {
+  // console.log(`applyCreate data: ${JSON.stringify(application, null, 2)}`);
+  const position = await prisma.position.findUnique({ where: { id: applic.positionId } });
+  if (!position) throw new Error('Position not found');
+  
+  const user = await prisma.user.findUnique({ where: { id: applic.userId } });
+  if (!user) throw new Error('User not found');
 
-  const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
-
-  await prisma.project.update({
-    where: { id: position.project },
+  const app = await prisma.application.create({
     data: {
-      skills: updatedSkills,
+      user: { connect: { id: applic.userId } },
+      position: { connect: { id: applic.positionId } },
+      application: applic.application,
     },
   });
+  if (!app) throw new Error('Application failed');
+
+  await prisma.position.update({
+    where: { id: applic.positionId },
+    data: {
+      applics: { connect: [{ id: app.id }] },
+    }
+  });
+
+  if (position.projectId != null) {
+    const project = await prisma.project.findUnique({
+      where: { id: position.projectId },
+      include: { admins: true },
+    });
+
+    if (project && project.admins && project.admins.length > 0) {
+      await Promise.all(project.admins.map(async (admUser) => {
+        if (!admUser?.email) return;
+        await sendAutoEmail(
+          admUser.email,
+          `Received ${project.title} application`,
+          `<!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+          </head>
+          <body>
+            <h1>Application received for project ${project.title}!</h1>
+            <br />
+            <h3>
+              <a href="https://team-uhp.vercel.app/project-opening/${project.id}">
+                Click here to view the project and a link to the application.
+              </a>
+            </h3>
+            <br />
+            <p>If you are not an admin of this project at team-uhp.vercel.app, ignore this email.</p>
+            </body>
+            </html>`,
+        );
+      }));
+    }
+  }
+}
+
+/**
+ * Deletes an existing application in the database.
+ * @param applic, an object with the following
+ * property: positionid.
+ */
+export async function applyDelete(applic: {
+  applicId: number,
+}) {
+  // console.log(`applyDelete data: ${JSON.stringify(application, null, 2)}`);
+  await prisma.application.delete({ where: { id: applic.applicId } });
 }
 
 /**
@@ -336,7 +439,6 @@ export async function editUser(credentials: {
   await prisma.user.update({
     where: { id: credentials.id },
     data: {
-      id: credentials.id,
       email: credentials.email,
       username: credentials.username || credentials.email.split('@')[0],
       password: credentials.password,
@@ -346,8 +448,10 @@ export async function editUser(credentials: {
       image: credentials.image,
       phone: credentials.phone,
       skills: credentials.skills,
-      availability: credentials.availability,
-      contacts: credentials.contacts,
+      contacts: {
+        set: credentials.contacts.map((id) => ({ id })),
+      },
+      availability: { set: credentials.availability },
     },
   });
 }

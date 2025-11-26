@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma';
 import { PageIDs } from '@/utilities/ids';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
-import { Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 
 /**
  * Renders project page.
@@ -20,9 +20,12 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
   loggedInProtectedPage(session);
 
   const userId = Number(session?.user?.id);
-  const project = await prisma.project.findUnique({ where: { id: Number((await params).id) } });
+  const project = await prisma.project.findUnique({
+    where: { id: Number((await params).id) },
+    include: { admins: { select: { id: true } } },
+  });
 
-  if (project && session?.user && project.admins.includes(userId)) {
+  if (project && session?.user && project.admins?.some(a => a.id === userId)) {
     return (
       <Container id={PageIDs.projectPage} fluid className="py-3">
         <Link href="/project-list">Back to List of Projects</Link>
@@ -34,12 +37,14 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
             }}
           />
         </Row>
-        <Link
-          href={`/add-opening/${(await params).id}`}
-          key={`Project-${params}`}
-        >
-          Recruit for Opening
-        </Link>
+        <Col>
+          <Link
+            href={`/project-opening/add-opening/${(await params).id}`}
+            key={`Project-${params}`}
+          >
+            Recruit for Opening
+          </Link>
+        </Col>
       </Container>
     );
   }
