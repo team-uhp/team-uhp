@@ -35,7 +35,7 @@ const AddProjectForm: React.FC = () => {
     setValue,
     formState: { errors },
   } = useForm<ProjectFormValues>({
-    resolver: yupResolver(AddProjectSchema),
+    resolver: yupResolver<ProjectFormValues>(AddProjectSchema),
     defaultValues: {
       title: '',
       descrip: '',

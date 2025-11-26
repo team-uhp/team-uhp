@@ -71,15 +71,13 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
       descrip: position.descrip,
       datestart: position.datestart,
       dateend: position.dateend,
-      admins: Array.isArray(position.admins)
-        ? position.admins.filter((id): id is number => id !== undefined && id !== null).map(id => String(id))
-        : [],
-      member: position.member ?? undefined,
+      admins: [],
+      member: position.memberId ?? undefined,
       image: position.image ?? undefined,
       skills: Array.isArray(position.skills)
         ? position.skills.filter((skill): skill is Skills => typeof skill === 'string')
         : [],
-      project: position.project,
+      project: position.projectId ?? 0,
     },
   });
 
@@ -137,21 +135,21 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
       skills: data.skills.map(skill => skill as Skills),
       datestart: selected.from.toISOString(),
       dateend: selected.to?.toISOString() || selected.from.toISOString(),
-      project: position.project,
+      project: position.projectId ?? 0,
       admins: data.admins.map(id => Number(id)),
       member: data.member ?? null,
     };
 
-    console.log('Submitting opening data:', openingData);
-
     try {
-      await editPosition(openingData);
-      await swal('Success', 'Your position has been edited', 'success', {
-        timer: 2000,
-      });
-      reset();
-      setSelected(undefined);
-      router.push(`/project-opening/${position.id}`);
+      if (openingData.project != 0) {
+        await editPosition(openingData);
+        await swal('Success', 'Your position has been edited', 'success', {
+          timer: 2000,
+        });
+        reset();
+        setSelected(undefined);
+        router.push(`/project-opening/${position.id}`);
+      }
     } catch (error) {
       if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
         return;
@@ -261,7 +259,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                           });
 
                           if (willDelete) {
-                            const proj = position.project;
+                            const proj = position.projectId ?? '';
                             await deletePosition(position.id);
                             swal('Success!', 'Position deleted.', 'success', {
                               timer: 2000,
@@ -271,9 +269,8 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                             swal('Cancelled', 'Position was not deleted', 'info', {
                               timer: 2000,
                             });
-                          }
-                        }}
-                        variant="danger"
+                          }}
+                        }
                         className="float-right"
                       >
                         DELETE

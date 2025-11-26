@@ -43,7 +43,7 @@ const ProjectListPage = async () => {
         <Col>
           <h2 className="text-center">Projects List</h2>
           <Link
-            href="/add-project/"
+            href="/project-page/add-project/"
           >
             Add Project
           </Link>
