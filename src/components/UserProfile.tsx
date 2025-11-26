@@ -16,7 +16,7 @@ const UserProfile = async ({ user }: { user: User }) => {
   // Check if the user is a member of any projects
   const projects: Project[] = await prisma.project.findMany({
     where: {
-      members: { some: { id: user.id } },
+      members: { has: user.id },
     } });
 
   // Get profile picture path
