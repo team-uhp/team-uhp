@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Col } from 'react-bootstrap';
 import Image from 'next/image';
 
-/* Renders a single row in the Contacts list. See contacts/page.tsx. */
+/* Renders a single card in the Contacts list. See contacts/page.tsx. */
 const ContactCard = ({ contact }: { contact: User }) => {
   const imgPath = `/${contact.image}`;
   return (
