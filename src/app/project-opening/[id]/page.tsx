@@ -36,7 +36,11 @@ const ProjectOpening = async ({ params }: { params: Promise<{
   const position = await prisma.position.findUnique({
     where: { id: Number(resolvedParams.id) },
     include: {
-      project: true,
+      project: {
+        select: {
+          id: true,
+        }
+      },
       admins: true,
       applics: {
         include: {
@@ -64,7 +68,7 @@ const ProjectOpening = async ({ params }: { params: Promise<{
           }}
         />
         <Row>
-          <Link href={`/edit-opening/${position.id}`}>Edit Opening</Link>
+          <Link href={`/project-opening/edit-opening/${position.id}`}>Edit Opening</Link>
         </Row>
         <h2>Applications</h2>
         <Container id="opening-tags" fluid>

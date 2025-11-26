@@ -162,8 +162,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Description</Form.Label>
-                  <input
-                    type="text"
+                  <textarea
                     {...register('descrip')}
                     className={`form-control ${errors.descrip ? 'is-invalid' : ''}`}
                   />

@@ -188,8 +188,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Description</Form.Label>
-                  <input
-                    type="text"
+                  <textarea
                     {...register('descrip')}
                     className={`form-control ${errors.descrip ? 'is-invalid' : ''}`}
                   />
