@@ -24,7 +24,7 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
 
   if (project && session?.user && project.admins.includes(userId)) {
     return (
-      <Container id={PageIDs.projectPage} fluid className="py-3">
+      <Container id={PageIDs.projectPage} className="py-3">
         <Link href="/project-list">Back to List of Projects</Link>
         <Row>
           <ProjectInfo
@@ -44,7 +44,7 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
     );
   }
   return (
-    <Container id={PageIDs.projectPage} fluid className="py-3">
+    <Container id={PageIDs.projectPage} className="py-3">
       <Link href="/project-list">Back to List of Projects</Link>
       <Row>
         <ProjectInfo

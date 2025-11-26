@@ -12,43 +12,50 @@ const NavBar: React.FC = () => {
   const currentUser = session?.user?.email;
   const user = session as { user: { email: string; id: string; randomKey: string } } | null;
   const pathName = usePathname();
+
   return (
-    <Navbar id="Topbar">
+    <Navbar id="Topbar" expand="lg" bg="dark" variant="dark">
       <Container>
-      <Navbar.Brand href="/">
+        <Navbar.Brand href="/">
           <img
             id="Logo"
             src="/logoMockup.png"
             alt="Site Logo"
-            height="50"
+            height="45"
           />
-      </Navbar.Brand>
+        </Navbar.Brand>
+
+        {/* Hamburger toggle button */}
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
+        {/* Collapsible content */}
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav id="TopbarLeft" className="ms-auto">
+          <Nav id="TopbarLeft">
             {currentUser
               ? [
-                   <Nav.Link id="home-page-nav" href="/" key="home" active={pathName === '/'}>
+                  <Nav.Link id="home-page-nav" href="/" key="home" active={pathName === '/'}>
                     Home
-                   </Nav.Link>,
+                  </Nav.Link>,
                   <Nav.Link id="list-project-nav" href="/project-list" key="list" active={pathName === '/project-list'}>
                     Projects List
                   </Nav.Link>,
                   <Nav.Link id="contacts-nav" href="/contacts" key="contacts" active={pathName === '/contacts'}>
                     Contacts
                   </Nav.Link>,
-                    <Nav.Link
-                      id="helpful-tools-nav"
-                      href="/helpful-tools"
-                      key="tools"
-                      active={pathName === '/helpful-tools'}
-                    >
+                  <Nav.Link
+                    id="helpful-tools-nav"
+                    href="/helpful-tools"
+                    key="tools"
+                    active={pathName === '/helpful-tools'}
+                  >
                     Helpful Tools
-                    </Nav.Link>,
+                  </Nav.Link>,
                 ]
-              : ''}
+              : null}
           </Nav>
-          <Nav>
-               {session ? (
+
+          <Nav className="ms-auto">
+            {session ? (
               <NavDropdown id="login-dropdown" title={currentUser}>
                 <NavDropdown.Item
                   id="login-dropdown-profile"
@@ -62,9 +69,9 @@ const NavBar: React.FC = () => {
                   &nbsp;&nbsp;Change Password
                 </NavDropdown.Item>
                 <NavDropdown.Item id="sign-out-nav" href="/auth/signout" key="signout" active={pathName === '/auth/signout'}>
-                    <BoxArrowRight />
-                    &nbsp;&nbsp;Sign Out
-                  </NavDropdown.Item>
+                  <BoxArrowRight />
+                  &nbsp;&nbsp;Sign Out
+                </NavDropdown.Item>
               </NavDropdown>
             ) : (
               <NavDropdown id="login-dropdown" title="Login">

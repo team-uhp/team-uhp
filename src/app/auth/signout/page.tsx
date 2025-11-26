@@ -9,16 +9,7 @@ export default function SignOutPage() {
   const router = useRouter();
 
   return (
-    <div
-      style={{
-        backgroundColor: '#f5f5f5',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '2rem',
-      }}
-    >
+    <Container className="mt-5 d-flex justify-content-center">
       <Card
         style={{
           width: '420px',
@@ -50,47 +41,45 @@ export default function SignOutPage() {
             Are you sure you want to sign out of your UH Mānoa account?
           </p>
 
-          <Container>
-            <Row className="justify-content-center text-center" style={{ gap: '1rem' }}>
-              <Col xs={12}>
-                <Button
-                  type="button"
-                  onClick={() => signOut({ callbackUrl: '/' })}
-                  style={{
-                    backgroundColor: '#024731',
-                    borderColor: '#024731',
-                    width: '100%',
-                    fontWeight: 'bold',
-                    color: 'white',
-                  }}
-                  onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#035a40')}
-                  onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#024731')}
-                >
-                  Yes, Sign Out
-                </Button>
-              </Col>
+          <Row className="justify-content-center text-center" style={{ gap: '1rem' }}>
+            <Col xs={12}>
+              <Button
+                type="button"
+                onClick={() => signOut({ callbackUrl: '/' })}
+                style={{
+                  backgroundColor: '#024731',
+                  borderColor: '#024731',
+                  width: '100%',
+                  fontWeight: 'bold',
+                  color: 'white',
+                }}
+                onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#035a40')}
+                onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#024731')}
+              >
+                Yes, Sign Out
+              </Button>
+            </Col>
 
-              <Col xs={12}>
-                <Button
-                  variant="outline-success"
-                  type="button"
-                  onClick={() => router.push('/')}
-                  style={{
-                    borderColor: '#024731',
-                    color: '#024731',
-                    width: '100%',
-                    fontWeight: 'bold',
-                  }}
-                  onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#e6f3ec')}
-                  onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = 'white')}
-                >
-                  Cancel
-                </Button>
-              </Col>
-            </Row>
-          </Container>
+            <Col xs={12}>
+              <Button
+                variant="outline-success"
+                type="button"
+                onClick={() => router.push('/')}
+                style={{
+                  borderColor: '#024731',
+                  color: '#024731',
+                  width: '100%',
+                  fontWeight: 'bold',
+                }}
+                onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#e6f3ec')}
+                onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = 'white')}
+              >
+                Cancel
+              </Button>
+            </Col>
+          </Row>
         </Card.Body>
       </Card>
-    </div>
+    </Container>
   );
 }

@@ -18,7 +18,7 @@ const UsersAdminPage = async () => {
 
   return (
     <main>
-      <Container id="list" fluid className="py-3">
+      <Container id="list" className="py-3">
         <Row>
           <Col>
             <h1>List Users Admin</h1>

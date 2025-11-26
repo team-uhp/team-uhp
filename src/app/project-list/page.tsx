@@ -38,7 +38,7 @@ const ProjectListPage = async () => {
   sortedProjs.sort((a, b) => b.matches - a.matches);
 
   return (
-    <Container id={PageIDs.projectsList} fluid className="py-3">
+    <Container id={PageIDs.projectsList} className="py-3">
       <Row>
         <Col>
           <h2 className="text-center">Projects List</h2>

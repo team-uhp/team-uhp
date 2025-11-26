@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { Button, Form, Card, Row, Col } from 'react-bootstrap';
+import { Button, Form, Card, Row, Col, Container } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 
 export default function SignInPage() {
@@ -29,19 +29,19 @@ export default function SignInPage() {
   };
 
   return (
-    <div
+    <Container
+      fluid
+      className="d-flex justify-content-center align-items-start"
       style={{
-        backgroundColor: '#f5f5f5',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '2rem',
+        backgroundColor: 'white',
+        minHeight: 'calc(100vh - 160px)', // leaves space for navbar + breadcrumb
+        padding: '3rem 1rem',
       }}
     >
       <Card
         style={{
-          width: '420px',
+          width: '100%',
+          maxWidth: '420px',
           border: '2px solid #024731',
           boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
           borderRadius: '1rem',
@@ -102,20 +102,24 @@ export default function SignInPage() {
                 width: '100%',
                 fontWeight: 'bold',
               }}
-              onMouseOver={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#035a40')}
-              onMouseOut={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#024731')}
+              onMouseOver={(e) =>
+                ((e.target as HTMLButtonElement).style.backgroundColor = '#035a40')
+              }
+              onMouseOut={(e) =>
+                ((e.target as HTMLButtonElement).style.backgroundColor = '#024731')
+              }
             >
               Sign In
             </Button>
           </Form>
 
+          {/* Keep nested Row/Col structure exactly as you had */}
           <Row style={{ marginTop: '10px' }}>
             <Col>
               <div className="mt-4 text-center" style={{ color: '#024731' }}>
                 <a href="/auth/signup" style={{ color: '#024731', fontWeight: 600 }}>
                   Create account
-                </a>
-                {' '}
+                </a>{' '}
               </div>
             </Col>
             <Col>
@@ -147,6 +151,6 @@ export default function SignInPage() {
           </Row>
         </Card.Body>
       </Card>
-    </div>
+    </Container>
   );
 }

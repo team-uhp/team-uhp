@@ -24,7 +24,7 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
   const year = date.getFullYear();
   const imgPath = `/${project.image}`;
   return (
-    <Container id={ComponentIDs.projectInfo} className="py-3">
+    <Container id={ComponentIDs.projectInfo} className="py-3" >
       <Row className="justify-content-center">
         <div style={{ height: '200px', position: 'relative' }}>
           {project.image && project.image.trim() !== '/' ? (
@@ -51,29 +51,21 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
             </div>
           )}
         </div>
-        <h1>
+        <h1 className="title">
           Project:&nbsp;
           {project.title}
         </h1>
-      </Row>
+      </Row> 
       <Row>
-        <h6>
-          Due date:&nbsp;
-          {day}
-          /
-          {mon}
-          /
-          {year}
+        <h6 style={{ marginBottom: '20px' }}>
+          Due Date:&nbsp;
+          {day}/{mon}/{year}
         </h6>
-        <br />
-        <br />
-        <h5>
-          Description:&nbsp;
-          {project.descrip}
-        </h5>
+          <strong>Project Description: </strong>
+          <Container className="body">{project.descrip}</Container>
       </Row>
-      Meet the Team:
-      <Container id="project-members" fluid>
+      <strong>Meet the Team:</strong>
+      <Container id="project-members">
         {project.members.map((member) => (
           <MemberName
             key={`User-${member}`}
@@ -81,9 +73,9 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
           />
         ))}
       </Container>
-      Project Openings:
+      <strong>Project Openings: </strong>
       {project.positions}
-      <Container id="project-openings" fluid>
+      <Container id="project-openings">
         {Array.isArray(project.positions) && project.positions.length > 0 ? (
           project.positions.map((opening) => (
             <OpeningTitle key={`Position-${opening}`} openingid={opening} />
@@ -92,7 +84,7 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
           'Currently no openings available.'
         )}
       </Container>
-      Looking for Skills:
+      <strong>Looking for Skills: </strong>
       <Container id="project-tags" fluid>
         {project.skills.map((tag) => (
           <Badge
