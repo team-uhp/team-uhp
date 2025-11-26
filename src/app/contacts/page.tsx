@@ -6,7 +6,7 @@ import { PageIDs } from '@/utilities/ids';
 import { getServerSession } from 'next-auth';
 import { Container, Row } from 'react-bootstrap';
 import { User } from '@prisma/client';
-import ContactCardTest from '@/components/ContactCard-test';
+import ContactCard from '@/components/ContactCard';
 
 /**
  * Renders User's contact page.
@@ -30,9 +30,9 @@ const ContactPage = async () => {
   return (
     <Container id={PageIDs.contactsPage} className="py-4 pt-5">
       <Row>
-        <h1>Your Contacts</h1>
+        <h1 className="py-3">Your Contacts</h1>
         {contacts.map((contact) => (
-        <ContactCardTest   contact={contact} key={`${contact.id}`} />
+        <ContactCard contact={contact} key={`${contact.id}`} />
       ))}
       </Row>
     </Container>
