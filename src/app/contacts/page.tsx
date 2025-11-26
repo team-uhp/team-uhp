@@ -20,12 +20,13 @@ const ContactPage = async () => {
   loggedInProtectedPage(sessionUser);
   
   // Get the contact data from database using the id from params
-  const user: User | null = await prisma.user.findUnique({
-    where: { id: Number(sessionUser!.user.id) },
+  const userId = sessionUser!.user.id;
+  const user = await prisma.user.findUnique({
+    where: { id: Number(userId) },
+    include: { contacts: true },
   });
-  const contacts: User[] = await prisma.user.findMany({ where: { 
-    id: { in: user?.contacts || [] }
-  } });
+  
+  const contacts: User[] = user?.contacts || [];
 
   return (
     <Container id={PageIDs.contactsPage} className="py-4 pt-5">
