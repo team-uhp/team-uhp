@@ -11,24 +11,17 @@ import { editUser } from '@/lib/dbActions';
 import { useState } from 'react';
 import { InferType } from 'yup';
 import TagsContainer from './TagsContainer';
+import { useRouter } from 'next/navigation';
 
 type EditUserFormData = InferType<typeof EditUserSchema>;
-
-const onSubmit = async (data: EditUserFormData) => {
-  console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
-  await editUser(data as User);
-  swal('Success', 'Your item has been updated', 'success', {
-    timer: 2000,
-  });
-};
 
 function useForceUpdate() {
   const [value, setValue] = useState(0); // integer state
   console.log(`forceUpdate value: ${value}`);
   return () => setValue(v => v + 1); // update state to force render
 }
-  // A function that increment 👆🏻 the previous state like here
-function EditUserForm({ user }: { user: User; }) {
+  // A function that increment the previous state like here
+function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   const {
     register, handleSubmit, reset, formState: { errors },
   } = useForm<EditUserFormData>({
@@ -36,13 +29,12 @@ function EditUserForm({ user }: { user: User; }) {
     defaultValues: user as EditUserFormData,
   });
   const forceUpdate = useForceUpdate();
+  const router = useRouter();
 
   const [skillTags, setSkillTags] = useState<Skills[]>(user.skills); // State to store the tags
   const [availabilityTags, setAvailabilityTags] = useState<number[]>(user.availability); // State to store the tags
-  const [contactTags, setContactTags] = useState<number[]>(user.contacts); // State to store the tags
+  const [contactTags, setContactTags] = useState<number[]>(user.contacts ?? []); // State to store the tags
   console.log(skillTags);
-  console.log(availabilityTags);
-  console.log(contactTags);
   // Function to add a new tag
   const addTag = <T,>(newTag: T, tags: T[], setTags: (tags: T[]) => void) => {
     if (newTag && !tags.includes(newTag)) { // Prevent adding empty or duplicate tags
@@ -52,6 +44,27 @@ function EditUserForm({ user }: { user: User; }) {
 
   const removeTag = <T,>(tagToRemove: T, tags: T[], setTags: (tags: T[]) => void) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
+  };
+  const onSubmit = async (data: EditUserFormData) => {
+    console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
+    await editUser({
+      id: data.id,
+      email: data.email,
+      username: data.username,
+      password: data.password,
+      role: data.role,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      image: data.image ?? null,
+      phone: data.phone ?? null,
+      skills: skillTags,
+      availability: availabilityTags,
+      contacts: contactTags,
+    });
+    swal('Success', 'Your item has been updated', 'success', {
+      timer: 2000,
+    });
+    router.push(`/user-profile/${user.id}`);
   };
 
   return (

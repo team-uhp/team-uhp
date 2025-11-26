@@ -13,7 +13,7 @@ datasource db {
   // for local development
   url       = env("DATABASE_URL")
   // for Vercel, uncomment
-  directUrl = env("POSTGRES_URL")
+  //directUrl = env("POSTGRES_URL")
 }
 
 enum Role {
@@ -65,34 +65,40 @@ enum Skills {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  email         String    @unique
-  username      String    @unique
-  password      String
-  role          Role      @default(USER)
-  firstName     String    @default("Change")
-  lastName      String    @default("Me")
-  image         String?
-  phone         String?
-  skills        Skills[]  @default([])
-  availability  Int[]     @default([])
-  contacts      Int[]     @default([])
-  validation    Boolean   @default(false)
-  validcheck    String?
-  passchgcanx   String?
-  validpasschg  String?
+  id              Int           @id @default(autoincrement())
+  email           String        @unique
+  username        String        @unique
+  password        String
+  role            Role          @default(USER)
+  firstName       String
+  lastName        String
+  image           String?
+  phone           String?
+  skills          Skills[]      @default([])
+  contacts        User[]        @relation("UserContacts")
+  contactsOf      User[]        @relation("UserContacts")
+  projects        ProjectMembers[]
+  adminProjects   Project[]     @relation("ProjAdmins")
+  positions       Position[]    @relation("UserPosits")
+  adminPositions  Position[]    @relation("PositAdmins")
+  applics         Application[] @relation("UserApplics")
+  availability    Int[]
+  validation      Boolean       @default(false)
+  validcheck      String?
+  passchgcanx     String?
+  validpasschg    String?
 }
 
 model Project {
-  id        Int       @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   image     String?
   title     String
   descrip   String
-  positions Int[]     @default([])
-  members   Int[]
-  admins    Int[]
+  positions Position[]  @relation("ProjPosits")
+  members   ProjectMembers[]
+  admins    User[]      @relation("ProjAdmins")
   duedate   String
-  skills    Skills[]  @default([])
+  skills    Skills[]    @default([])
 }
 
 model Position {
@@ -103,7 +109,30 @@ model Position {
   skills      Skills[]  @default([])
   datestart   String
   dateend     String
-  project     Int
-  admins      Int[]
-  member      Int?
+  project     Project?  @relation("ProjPosits", fields: [projectId], references: [id])
+  projectId   Int?
+  admins      User[]    @relation("PositAdmins")
+  member      User?     @relation("UserPosits", fields: [memberId], references: [id])
+  memberId    Int?
+  applics     Application[] @relation("PositApplics")
+}
+
+model Application {
+  id          Int       @id @default(autoincrement())
+  user        User?     @relation("UserApplics", fields: [userId], references: [id])
+  userId      Int?
+  position    Position? @relation("PositApplics", fields: [positionId], references: [id])
+  positionId  Int?
+  application String?
+}
+
+model ProjectMembers {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  role      String?
+
+  @@unique([userId, projectId])
 }
