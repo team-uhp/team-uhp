@@ -1,16 +1,18 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import swal from "sweetalert";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { User, Skills } from "@prisma/client";
-import { EditUserSchema } from "@/lib/validationSchemas";
-import { editUser } from "@/lib/dbActions";
-import { InferType } from "yup";
-import TagsContainer from "./TagsContainer";
+import React, { useEffect } from 'react';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import swal from 'sweetalert';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { User, Skills } from '@prisma/client';
+import { EditUserSchema } from '@/lib/validationSchemas';
+import { editUser } from '@/lib/dbActions';
+import { useState } from 'react';
+import { InferType } from 'yup';
+import TagsContainer from './TagsContainer';
+import { useRouter } from 'next/navigation';
+
 type EditUserFormData = InferType<typeof EditUserSchema>;
 
 function useForceUpdate() {
