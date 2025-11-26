@@ -149,3 +149,58 @@ a.footLink:Hover {
   outline: 2px solid white;
   outline-offset: 2px;
 }
+
+.contact-card {
+  width: 220px;
+  min-height: 175px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.contact-card img {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.contact-card h3 {
+  margin: 8px 0 4px;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.contact-card a {
+  color: #1e6bb8;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.contact-card a:hover {
+  text-decoration: underline;
+}
+
+.contact-card p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+img.padded {
+  max-width: 95%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
