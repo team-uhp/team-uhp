@@ -18,7 +18,7 @@ const NavBar: React.FC = () => {
       <Navbar.Brand href="/">
           <img
             id="Logo"
-            src="/logoMockup.png"
+            src="teamUhpLogoFinal - White.png"
             alt="Site Logo"
             height="50"
           />
