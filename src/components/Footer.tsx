@@ -18,12 +18,10 @@ const Footer = () => {
           <Col> 
             <strong>Navigate</strong>
             <hr />
-            <a className="footLink" href=""> 
-              {/* TO DO: Add appropriate links to href. Intended for project finders*/}
+            <a className="footLink" href="/project-list"> 
               Find Projects
             </a>
-            <a className="footLink" href=""> 
-              {/* TO DO: Add appropriate links to href. Intended for project owners*/}
+            <a className="footLink" href="/project-page/add-project"> 
               Post Projects
             </a>
             <a className="footLink" href="/contacts">

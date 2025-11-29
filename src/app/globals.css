@@ -13,7 +13,11 @@ html, body {
   flex: 1;
   font-family: sans-serif, 'Inter';
   overflow-x: hidden;
+}
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
 }
 
 .wrapper {
@@ -25,8 +29,9 @@ html, body {
 main {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  padding-top: 40px;
 }
 
 #page-Name {
@@ -52,7 +57,7 @@ main {
 
 #Topbar {
   height: 80px;
-  background-color: #024731!important;
+  background-color: #002325!important;
   color: white;
   display: flex;
   align-items: center;
@@ -63,12 +68,12 @@ main {
 }
 
 #Topbar .navbar-collapse {
-  background-color: #024731;
+  background-color: #002325;
 }
 
 @media (max-width: 991.98px) {
   #Topbar .navbar-collapse.show {
-    background-color: #024731;
+    background-color: #002325;
     position: absolute;
     top: 100%;
     left: 0;
@@ -124,7 +129,6 @@ footer strong {
   width:100%;  
   bottom:0;        
   padding: 1-p;     
-  position: fixed;
 }
 
 #Logo {
@@ -201,20 +205,10 @@ footer strong {
   margin-top: 10px;
 }
 
-#project-openings .button {
-  background-color: #07394f!important;
-  /* doesnt work */
-}
-
 #project-tags {
   margin-bottom: 20px;
   margin-top: 10px;
 }
-
-#project-tags .badge {
-  /* background-color: #07394f!important; */
-}
-
 
 .contact-card {
   width: 220px;
@@ -269,4 +263,31 @@ img.padded {
   height: auto;
   display: block;
   margin: 0 auto;
+}
+
+.opening-title-button {
+  background-color: #008091!important;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400!important;
+  font-size: 0.9rem!important;
+  padding: 6px 14px!important;
+  margin-right: 6px!important;
+  border: none;
+  border-radius: 6px;
+  border-color: transparent!important;
+} 
+
+#search-button {
+  margin-top: 10px;
+  padding: 2px 8px 2px 8px;
+  background-color: rgb(136, 136, 136);
+  border-color: transparent;
+  border-radius: 0;
+  font-size: 0.9rem;
+}
+
+#search-button:hover {
+  background-color: rgb(118, 118, 118);
+  color: white;
 }

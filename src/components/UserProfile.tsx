@@ -18,7 +18,11 @@ const UserProfile = async ({ user }: { user: User }) => {
     where: {
       members: { some: { userId: user.id } },
     },
+    include: {
+      positions: true, // <--- add this
+    },
   });
+
 
   // Get profile picture path
   const imgPath = `/${user.image}`;

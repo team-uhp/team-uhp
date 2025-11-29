@@ -18,7 +18,7 @@ const OpeningTitle = async ({ openingid }: { openingid: number }) => {
       href={`/project-opening/${opening.id}`}
       style={{ textDecoration: 'none' }}
     >
-      <Button>
+      <Button className="opening-title-button">
         {opening.title}
       </Button>
     </Link>

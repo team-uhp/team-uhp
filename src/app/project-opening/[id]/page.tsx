@@ -39,6 +39,7 @@ const ProjectOpening = async ({ params }: { params: Promise<{
       project: {
         select: {
           id: true,
+          title: true,
         }
       },
       admins: true,
@@ -59,7 +60,7 @@ const ProjectOpening = async ({ params }: { params: Promise<{
 
   if ((position.admins?.some((a) => a.id === user.id) ?? false) || (user.role === 'ADMIN')) {
     return (
-      <Container id={PageIDs.openingPage} fluid className="py-3">
+      <Container id={PageIDs.openingPage} className="py-3">
         <Link href={`/project-page/${position.project?.id}`}>Back to Project</Link>
         <OpeningInfo
           key={`Position-${resolvedParams.id}`}
