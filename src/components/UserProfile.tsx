@@ -18,7 +18,11 @@ const UserProfile = async ({ user }: { user: User }) => {
     where: {
       members: { some: { userId: user.id } },
     },
+    include: {
+      positions: true, // <--- add this
+    },
   });
+
 
   // Get profile picture path
   const imgPath = `/${user.image}`;
@@ -66,7 +70,7 @@ const UserProfile = async ({ user }: { user: User }) => {
       <Col>
         {
           session && Number(session.user.id) === user.id && (
-            <Button variant="primary" href={`/edit-profile/${user.id}`}>Edit Profile</Button>
+            <Button style={{backgroundColor: '#0e4f6cff', borderColor:'#0e4f6cff' }} href={`/edit-profile/${user.id}`}>Edit Profile</Button>
           )
         }
       </Col>

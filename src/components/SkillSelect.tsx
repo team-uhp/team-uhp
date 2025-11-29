@@ -2,12 +2,14 @@
 import React from 'react';
 
 const SkillSelect = ({ skill, value, onChange }: { skill: string, value: boolean, onChange: () => void }) => (
-  <label
+  <label 
     htmlFor={`skill-${skill}`}
     style={{
-      backgroundColor: value ? 'lightblue' : 'darkblue',
+      backgroundColor: value ? '#cfffdb' : '#f1f1f1',
       borderColor: value ? 'lightblue' : 'darkblue',
-      color: 'white',
+      fontFamily: 'opensans, sans-serif',
+      fontSize: '14px',
+      color: '#111613',
       borderRadius: '20px',
     }}
     className={`
@@ -21,6 +23,7 @@ const SkillSelect = ({ skill, value, onChange }: { skill: string, value: boolean
       checked={value}
       onChange={onChange}
       className="w-4 h-4 rounded cursor-pointer"
+      
     />
     <span className="text-sm">
       {' '}

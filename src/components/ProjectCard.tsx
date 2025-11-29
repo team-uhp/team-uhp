@@ -11,6 +11,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
   const mon = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
   const imgPath = `/${project.image}`;
+
   return (
     <Container className="py-3">
       <Row className="justify-content-start">
@@ -46,23 +47,48 @@ const ProjectCard = ({ project }: { project: Project }) => {
                     </div>
                   )}
                 </div>
-                <Col id="proj-title" className="truncate-text">
-                  <h1>{project.title}</h1>
-                  <h6>
-                    Due date:&nbsp;
-                    {mon}
-                    /
-                    {day}
-                    /
-                    {year}
+               <Col style={{ paddingLeft: '15px' }}>
+                 <h4
+                    style={{
+                      fontFamily: 'Poppins, sans-serif',
+                      fontWeight: 600,
+                      fontSize: '1.5rem', // a little bigger
+                      marginBottom: '0.25rem',
+                      color: '#008091',
+                    }}
+                  >
+                    {project.title}
+                  </h4>
+                  <h6 style={{ fontSize: '0.95rem', fontWeight: 400, color: '#555' }}>
+                    Due date:&nbsp;{mon}/{day}/{year}
                   </h6>
-                </Col>
+               </Col>
               </Row>
             </CardHeader>
             <CardBody>
-              <CardText id="proj-descrip" className="truncate-text">
-                {project.descrip}
+              <CardText
+                id="proj-descrip"
+                style={{ whiteSpace: 'pre-line' }}
+              >
+                {project.descrip.length > 650
+                  ? project.descrip.slice(0, 650) + '...'
+                  : project.descrip}
               </CardText>
+              {/* Openings */}
+              {Array.isArray(project.positions) && project.positions.length > 0 ? (
+                <div style={{ marginTop: '0.5rem' }}>
+                  <strong>Openings:</strong>
+                  <ul style={{ margin: '0.25rem 0 0 1rem', padding: 0 }}>
+                    {project.positions.map((opening) => (
+                      <li key={opening.id}>{opening.title}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#555' }}>
+                  No openings listed.
+                </div>
+              )}
             </CardBody>
             <CardFooter className="flex gap-2 flex-wrap">
               {project.skills.map((tag) => (
