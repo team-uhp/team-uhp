@@ -108,11 +108,19 @@ a.footLink:hover {
   text-decoration: underline;
 }
 
+@media (max-width: 767.98px) {
+  #Footer .col-xs-stack {
+    margin-top: 1rem;
+  }
+}
+
 footer strong {
   font-weight: 600;
   color: #FFFFFF;
   font-family: 'Poppins', sans-serif;
   font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 #Footer hr {
@@ -121,6 +129,11 @@ footer strong {
   border-top: 1px solid #CCCCCC;
 }
 
+#Footer .footLink {
+  display: block;
+  margin-bottom: 0.5rem; /* tighter spacing for stacking */
+  font-size: 0.85rem; 
+}
 
 #Footer {
   height: fit-content;             
@@ -280,7 +293,7 @@ img.padded {
 
 #search-button {
   margin-top: 10px;
-  padding: 2px 8px 2px 8px;
+  padding: 3px 12px 3px 12px;
   background-color: rgb(136, 136, 136);
   border-color: transparent;
   border-radius: 0;
@@ -290,4 +303,61 @@ img.padded {
 #search-button:hover {
   background-color: rgb(118, 118, 118);
   color: white;
+}
+
+#posted-by-card {
+  margin-top: 20px;
+  border-radius: 0;
+  border-color: #ddd;
+  font-size: 0.9rem;
+}
+
+#posted-by-card .card-header {
+  background-color: #fafafa;
+  font-weight: 550;
+  font-size: 0.95rem;
+}
+
+#posted-by-card .posted-by-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+#posted-by-card .posted-by-info .posted-by-text {
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+#posted-by-card a {
+  color: #002325;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+#posted-by-card a:hover {
+  text-decoration: underline;
+}
+
+#posted-by-card hr {
+  margin: 0.5rem 0;
+}
+
+#posted-by-card .projects-worked {
+  color: #002325;
+  font-weight: 400;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+#recruit-button {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #008091!important;
+  color: white;
+  border-radius: '0.2rem';
+  border-color: #008091!important;
+  font-size: 0.9rem!important;
 }

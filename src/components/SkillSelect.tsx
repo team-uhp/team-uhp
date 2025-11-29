@@ -5,7 +5,7 @@ const SkillSelect = ({ skill, value, onChange }: { skill: string, value: boolean
   <label 
     htmlFor={`skill-${skill}`}
     style={{
-      backgroundColor: value ? '#cfffdb' : '#f1f1f1',
+      backgroundColor: value ? '#acf1ffff' : '#f1f1f1',
       borderColor: value ? 'lightblue' : 'darkblue',
       fontFamily: 'opensans, sans-serif',
       fontSize: '14px',

@@ -26,7 +26,7 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
   return (
     <Container id={ComponentIDs.projectInfo} className="py-3">
       {/* Project Image and Title */}
-      <Row className="justify-content-center">
+      <Row>
         <div style={{ height: '200px', position: 'relative', width: '100%', marginBottom: '15px' }}>
           {project.image && project.image.trim() !== '/' ? (
             <Image

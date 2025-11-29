@@ -12,55 +12,37 @@ const Footer = () => {
   const role = userWithRole?.randomKey;
 
   return (
-    <footer id="Footer" className="mt-auto py-3">
+    <footer id="Footer" className="mt-auto py-4">
       <Container>
         <Row>
-          <Col> 
+          <Col xs={12} md={3} className="col-xs-stack"> 
             <strong>Navigate</strong>
             <hr />
-            <a className="footLink" href="/project-list"> 
-              Find Projects
-            </a>
-            <a className="footLink" href="/project-page/add-project"> 
-              Post Projects
-            </a>
-            <a className="footLink" href="/contacts">
-              Contacts
-            </a>
+            <a className="footLink" href="/project-list">Find Projects</a>
+            <a className="footLink" href="/project-page/add-project">Post Projects</a>
+            <a className="footLink" href="/contacts">Contacts</a>
           </Col>
 
-          <Col>
+          <Col xs={12} md={3} className="col-xs-stack">
             <strong>About</strong>
             <hr />
-            <a className="footLink" href="https://team-uhp.github.io/#team">
-              About the Team
-            </a>
-            <a className="footLink" href="https://team-uhp.github.io/#overview">
-              About TeamUHp
-            </a>
+            <a className="footLink" href="https://team-uhp.github.io/#team">About the Team</a>
+            <a className="footLink" href="https://team-uhp.github.io/#overview">About TeamUHp</a>
           </Col>
 
-          <Col>
+          <Col xs={12} md={3} className="col-xs-stack">
             <strong>Resources</strong>
             <hr />
-            <a className="footLink" href="https://team-uhp.github.io/#user-guide">
-              User Guide
-            </a>
-            <a className="footLink" href="https://team-uhp.github.io/">
-              Contact Us
-            </a>
+            <a className="footLink" href="https://team-uhp.github.io/#user-guide">User Guide</a>
+            <a className="footLink" href="https://team-uhp.github.io/">Contact Us</a>
           </Col>
 
           {currentUser && role === 'ADMIN' && (
-            <Col>
+            <Col xs={12} md={3} className="col-xs-stack">
               <strong>Admin</strong>
               <hr />
-              <a className="footLink" href="/admin/users">
-                User Admin
-              </a>
-              <a className="footLink" href="/admin/projects">
-                Project Admin
-              </a>
+              <a className="footLink" href="/admin/users">User Admin</a>
+              <a className="footLink" href="/admin/projects">Project Admin</a>
             </Col>
           )}
         </Row>
