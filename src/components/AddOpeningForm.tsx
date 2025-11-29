@@ -8,7 +8,9 @@ import swal from 'sweetalert';
 import { addPosition } from '@/lib/dbActions';
 import { AddPositionSchema } from '@/lib/validationSchemas';
 import { useState, useEffect } from 'react';
-import { DateRange, DayPicker } from 'react-day-picker';
+import { DateRange } from 'react-day-picker'; // subject to changee
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Link from 'next/link';
 import { Skills } from '@prisma/client';
 import { useSession } from 'next-auth/react';
@@ -137,7 +139,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
   console.log('skills:', selectedSkills);
   console.log('selected date:', selected);
   return (
-    <Container className="py-3" fluid>
+    <Container className="py-3">
       <Row className="justify-content-center">
         <Col>
           <Col className="text-center">
@@ -151,36 +153,53 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
           <Card>
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
-                <Form.Group>
-                  <Form.Label>Title</Form.Label>
-                  <input
-                    type="text"
-                    {...register('title')}
-                    className={`form-control ${errors.title ? 'is-invalid' : ''}`}
-                  />
-                  <div className="invalid-feedback">{errors.title?.message}</div>
-                </Form.Group>
+                <Row>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Title</Form.Label>
+                      <input
+                        type="text"
+                        {...register('title')}
+                        className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+                      />
+                      <div className="invalid-feedback">{errors.title?.message}</div>
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <br />
+                    <Form.Group className="mb-3">
+                      <Form.Label className="me-2 mb-0">Timeline:</Form.Label>
+                      <DatePicker
+                        selectsRange
+                        startDate={selected?.from || null}
+                        endDate={selected?.to || null}
+                        onChange={(dates) => {
+                          const [start, end] = dates;
+                          setSelected({ from: start || undefined, to: end || undefined });
+                          if (start) setValue("datestart", start.toISOString());
+                          if (end) setValue("dateend", end.toISOString());
+                        }}
+                        minDate={new Date()}
+                        placeholderText="Select a start and end date"
+                        className="form-control"
+                      />
+                      {errors.datestart && (
+                        <div className="text-danger mt-2">{errors.datestart.message}</div>
+                      )}
+                    </Form.Group>
+                  </Col>
+                </Row>
                 <Form.Group>
                   <Form.Label>Description</Form.Label>
-                  <input
-                    type="text"
+                  <textarea
                     {...register('descrip')}
                     className={`form-control ${errors.descrip ? 'is-invalid' : ''}`}
+                    style={{ height: '120px' }}
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
-                <Form.Group>
-                  <DayPicker
-                    mode="range"
-                    required
-                    disabled={{ before: new Date() }}
-                    selected={selected}
-                    onSelect={setSelected}
-                    footer={
-                      selected?.from ? `Selected: ${selected.from.toLocaleDateString()}${selected.to ? ` - ${selected.to.toLocaleDateString()}` : ''}` : 'Pick a day.'
-                    }
-                  />
-                </Form.Group>
+               
+
                 {errors.datestart && (
                 <div className="text-danger mt-2">{errors.datestart.message}</div>
                 )}

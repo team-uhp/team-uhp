@@ -50,7 +50,7 @@ main {
 
 #Topbar {
   height: 80px;
-  background-color: #002325 !important;
+  background-color: #024731!important;
   color: white;
   display: flex;
   align-items: center;
@@ -60,12 +60,12 @@ main {
 }
 
 #Topbar .navbar-collapse {
-  background-color: #002325;
+  background-color: #024731;
 }
 
 @media (max-width: 991.98px) {
   #Topbar .navbar-collapse.show {
-    background-color: #002325;
+    background-color: #024731;
     position: absolute;
     top: 100%;
     left: 0;
@@ -164,7 +164,7 @@ footer strong {
   font-weight: 500;
   font-size: 0.85rem;
   padding: 4px 12px;
-  background-color: #f0f0f0;
+  background-color: #F0F0F0FF;
   border-color: transparent;
   display: inline-flex;
   align-items: center;
@@ -196,7 +196,18 @@ footer strong {
   margin-top: 10px;
 }
 
+#project-openings .button {
+  background-color: #07394f!important;
+  /* doesnt work */
+}
+
 #project-tags {
   margin-bottom: 20px;
   margin-top: 10px;
 }
+
+#project-tags .badge {
+  /* background-color: #07394f!important; */
+}
+
+

@@ -42,9 +42,12 @@ const ProjectListPage = async () => {
       <Row>
         <Col>
           <h2 className="text-center">Projects List</h2>
-          <Link
-            href="/add-project/"
-          >
+          <Link href="/add-project/" className="btn btn-primary"
+            style={{
+              backgroundColor: '#008091',
+              borderColor: 'transparent',
+              fontSize: '16px'
+            }}>
             Add Project
           </Link>
           <br />

@@ -34,7 +34,6 @@ export default function SignInPage() {
       className="d-flex justify-content-center align-items-start"
       style={{
         backgroundColor: 'white',
-        minHeight: 'calc(100vh - 160px)', // leaves space for navbar + breadcrumb
         padding: '3rem 1rem',
       }}
     >

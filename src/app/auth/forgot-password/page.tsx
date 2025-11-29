@@ -22,7 +22,7 @@ export default function ForgotPassword() {
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: '70vh' }}
+      style={{ minHeight: '50vh' }}
     >
       <Row className="justify-content-center">
         <Col>
@@ -59,6 +59,7 @@ export default function ForgotPassword() {
                       <Form.Label style={{ color: '#024731', fontWeight: 600 }}>Email</Form.Label>
                       <input
                         style={{ borderColor: '#024731' }}
+                        placeholder="Enter email"
                         type="email"
                         {...register('email', { required: 'Email is required' })}
                         className={`form-control ${errors.email ? 'is-invalid' : ''}`}
