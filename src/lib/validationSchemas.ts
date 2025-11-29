@@ -32,8 +32,8 @@ export const EditUserSchema = Yup.object({
 export const AddProjectSchema = Yup.object({
   title: Yup.string().required('Title is required'),
   descrip: Yup.string().required('Description is required'),
-  members: Yup.array().of(Yup.number()).optional(),
-  admins: Yup.array().of(Yup.number()).optional(),
+  members: Yup.array().of(Yup.number().defined()).default([]),
+  admins: Yup.array().of(Yup.number().defined()).default([]),
   image: Yup.string().optional(),
   duedate: Yup.string().optional(),
 });

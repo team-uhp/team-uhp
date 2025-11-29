@@ -19,8 +19,8 @@ type ProjectFormValues = {
   title: string;
   descrip: string;
   duedate?: string;
-  members?: number[];
-  admins?: number[];
+  members: number[];
+  admins: number[];
 };
 
 const AddProjectForm: React.FC = () => {
