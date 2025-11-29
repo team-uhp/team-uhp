@@ -7,7 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { PageIDs } from '@/utilities/ids';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
-import { Container } from 'react-bootstrap';
+import { Badge, Container, Row } from 'react-bootstrap';
 
 /**
  * Renders project opening page.
@@ -21,34 +21,74 @@ const ProjectOpening = async ({ params }: { params: Promise<{
     user: { email: string; id: string; randomKey: string };
   } | null;
 
-  loggedInProtectedPage(session);
-
-  const resolvedParams = await params;
-  const position = await prisma.position.findUnique({ where: { id: Number(resolvedParams.id) } });
-  if (!position) {
+  if (!session) {
     return NotFound();
   }
-  // console.log(project opening);
 
-  const userId = Number(session?.user?.id);
+  loggedInProtectedPage(session);
 
-  if (position && session?.user && position.admins.includes(userId)) {
+  const user = await prisma.user.findUnique({ where: { id: Number(session.user.id) }})
+  if (!user) {
+    return NotFound();
+  }
+
+  const resolvedParams = await params;
+  const position = await prisma.position.findUnique({
+    where: { id: Number(resolvedParams.id) },
+    include: {
+      project: {
+        select: {
+          id: true,
+        }
+      },
+      admins: true,
+      applics: {
+        include: {
+          user: true,
+        }
+      } },
+  });
+  if (!position || position == null) {
+    return NotFound();
+  }
+
+  const apps: { id: number; name: string | null }[] = position.applics.map(application => ({
+    id: application.id,
+    name: application.user ? `${application.user.firstName} ${application.user.lastName}` : null,
+  }));
+
+  if ((position.admins?.some((a) => a.id === user.id) ?? false) || (user.role === 'ADMIN')) {
     return (
       <Container id={PageIDs.openingPage} fluid className="py-3">
-        <Link href={`/project-page/${position.project}`}>Back to Project</Link>
+        <Link href={`/project-page/${position.project?.id}`}>Back to Project</Link>
         <OpeningInfo
           key={`Position-${resolvedParams.id}`}
           params={{
             id: resolvedParams.id,
           }}
         />
-        <Link href={`/edit-opening/${position.id}`}>Edit Opening</Link>
+        <Row>
+          <Link href={`/project-opening/edit-opening/${position.id}`}>Edit Opening</Link>
+        </Row>
+        <h2>Applications</h2>
+        <Container id="opening-tags" fluid>
+        {apps.map((app) => (
+          <Link key={`app-${app.id}`} href={`/project-opening/application/${app.id}`}>
+            <Badge
+              className="mx-1"
+              bg="info"
+            >
+              {app.name ?? 'N/A'}
+            </Badge>
+          </Link>
+        ))}
+      </Container>
       </Container>
     );
   }
   return (
     <Container id={PageIDs.openingPage} fluid className="py-3">
-      <Link href={`/project-page/${position.project}`}>Back to Project</Link>
+      <Link href={`/project-page/${position.project?.id}`}>Back to Project</Link>
       <OpeningInfo
         key={`Position-${resolvedParams.id}`}
         params={{

@@ -13,7 +13,6 @@ async function main() {
     const role = account.role as Role || Role.USER;
     console.log(`  Creating user: ${account.email} with role: ${role}`);
 
-    // eslint-disable-next-line no-await-in-loop
     await prisma.user.upsert({
       where: { email: account.email },
       update: {},
@@ -27,15 +26,29 @@ async function main() {
         image: account.image,
         phone: account.phone,
         skills: account.skills.map(s => s as Skills) || [],
-        availability: account.availability,
-        contacts: account.contacts,
         validation: account.validation,
       },
     });
     // console.log(`  Created user: ${user.email} with role: ${user.role}`);
   }
 
-  for (const project of config.defaultProject) {
+  // console.log('Adding contacts');
+  for (const account of config.defaultAccounts) {
+    const contacts = (account as { contacts?: number[] }).contacts;
+
+    if (contacts && contacts.length > 0) {
+      await prisma.user.update({
+        where: { email: account.email },
+        data: {
+          contacts: {
+            connect: contacts.map(id => ({ id }))
+          }
+        }
+      });
+    }
+  }
+
+  /*for (const project of config.defaultProject) {
     console.log(`  Adding project: ${JSON.stringify(project)}`);
     // eslint-disable-next-line no-await-in-loop
     await prisma.project.upsert({
@@ -71,7 +84,7 @@ async function main() {
         admins: position.admins,
       },
     });
-  }
+  }*/
 }
 main()
   .then(() => prisma.$disconnect())

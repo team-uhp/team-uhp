@@ -35,7 +35,7 @@ const AddProjectForm: React.FC = () => {
     setValue,
     formState: { errors },
   } = useForm<ProjectFormValues>({
-    resolver: yupResolver(AddProjectSchema),
+    resolver: yupResolver<ProjectFormValues>(AddProjectSchema),
     defaultValues: {
       title: '',
       descrip: '',
@@ -113,8 +113,7 @@ const AddProjectForm: React.FC = () => {
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Description</Form.Label>
-                  <input
-                    type="text"
+                  <textarea
                     {...register('descrip')}
                     className={`form-control ${errors.descrip ? 'is-invalid' : ''}`}
                   />

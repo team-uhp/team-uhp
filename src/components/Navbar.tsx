@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 'use client';
 
 import React from 'react';
@@ -19,7 +18,7 @@ const NavBar: React.FC = () => {
         <Navbar.Brand href="/">
           <img
             id="Logo"
-            src="/logoMockup.png"
+            src="teamUhpLogoFinal - White.png"
             alt="Site Logo"
             height="45"
           />
