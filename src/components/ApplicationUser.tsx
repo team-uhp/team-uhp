@@ -5,7 +5,7 @@ import swal from 'sweetalert';
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { applyAccept, applyDelete } from "@/lib/dbActions";
+import { applyDelete } from "@/lib/dbActions";
 
 type ApplicationAdminProps = {
   user: User;
@@ -19,7 +19,7 @@ type ApplicationAdminProps = {
   };
 };
 
-const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => {
+const ApplicationUser: React.FC<ApplicationAdminProps> = ({ applic, user }) => {
   const router = useRouter();
 
   return (
@@ -34,37 +34,7 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
       </Row>
       <Row>
         <Col>
-            <Button
-            type="button"
-            onClick={async (event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              const willAccept = await swal({
-                title: 'Are you sure you want to accept?',
-                buttons: ['Cancel', 'Accept'],
-                dangerMode: true,
-              });
-
-              if (willAccept) {
-                try {
-                  await applyAccept({ applicId: applic.id });
-                  swal('Success!', 'Application accepted.', 'success', {
-                    timer: 2000,
-                  });
-                  router.push(`/project-page/${applic.projId}`);
-                }
-                catch (err) {
-                  console.error(err);
-                  swal('Cancelled', 'Application was not accepted', 'info', {
-                    timer: 2000,
-                  });
-                  router.push(`/project-opening/application/${applic.id}`)
-                }
-            }}}
-            className="float-right"
-          >
-            Accept
-          </Button>
+            <Button variant="primary" href={`/project-opening/edit-application/${applic.id}`}>Edit Application</Button>
         </Col>
         <Col>
           <Button
@@ -106,4 +76,4 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
   );
 }
 
-export default ApplicationAdmin;
+export default ApplicationUser;

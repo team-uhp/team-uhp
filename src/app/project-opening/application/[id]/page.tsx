@@ -1,14 +1,13 @@
 import React from 'react';
 import NotFound from '@/app/not-found';
-import OpeningInfo from '@/components/OpeningInfo';
 import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import { prisma } from '@/lib/prisma';
-import { PageIDs } from '@/utilities/ids';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 import ApplicationAdmin from '@/components/ApplicationAdmin';
+import ApplicationUser from '@/components/ApplicationUser';
 
 /**
  * Renders project opening page.
@@ -70,15 +69,30 @@ const ApplicationPage = async ({ params }: { params: Promise<{
       </Container>
     );
   }
+  else if (applic.userId == user.id) {
+    return (
+      <Container>
+        <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
+        <ApplicationUser
+          user={user}
+          applic={{
+            ...applic,
+            projId: applic.position?.project?.id ?? 0,
+            application: applic.application ?? '',
+          }}
+        />
+      </Container>
+    );
+  }
   return (
-    <Container id={PageIDs.openingPage} fluid className="py-3">
+    <Container>
       <Link href={`/project-page/${applic.position.id ?? ''}`}>Back to Position</Link>
-      <OpeningInfo
-        key={`Position-${resolvedParams.id}`}
-        params={{
-          id: resolvedParams.id,
-        }}
-      />
+      <h1>
+        Permissions denied.
+      </h1>
+      <h2>
+        You do not have permissions to view this application.
+      </h2>
     </Container>
   );
 };
