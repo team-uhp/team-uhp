@@ -12,7 +12,8 @@ import keyGen from './keygen';
 /**
  * Adds a new project to the database.
  * @param project, an object with the following
- * properties: image, title, descrip, duedate.
+ * properties: image, title, descrip, duedate,
+ * members, admins.
  */
 export async function addProject(project: {
   image: string,
@@ -47,8 +48,6 @@ export async function addProject(project: {
       },
     },
   });
-
-  redirect('/project-list');
 }
 
 /**
@@ -93,8 +92,6 @@ export async function editProject(project: {
       skills: project.skills,
     },
   });
-
-  redirect('/project-list');
 }
 
 /**
@@ -342,9 +339,91 @@ export async function applyCreate(applic: {
 }
 
 /**
+ * Accepts an application for a position.
+ * @param applic, the application ID number.
+ */
+
+export async function applyAccept(applic: { applicId: number,
+}) {
+  // console.log(`applyAccept data: ${JSON.stringify(application, null, 2)}`);
+  const application = await prisma.application.findUnique({ where: { id: applic.applicId } });
+  if (!application) throw new Error ('Application not found');
+
+  if (application.userId == null) throw new Error ('Application is not associated with user.');
+
+  const user = await prisma.user.findUnique({ where: { id: application.userId }});
+  if (!user) throw new Error ('Position not found');
+
+  if (application.positionId == null) throw new Error ('Application is not associated with position');
+
+  const position = await prisma.position.findUnique({ where: { id: application.positionId } });
+  if (!position) throw new Error ('Project not found');
+
+  if (position.projectId == null) throw new Error ('Position is not associated with a project.');
+
+  if (application.userId == null) throw new Error('Application is not associated with a user.');
+
+  await prisma.position.update({
+    where: { id: application.positionId },
+    data: {
+      member: { connect: { id: application.userId } },
+      skills: [],
+    },
+  });
+
+  const project = await prisma.project.findUnique({ where: { id: position.projectId }, include: { positions: true } });
+  if (!project) throw new Error('Project not found');
+
+  const updatedPositions = (project.positions || []).map(p => p.id).filter(pid => pid !== position.id);
+  await prisma.project.update({
+    where: { id: position.projectId },
+    data: {
+      positions: {
+        set: updatedPositions.map(pid => ({ id: pid })),
+      },
+      members: { connect: { id: application.userId } },
+    },
+  });
+  
+  const remainingPositions = await prisma.position.findMany({
+    where: { id: { in: updatedPositions } },
+  });
+  
+  const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
+  
+  await prisma.project.update({
+    where: { id: position.projectId },
+    data: {
+      skills: updatedSkills,
+    },
+  });
+
+  await sendAutoEmail(
+    user.email,
+    `${position.title} application accepted!`,
+    `<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+    </head>
+    <body>
+      <h1>Your application for ${position.title} was accepted!</h1>
+      <br />
+      <h3>
+        <a href="https://team-uhp.vercel.app/project-opening/${position.projectId}">
+          Click here to view the project.
+        </a>
+      </h3>
+      <br />
+      <p>If you did not apply for this project at team-uhp.vercel.app, ignore this email.</p>
+      </body>
+      </html>`,
+  );
+}
+
+/**
  * Deletes an existing application in the database.
- * @param applic, an object with the following
- * property: positionid.
+ * @param applic, the application ID number.
  */
 export async function applyDelete(applic: {
   applicId: number,
