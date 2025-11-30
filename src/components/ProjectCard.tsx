@@ -1,11 +1,14 @@
 import React from 'react';
-import { Project } from '@prisma/client';
+import { Project, Position } from '@prisma/client';
 import Link from 'next/link';
 import { Badge, Card, CardBody, CardFooter, CardHeader, CardText, Col, Container, Row } from 'react-bootstrap';
 import Image from 'next/image';
 
 /* Renders a single row in the Projects list. See project-list/page.tsx. */
-const ProjectCard = ({ project }: { project: Project }) => {
+
+type ProjectWithPositions = Project & { positions: Position[] };
+
+const ProjectCard = ({ project }: { project: ProjectWithPositions }) => {
   const date = new Date(project.duedate);
   const day = date.getDate().toString().padStart(2, '0');
   const mon = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -52,7 +55,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                     style={{
                       fontFamily: 'Poppins, sans-serif',
                       fontWeight: 600,
-                      fontSize: '1.5rem', // a little bigger
+                      fontSize: '1.5rem',
                       marginBottom: '0.25rem',
                       color: '#008091',
                     }}
