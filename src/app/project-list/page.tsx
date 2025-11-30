@@ -23,7 +23,7 @@ const ProjectListPage = async () => {
   const projects = await prisma.project.findMany({
     include: { positions: true },
   }) as ProjectWithPositions[];
-  
+
   const sessionUser = session?.user as { id: string };
   const user = await prisma.user.findUnique({
     where: { id: Number(sessionUser.id) },
@@ -31,7 +31,7 @@ const ProjectListPage = async () => {
   });
   const userSkills: Skills[] = user?.skills || [];
 
-  const sortedProjs: Array<{ project: Project; matches: number }> = [];
+  const sortedProjs: Array<{ project: ProjectWithPositions; matches: number }> = [];
 
   projects.forEach((project) => sortedProjs.push(
     { project,
