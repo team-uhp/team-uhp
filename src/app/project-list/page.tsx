@@ -7,7 +7,7 @@ import authOptions from '@/lib/authOptions';
 import ProjectCard from '@/components/ProjectCard';
 import { PageIDs } from '@/utilities/ids';
 import Link from 'next/link';
-import { Project, Skills } from '@prisma/client';
+import { Project, Position, Skills } from '@prisma/client';
 
 /** Render a list of projects for the logged in user. */
 const ProjectListPage = async () => {
@@ -18,10 +18,12 @@ const ProjectListPage = async () => {
       user: { email: string; id: string; randomKey: string, skills: Skills[] };
     } | null,
   );
+  type ProjectWithPositions = Project & { positions: Position[] };
+
   const projects = await prisma.project.findMany({
     include: { positions: true },
-  });
-
+  }) as ProjectWithPositions[];
+  
   const sessionUser = session?.user as { id: string };
   const user = await prisma.user.findUnique({
     where: { id: Number(sessionUser.id) },
