@@ -210,7 +210,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
                       <SkillSelect
                         key={`skill-${skill}`}
                         skill={skill}
-                        value={selectedSkills[skill] || false}
+                        isSelected={selectedSkills[skill] || false}
                         onChange={() => handleSkillToggle(skill)}
                       />
                     ))}
