@@ -4,8 +4,11 @@ import authOptions from '@/lib/authOptions';
 import React from 'react';
 import { Badge, Button, Col, Row } from 'react-bootstrap';
 import Image from 'next/image';
-import { Project, User } from '@prisma/client';
+import { Project, User, Position } from '@prisma/client';
 import ProjectCard from './ProjectCard';
+
+type ProjectWithPositions = Project & { positions: Position[] };
+
 
 /** Renders the information page for a Project. */
 const UserProfile = async ({ user }: { user: User }) => {
@@ -14,15 +17,14 @@ const UserProfile = async ({ user }: { user: User }) => {
   } | null;
 
   // Check if the user is a member of any projects
-  const projects: Project[] = await prisma.project.findMany({
+  const projects: ProjectWithPositions[] = await prisma.project.findMany({
     where: {
       members: { some: { userId: user.id } },
     },
     include: {
-      positions: true, // <--- add this
+      positions: true,
     },
   });
-
 
   // Get profile picture path
   const imgPath = `/${user.image}`;
