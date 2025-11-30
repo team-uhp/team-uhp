@@ -1,5 +1,3 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable import/no-extraneous-dependencies */
 import { test as base, Page } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
@@ -37,6 +35,7 @@ async function fillFormWithRetry(
         await element.fill(field.value);
         await element.evaluate((el) => el.blur()); // Trigger blur event
         break;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         attempts++;
         if (attempts >= maxAttempts) {
@@ -75,7 +74,6 @@ async function authenticateWithUI(
         page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
         page.getByText('Sign out').isVisible().then((visible) => visible),
         page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
-        // eslint-disable-next-line no-promise-executor-return
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
 

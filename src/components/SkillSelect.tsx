@@ -1,12 +1,12 @@
 /* Renders a single skill for selection. See project-page/page.tsx. */
 import React from 'react';
 
-const SkillSelect = ({ skill, value, onChange }: { skill: string, value: boolean, onChange: () => void }) => (
+const SkillSelect = ({ skill, isSelected: isSelected, onChange }: { skill: string, isSelected: boolean, onChange: () => void }) => (
   <label 
     htmlFor={`skill-${skill}`}
     style={{
-      backgroundColor: value ? '#cfffdb' : '#f1f1f1',
-      borderColor: value ? 'lightblue' : 'darkblue',
+      backgroundColor: isSelected ? '#cfffdb' : '#f1f1f1',
+      borderColor: isSelected ? 'lightblue' : 'darkblue',
       fontFamily: 'opensans, sans-serif',
       fontSize: '14px',
       color: '#111613',
@@ -20,7 +20,7 @@ const SkillSelect = ({ skill, value, onChange }: { skill: string, value: boolean
     <input
       id={`skill-${skill}`}
       type="checkbox"
-      checked={value}
+      checked={isSelected}
       onChange={onChange}
       className="w-4 h-4 rounded cursor-pointer"
       

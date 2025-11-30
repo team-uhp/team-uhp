@@ -216,7 +216,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                       <SkillSelect
                         key={`skill-${skill}`}
                         skill={skill}
-                        value={selectedSkills[skill] || false}
+                        isSelected={selectedSkills[skill] || false}
                         onChange={() => handleSkillToggle(skill)}
                       />
                     ))}
