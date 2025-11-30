@@ -34,9 +34,9 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
 
 
   const postedBy = project?.admins?.[0] || null;
-  const isAdmin = project && session?.user && project.admins.some(a => a.id === userId);
+  const isAdmin = project && session?.user && project.admins?.some(a => a.id === userId);
 
-  if (project && session?.user && project.admins?.some(a => a.id === userId)) {
+  if (isAdmin) {
     return (
       <Container id={PageIDs.projectPage} className="py-3">
       <Link href="/project-list" style={{ color: '#111613' }}>&lt; Back to List of Projects</Link>
