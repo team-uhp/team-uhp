@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test('Page Accessibility Tests', async ({ page }) => {
   await page.goto('http://localhost:3000/');
@@ -19,8 +19,14 @@ test('Page Accessibility Tests', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter email' }).press('Tab');
   await page.getByRole('textbox', { name: 'Enter password' }).fill('changeme');
   await page.getByRole('button', { name: 'Sign In' }).click();
+
+  await expect(page.getByRole('link', { name: 'Projects List' })).toBeVisible({ timeout: 10000 });
+
   await page.getByRole('button', { name: 'View Projects' }).click();
   await page.getByRole('heading', { name: 'Projects List' }).click();
+
+  await expect(page.getByRole('heading', { name: 'Add Project' })).toBeVisible();
+
   await page.getByRole('link', { name: 'Add Project' }).click();
   await page.getByRole('heading', { name: 'Add Project' }).click();
   await page.locator('input[name="title"]').click();
