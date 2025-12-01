@@ -23,7 +23,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
     "@ngneat/falso": "^7.2.0",
-    "@prisma/client": "^6.19.0",
+    "@prisma/client": "6.19.0",
     "@prisma/extension-accelerate": "^2.0.2",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
@@ -43,7 +43,6 @@
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.52.0",
     "sweetalert": "^2.1.2",
-    "ts-node": "10.9.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {
@@ -68,7 +67,8 @@
     "jiti": "^2.6.1",
     "prettier": "^3.3.1",
     "prettier-eslint": "^16.3.0",
-    "prisma": "^6.19.0",
+    "prisma": "6.19.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
     "typescript-eslint": "^8.46.4"
   }
