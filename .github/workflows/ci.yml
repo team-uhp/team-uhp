@@ -42,7 +42,7 @@ jobs:
       - name: Run migrations
         run: ./node_modules/.bin/prisma migrate deploy
       - name: Seed database
-        run: npm run seed || echo "No seed script"
+        run: ./node_modules/.bin/prisma db seed
       - name: Verify admin user exists
         run: |
           PGPASSWORD=postgres psql -h localhost -U postgres -d teamuhp_test -c \
