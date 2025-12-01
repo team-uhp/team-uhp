@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 
 test('Page Accessibility Tests', async ({ page }) => {
   await page.goto('http://localhost:3000/');
@@ -19,14 +19,12 @@ test('Page Accessibility Tests', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Enter email' }).press('Tab');
   await page.getByRole('textbox', { name: 'Enter password' }).fill('changeme');
   await page.getByRole('button', { name: 'Sign In' }).click();
-  await page.getByRole('button', { name: 'View Projects' }).click();
   await page.getByRole('heading', { name: 'Projects List' }).click();
   await page.getByRole('link', { name: 'Add Project' }).click();
   await page.getByRole('heading', { name: 'Add Project' }).click();
   await page.locator('input[name="title"]').click();
   await page.locator('input[name="title"]').fill('CI Test Project');
   await page.getByRole('textbox', { name: 'Pick a date' }).click();
-  await page.getByRole('heading', { name: 'November' }).click();
   await page.getByRole('button', { name: 'Next Month' }).click();
   await page.getByRole('gridcell', { name: 'Choose Tuesday, December 30th,' }).click();
   await page.locator('textarea[name="descrip"]').click();
