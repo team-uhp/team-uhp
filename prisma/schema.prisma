@@ -10,8 +10,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // for local development
-  url       = env("DATABASE_URL")
 }
 
 enum Role {
