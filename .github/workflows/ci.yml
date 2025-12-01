@@ -49,14 +49,14 @@ jobs:
           "SELECT email FROM \"User\" WHERE email='admin@hawaii.edu';" || echo "No users found"
       - name: Build app
         run: npm run build
-      #- name: Install Playwright Browsers
-        #run: npx playwright install --with-deps
       - name: Run ESLint
         run: npm run lint
+      #- name: Install Playwright Browsers
+        #run: npx playwright install --with-deps
       #- name: Run Playwright tests
         #run: npx playwright test
       #- name: Upload Playwright report
-        #if: ${{ always() }}
+        #if: always()
         #uses: actions/upload-artifact@v4
         #with:
           #name: playwright-report
