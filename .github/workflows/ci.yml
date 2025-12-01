@@ -25,6 +25,7 @@ jobs:
           --health-retries 5
     env:
       DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/teamuhp_test'
+      POSTGRES_URL: 'postgresql://postgres:postgres@localhost:5432/teamuhp_test'
       NEXTAUTH_SECRET: 'test-secret-for-ci-only-do-not-use-in-production'
       NEXTAUTH_URL: 'http://localhost:3000'
       NODE_ENV: 'test'
