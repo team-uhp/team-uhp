@@ -43,6 +43,10 @@ jobs:
         run: ./node_modules/.bin/prisma migrate deploy
       - name: Seed database
         run: npm run seed || echo "No seed script"
+      - name: Verify admin user exists
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -d teamuhp_test -c \
+          "SELECT email FROM \"User\" WHERE email='admin@hawaii.edu';" || echo "No users found"
       - name: Build app
         run: npm run build
       - name: Install Playwright Browsers
