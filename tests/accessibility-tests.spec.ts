@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 
 test('Page Accessibility Tests', async ({ page }) => {
-  await page.goto('https://team-uhp.vercel.app/');
+  await page.goto('localhost:3000');
   await page.getByRole('heading', { name: 'Welcome to TeamUHp' }).click();
   await page.getByRole('button', { name: 'View Projects' }).click();
   await page.getByRole('textbox', { name: 'Enter email' }).click();
