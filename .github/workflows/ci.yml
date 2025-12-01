@@ -18,6 +18,14 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          DATABASE_URL=postgresql://postgres:postgres@localhost:5432/teamuhp_test
+          NEXTAUTH_SECRET=test-secret-for-ci-only-do-not-use-in-production
+          NEXTAUTH_URL=http://localhost:3000
+          NODE_ENV=test
+          EOF
       - name: Run ESLint
         run: npm run lint
       - name: Run Playwright tests
