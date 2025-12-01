@@ -1,5 +1,5 @@
 {
   "defaultAccounts": [
-    { "email": "admin@hawaii.edu", "username": "admin", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming", "other", "C", "CPP" ], "validation": true }
+    { "email": "admin1@hawaii.edu", "username": "admin1", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming", "other", "C", "CPP" ], "validation": true }, { "email": "admin@foo.com", "username": "admin", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min", "image": "replaceme.png", "phone": "808-867-5309", "skills": [ "programming", "other", "C", "CPP" ], "validation": true }
   ]
 }
