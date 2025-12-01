@@ -43,6 +43,8 @@ jobs:
         run: ./node_modules/.bin/prisma migrate deploy
       - name: Seed database
         run: npm run seed || echo "No seed script"
+      - name: Build app
+        run: npm run build
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run ESLint
