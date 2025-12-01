@@ -47,9 +47,9 @@ jobs:
         run: |
           PGPASSWORD=postgres psql -h localhost -U postgres -d teamuhp_test -c "SELECT 1;"
       - name: Generate Prisma Client
-        run: npm exec prisma generate
+        run: ./node_modules/.bin/prisma generate
       - name: Run migrations
-        run: npx prisma migrate deploy
+        run: ./node_modules/.bin/prisma migrate deploy
       - name: Seed database
         run: npm run seed || echo "No seed script"
       - name: Install dependencies
