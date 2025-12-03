@@ -32,6 +32,7 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
     resolver: yupResolver(EditUserSchema),
     defaultValues: user as EditUserFormData,
   });
+
   const forceUpdate = useForceUpdate();
   const router = useRouter();
 
@@ -39,11 +40,12 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   const [availabilityTags, setAvailabilityTags] = useState<number[]>(user.availability ?? []); // State to store the tags
   const [contactTags, setContactTags] = useState<number[]>(user.contacts ?? []); // State to store the tags
 
-  // Register array fields so setValue works without inputs
+  // Register array fields and file input so setValue works without inputs
   useEffect(() => {
     register("skills");
     register("availability");
     register("contacts");
+    register("image");
   }, [register]);
 
   // Keep RHF values in sync with local state
@@ -58,6 +60,9 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   useEffect(() => {
     setValue("contacts", contactTags, { shouldDirty: true, shouldValidate: true });
   }, [contactTags, setValue]);
+
+  
+
   // Function to add a new tag
   const addTag = <T,>(newTag: T, tags: T[], setTags: (tags: T[]) => void) => {
     if (newTag && !tags.includes(newTag)) { // Prevent adding empty or duplicate tags
@@ -68,8 +73,48 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   const removeTag = <T,>(tagToRemove: T, tags: T[], setTags: (tags: T[]) => void) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
+
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+  const onFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadedFile(file);
+      setValue('image', file.name, { shouldDirty: true, shouldValidate: true });
+      console.log(`File selected: ${file.name}`);
+    }
+  };
+
   const onSubmit = async (data: EditUserFormData) => {
     console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
+    
+    let imageUrl = data.image;
+    
+    // Upload file if one was selected
+    if (uploadedFile) {
+      try {
+        const formData = new FormData();
+        formData.append('file', uploadedFile);
+        
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        if (!response.ok) {
+          throw new Error('File upload failed');
+        }
+        
+        const result = await response.json();
+        imageUrl = result.url; // Use the server-returned URL path
+        console.log(`File uploaded successfully: ${result.url}`);
+      } catch (error) {
+        console.error('Upload error:', error);
+        swal('Error', 'Failed to upload image', 'error');
+        return; // Stop submission if upload fails
+      }
+    }
+    
     await editUser({
       id: data.id,
       email: data.email,
@@ -78,7 +123,7 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
       role: data.role,
       firstName: data.firstName,
       lastName: data.lastName,
-      image: data.image ?? null,
+      image: imageUrl ?? null,
       phone: data.phone ?? null,
       skills: skillTags,
       availability: availabilityTags,
@@ -108,7 +153,8 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
                     type="text"
                     {...register('email')}
                     defaultValue={user.email}
-                    required
+                    disabled
+                    readOnly
                     className={`form-control ${errors.email ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.email?.message}</div>
                 </Form.Group>
@@ -117,6 +163,8 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
                   <input
                     type="text"
                     {...register('username')}
+                    disabled
+                    readOnly
                     defaultValue={user.username ? user.username : ''}
                     className={`form-control ${errors.username ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.username?.message}</div>
@@ -145,13 +193,14 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Form.Group>
+                <Form.Group controlId='formFile'>
                   <Form.Label>Profile Image</Form.Label>
-                  <input
-                    type="text"
-                    {...register('image')}
-                    defaultValue={user.image ? user.image : ''}
-                    className={`form-control ${errors.image ? 'is-invalid' : ''}`} />
+                  <Form.Control 
+                    type='file'
+                    accept='.jpg,.png,.jpeg'
+                    onChange={onFileUpload}
+                    className={`form-control ${errors.image ? 'is-invalid' : ''}`}
+                  />
                   <div className="invalid-feedback">{errors.image?.message}</div>
                 </Form.Group>
                 <Form.Group>

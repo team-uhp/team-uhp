@@ -27,7 +27,7 @@ const UserProfile = async ({ user }: { user: User }) => {
   });
 
   // Get profile picture path
-  const imgPath = `/${user.image}`;
+  const imgPath = `${user.image}`;
 
   return (
     <Row>
