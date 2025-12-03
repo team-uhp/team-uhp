@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 export default function SignInPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -16,7 +16,7 @@ export default function SignInPage() {
 
     const result = await signIn('credentials', {
       redirect: false,
-      email,
+      identifier,
       password,
       callbackUrl: '/',
     });
@@ -61,13 +61,13 @@ export default function SignInPage() {
           <Form className="text-start" onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label style={{ color: '#024731', fontWeight: 600 }}>
-                Email address
+                Username or Email
               </Form.Label>
               <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                placeholder="Enter username or email"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
                 style={{ borderColor: '#024731' }}
                 required
               />
@@ -112,7 +112,6 @@ export default function SignInPage() {
             </Button>
           </Form>
 
-          {/* Keep nested Row/Col structure exactly as you had */}
           <Row style={{ marginTop: '10px' }}>
             <Col>
               <div className="mt-4 text-center" style={{ color: '#024731' }}>

@@ -9,28 +9,35 @@ const authOptions: NextAuthOptions = {
   },
   providers: [
     CredentialsProvider({
-      name: 'Email and Password',
+      name: 'Username or Email',
       credentials: {
-        email: {
-          label: 'Email',
-          type: 'email',
-          placeholder: 'john@foo.com',
+        identifier: {
+          label: 'Username or Email',
+          type: 'text',
+          placeholder: 'john@hawaii.edu',
         },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
+        if (!credentials?.identifier || !credentials.password) {
           return null;
         }
-        const user = await prisma.user.findUnique({
+
+        // Try to find user by email OR username
+        const user = await prisma.user.findFirst({
           where: {
-            email: credentials.email,
+            OR: [
+              { email: credentials.identifier },
+              { username: credentials.identifier },
+            ],
           },
         });
+
         if (!user) {
           return null;
         }
 
+        // Require account to be validated
         if (!user.validation) {
           return null;
         }
@@ -43,6 +50,7 @@ const authOptions: NextAuthOptions = {
         return {
           id: `${user.id}`,
           email: user.email,
+          username: user.username,
           randomKey: user.role,
         };
       },
@@ -51,30 +59,28 @@ const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/signin',
     signOut: '/auth/signout',
-    //   error: '/auth/error',
-    //   verifyRequest: '/auth/verify-request',
-    //   newUser: '/auth/new-user'
   },
   callbacks: {
     session: ({ session, token }) => {
-      // console.log('Session Callback', { session, token })
+      // Inject id, role, and username into session.user
       return {
         ...session,
         user: {
           ...session.user,
           id: token.id,
           randomKey: token.randomKey,
+          username: token.username,
         },
       };
     },
     jwt: ({ token, user }) => {
-      // console.log('JWT Callback', { token, user })
       if (user) {
-        const u = user as { id: string; email: string; randomKey: string };
+        const u = user as { id: string; email: string; username: string; randomKey: string };
         return {
           ...token,
           id: u.id,
           randomKey: u.randomKey,
+          username: u.username,
         };
       }
       return token;

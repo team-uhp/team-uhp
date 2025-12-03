@@ -449,13 +449,42 @@ export async function createUser(data: {
   const hashedPassword = await hash(password, 10);
 
   try {
+    let baseUsername = "";
+    
+    if (email && email.includes("@")) {
+      baseUsername = email
+      .split("@")[0]
+      .toLowerCase()
+      .replace(/[^a-z0-9]/gi, "");
+    }
+
+    if (!baseUsername && firstName) {
+      baseUsername = firstName.toLowerCase().replace(/[^a-z0-9]/gi, "");
+    }
+
+    if(!baseUsername) {
+      baseUsername = "user";
+    }
+
+    let finalUsername = baseUsername;
+    let counter = 1;
+
+    while (true) {
+      const existing = await prisma.user.findUnique({
+        where: { username: finalUsername },
+      });
+      if (!existing) break;
+      finalUsername = `${baseUsername}${counter}`;
+      counter++;
+    }
+
     const key = await keyGen();
     const user = await prisma.user.create({
       data: {
         email,
+        username: finalUsername,
         password: hashedPassword,
         role: 'USER',
-        username: email.split('@')[0],
         firstName,
         lastName,
         image: '',
@@ -690,31 +719,26 @@ export async function forgotPasswordEmail(email: string) {
 }
 
 export async function forgotUsernameEmail(email: string) {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    throw new Error('User not found.');
-  }
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: { username: true },
+  });
+
+  if (!user) return;
 
   await sendAutoEmail(
     email,
-    'Team UHp! username reminder.',
+    'Team UHp! Username Reminder',
     `<!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-    </head>
-    <body>
-      <h1>Team UHp!</h1>
-      <br />
-      <h3>
-        <p>
-          Your Team UHp! username is: ${user.username}.
-        </p>
-      </h3>
-      <p>
-        If you did not make this request, please disregard this email.
-      </p>
-      </body>
-      </html>`,
+      <html>
+        <head><meta charset="UTF-8"></head>
+        <body>
+          <h1>Team UHp!</h1>
+          <p>Your username is:</p>
+          <h2>${user.username}</h2>
+
+          <p>If you did not make this request, please ignore this email.</p>
+        </body>
+      </html>`
   );
 }
