@@ -5,7 +5,7 @@ import React from 'react';
 import { Badge, Button, Col, Row } from 'react-bootstrap';
 import Image from 'next/image';
 import { Project, User, Position } from '@prisma/client';
-import ProjectCard from './ProjectCard';
+import UserProjectCard from './UserProjectCard';
 
 type ProjectWithPositions = Project & { positions: Position[] };
 
@@ -64,10 +64,18 @@ const UserProfile = async ({ user }: { user: User }) => {
         </h6>
       </Col>
       <Col lg={9}>
-        <Row>
-          <h2>Projects</h2>
-          {projects.map((project) => <ProjectCard key={project.id} project={project} />)}
-        </Row>
+        <h2 className="mb-4">Projects</h2>
+          <Row className="g-4">
+            {projects.length === 0 && (
+              <p>This user is not part of any projects.</p>
+            )}
+
+            {projects.map((project) => (
+              <Col key={project.id} xs={12} md={6} lg={6}>
+                <UserProjectCard project={project} />
+              </Col>
+            ))}
+          </Row>
       </Col>
       <Col>
         {
