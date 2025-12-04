@@ -27,6 +27,7 @@ const AddProjectForm: React.FC = () => {
   const { data: session, status } = useSession();
   const [userId, setUserId] = useState<number>(0);
   const [selected, setSelected] = useState<Date | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const {
     register,
@@ -66,6 +67,15 @@ const AddProjectForm: React.FC = () => {
     }
   }, [userId, setValue]);
 
+  const onFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        setUploadedFile(file);
+        setValue('image', file.name, { shouldDirty: true, shouldValidate: true });
+        console.log(`File selected: ${file.name}`);
+      }
+    };
+
   const onSubmit = async (data: ProjectFormValues) => {
     if (!selected) {
       swal('Error', 'Please select a due date', 'error');
@@ -80,6 +90,30 @@ const AddProjectForm: React.FC = () => {
       members: [userId],
       admins: [userId],
     };
+    
+    if (uploadedFile) {
+      try {
+        const formData = new FormData();
+        formData.append('file', uploadedFile);
+        
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        if (!response.ok) {
+          throw new Error('File upload failed');
+        }
+        
+        const result = await response.json();
+        projectData.image = result.url; // Use the server-returned URL path
+        console.log(`File uploaded successfully: ${result.url}`);
+      } catch (error) {
+        console.error('Upload error:', error);
+        swal('Error', 'Failed to upload image', 'error');
+        return; // Stop submission if upload fails
+      }
+    }
 
     try {
       await addProject(projectData);
@@ -119,6 +153,17 @@ const AddProjectForm: React.FC = () => {
                         className={`form-control ${errors.title ? 'is-invalid' : ''}`}
                       />
                       <div className="invalid-feedback">{errors.title?.message}</div>
+                    </Form.Group>
+                    {/* Project Image */}
+                    <Form.Group controlId='formFile'>
+                      <Form.Label>Project Image</Form.Label>
+                      <Form.Control 
+                        type='file'
+                        accept='.jpg,.png,.jpeg'
+                        onChange={onFileUpload}
+                        className={`form-control ${errors.image ? 'is-invalid' : ''}`}
+                      />
+                      <div className="invalid-feedback">{errors.image?.message}</div>
                     </Form.Group>
                   </Col>
 
