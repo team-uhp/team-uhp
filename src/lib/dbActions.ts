@@ -54,7 +54,7 @@ export async function addProject(project: {
  * Edits an existing project in the database.
  * @param project, an object with the following
  * properties: id, image, title, descrip,
- * positions, members, admins, duedate, skills.
+ * positions, members, admins, duedate.
  */
 export async function editProject(project: {
   id: number,
@@ -65,9 +65,8 @@ export async function editProject(project: {
   members: number[],
   admins: number[],
   duedate: string,
-  skills: Skills[],
 }) {
-  // console.log(`editStuff data: ${JSON.stringify(project, null, 2)}`);
+  // console.log(`editProject data: ${JSON.stringify(project, null, 2)}`);
   await prisma.project.update({
     where: { id: project.id },
     data: {
@@ -89,7 +88,6 @@ export async function editProject(project: {
         connect: project.admins.map((id) => ({ id })),
       },
       duedate: new Date(project.duedate).toISOString(),
-      skills: project.skills,
     },
   });
 }
@@ -339,10 +337,27 @@ export async function applyCreate(applic: {
 }
 
 /**
+ * Edits an application for a position.
+ * @param applic, an object with the following
+ * properties: id, application.
+ */
+export async function applyEdit(applic: {
+  id: number,
+  application: string,
+}) {
+  // console.log(`applyEdit data: ${JSON.stringify(applic, null, 2)}`);
+  await prisma.application.update({
+    where: { id: applic.id },
+    data: {
+      application: applic.application,
+    },
+  });
+}
+
+/**
  * Accepts an application for a position.
  * @param applic, the application ID number.
  */
-
 export async function applyAccept(applic: { applicId: number,
 }) {
   // console.log(`applyAccept data: ${JSON.stringify(application, null, 2)}`);

@@ -60,6 +60,11 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
                 Recruit for Opening
               </Button>
             </Link>
+            <Link href={`/project-page/edit-project/${(await params).id}`} passHref>
+              <Button id="edit-project-button">
+                Edit Project
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Container>
