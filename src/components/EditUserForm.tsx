@@ -37,7 +37,6 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   const router = useRouter();
 
   const [skillTags, setSkillTags] = useState<Skills[]>(user.skills ?? []); // State to store the tags
-  const [availabilityTags, setAvailabilityTags] = useState<number[]>(user.availability ?? []); // State to store the tags
   const [contactTags, setContactTags] = useState<number[]>(user.contacts ?? []); // State to store the tags
 
   // Register array fields and file input so setValue works without inputs
@@ -54,14 +53,8 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   }, [skillTags, setValue]);
 
   useEffect(() => {
-    setValue("availability", availabilityTags, { shouldDirty: true, shouldValidate: true });
-  }, [availabilityTags, setValue]);
-
-  useEffect(() => {
     setValue("contacts", contactTags, { shouldDirty: true, shouldValidate: true });
   }, [contactTags, setValue]);
-
-  
 
   // Function to add a new tag
   const addTag = <T,>(newTag: T, tags: T[], setTags: (tags: T[]) => void) => {
@@ -126,7 +119,7 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
       image: imageUrl ?? null,
       phone: data.phone ?? null,
       skills: skillTags,
-      availability: availabilityTags,
+      availability: data.availability,
       contacts: contactTags,
     });
     swal('Success', 'Your item has been updated', 'success', {
@@ -223,17 +216,6 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
                     forceUpdate={forceUpdate}
                   />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
-                </Form.Group>
-                <Form.Group onClick={forceUpdate}>
-                  <Form.Label>Availability</Form.Label>
-                  <TagsContainer
-                    defaultValue="Select an availability slot to add"
-                    type="availability"
-                    tags={availabilityTags}
-                    removeTag={(tag) => removeTag(tag, availabilityTags, setAvailabilityTags)}
-                    addTag={(tag) => addTag(tag, availabilityTags, setAvailabilityTags)}
-                    forceUpdate={forceUpdate} />
-                  <div className="invalid-feedback">{errors.availability?.message}</div>
                 </Form.Group>
                 <Form.Group onClick={forceUpdate}>
                   <Form.Label>Contacts</Form.Label>
