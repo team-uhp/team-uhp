@@ -54,11 +54,11 @@ const ApplicationPage = async ({ params }: { params: Promise<{
     return NotFound();
   }
 
-  if ((applic.position.admins?.some((a) => a.id === user.id) ?? false) || (user.role === 'ADMIN')) {
+  if (applic.userId == user.id) {
     return (
       <Container>
         <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
-        <ApplicationAdmin
+        <ApplicationUser
           user={user}
           applic={{
             ...applic,
@@ -69,11 +69,11 @@ const ApplicationPage = async ({ params }: { params: Promise<{
       </Container>
     );
   }
-  else if (applic.userId == user.id) {
+  else if ((applic.position.admins?.some((a) => a.id === user.id) ?? false) || (user.role === 'ADMIN')) {
     return (
       <Container>
         <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
-        <ApplicationUser
+        <ApplicationAdmin
           user={user}
           applic={{
             ...applic,
