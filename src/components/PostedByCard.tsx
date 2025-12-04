@@ -21,7 +21,7 @@ const PostedByCard: React.FC<PostedByProps> = ({ admin }) => {
           <>
             <div className="posted-by-info">
               <Image
-                src={`${admin.image || "default-profile.png"}`}
+                src={`/${admin.image || "default-profile.png"}`}
                 alt="Profile"
                 width={40}
                 height={40}

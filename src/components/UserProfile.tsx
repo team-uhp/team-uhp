@@ -39,8 +39,10 @@ const UserProfile = async ({ user }: { user: User }) => {
           height={200}
           style={{ objectFit: 'contain' }}
         />
-        <h1 style={{ wordWrap: 'break-word' }}>
-          {`${user.firstName} ${user.lastName}`}
+        <h1>
+          {user.firstName}
+          &nbsp;
+          {user.lastName}
         </h1>
         <h6>
           Username:&nbsp;
@@ -61,7 +63,7 @@ const UserProfile = async ({ user }: { user: User }) => {
           {user.skills.join(', ')}
         </h6>
       </Col>
-      <Col lg={9} className='px-3'>
+      <Col lg={9}>
         <h2 className="mb-4">Projects</h2>
           <Row className="g-4">
             {projects.length === 0 && (
