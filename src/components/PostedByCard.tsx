@@ -13,6 +13,7 @@ interface PostedByProps {
 }
 
 const PostedByCard: React.FC<PostedByProps> = ({ admin }) => {
+  const imgPath = admin && admin.image ? `/${admin.image}` : '/default-profile.png';
   return (
     <Card id="posted-by-card" className="mb-3">
       <CardHeader>Posted By</CardHeader>
@@ -21,7 +22,7 @@ const PostedByCard: React.FC<PostedByProps> = ({ admin }) => {
           <>
             <div className="posted-by-info">
               <Image
-                src={`/${admin.image || "default-profile.png"}`}
+                src={imgPath}
                 alt="Profile"
                 width={40}
                 height={40}
