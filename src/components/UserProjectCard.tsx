@@ -44,7 +44,7 @@ const UserProjectCard = ({ project }: { project: ProjectWithPositions }) => {
         {project.image && (
           <div className="text-center mb-3">
             <img
-              src={`${project.image}`}
+              src={`/${project.image}`}
               alt={project.title}
               style={{
                 maxWidth: '100%',

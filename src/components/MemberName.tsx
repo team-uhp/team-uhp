@@ -12,7 +12,7 @@ const MemberName = async ({ userid }: { userid: number }) => {
     notFound();
   }
 
-  const imgSrc = member.image ? `${member.image}` : '/default-profile.png';
+  const imgSrc = member.image ? `/${member.image}` : '/default-profile.png';
 
   return (
     <Link
