@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { ComponentIDs } from '@/utilities/ids';
 import { notFound } from 'next/navigation';
 import { Badge, Container, Row, Col } from 'react-bootstrap';
-import Image from 'next/image';
 import Link from 'next/link';
 import MemberName from './MemberName';
 
@@ -29,38 +28,11 @@ const OpeningInfo = async ({ params }: { params: { id: number } }) => {
   const emon = (edate.getMonth() + 1).toString().padStart(2, '0');
   const eyear = edate.getFullYear();
 
-  const imgPath = `/${position.image}`;
 
   return (
     <Container id={ComponentIDs.projectInfo} className="py-3">
       {/* Position Image and Title */}
       <Row className="justify-content-center">
-        <div style={{ height: '200px', position: 'relative', width: '100%', marginBottom: '15px' }}>
-          {position.image && position.image.trim() !== '/' ? (
-            <Image
-              src={imgPath}
-              alt={position.title}
-              fill
-              style={{ objectFit: 'contain' }}
-              sizes="75px"
-            />
-          ) : (
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: '#e0e0e0',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '48px',
-                color: '#888',
-              }}
-            >
-              No Image Provided
-            </div>
-          )}
-        </div>
         <h1
           className="title mt-2"
           style={{
