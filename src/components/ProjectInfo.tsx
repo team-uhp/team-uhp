@@ -21,7 +21,7 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
   const day = date.getDate().toString().padStart(2, '0');
   const mon = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
-  const imgPath = `/${project.image}`;
+  const imgPath = `${project.image}`;
 
   return (
     <Container id={ComponentIDs.projectInfo} className="py-3">
