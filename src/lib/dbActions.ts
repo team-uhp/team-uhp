@@ -95,9 +95,6 @@ export async function editProject(project: {
           image: project.image,
           title: project.title,
           descrip: project.descrip,
-          positions: {
-            set: project.positions.map((id) => ({ id })),
-          },
           members: {
             create: addMembers.map(userId => ({
               user: { connect: { id: userId } },
@@ -117,9 +114,6 @@ export async function editProject(project: {
           image: project.image,
           title: project.title,
           descrip: project.descrip,
-          positions: {
-            set: project.positions.map((id) => ({ id })),
-          },
           admins: {
             set: (project.admins || []).map((id) => ({ id })),
           },
