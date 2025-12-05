@@ -13,6 +13,7 @@ import { AddProjectSchema } from '@/lib/validationSchemas';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type ProjectFormValues = {
   image?: string;
@@ -28,6 +29,7 @@ const AddProjectForm: React.FC = () => {
   const [userId, setUserId] = useState<number>(0);
   const [selected, setSelected] = useState<Date | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -120,7 +122,7 @@ const AddProjectForm: React.FC = () => {
       swal('Success', 'Your project has been added', 'success', { timer: 2000 });
 
       reset();
-      setSelected(null);
+      router.push('/project-list');
     } catch {
       swal('Error', 'Something went wrong.', 'error');
     }

@@ -5,26 +5,25 @@ import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useForm, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
-import { applyCreate } from '@/lib/dbActions';
-import { ApplyPositionSchema } from '@/lib/validationSchemas';
+import { applyEdit } from '@/lib/dbActions';
+import { ApplyEditSchema } from '@/lib/validationSchemas';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Position } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import type { SubmitHandler } from 'react-hook-form';
+import { Application } from '@prisma/client';
 
-type ApplyOpeningFormValues = {
-  userId: number;
-  positionId: number;
+type ApplyEditFormValues = {
   application?: string;
+  id?: number;
 };
 
-type ApplyOpeningFormProps = {
-  position: Position;
+type ApplyEditFormProps = {
+  applic: Application;
 };
 
-const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
+const ApplyEditForm: React.FC<ApplyEditFormProps> = ({ applic }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [userId, setUserId] = useState<number>(0);
@@ -34,14 +33,12 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
-  } = useForm<ApplyOpeningFormValues>({
-    resolver: yupResolver(ApplyPositionSchema) as unknown as Resolver<ApplyOpeningFormValues>,
+  } = useForm<ApplyEditFormValues>({
+    resolver: yupResolver(ApplyEditSchema) as unknown as Resolver<ApplyEditFormValues>,
     defaultValues: {
-      userId: 0,
-      positionId: position.id,
-      application: '',
+      id: applic.id,
+      application: applic.application || '',
     },
   });
 
@@ -51,28 +48,23 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
     }
   }, [session]);
 
-  useEffect(() => {
-    setValue('userId', userId);
-  }, [userId, setValue]);
-
-  const onSubmit: SubmitHandler<ApplyOpeningFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<ApplyEditFormValues> = async (data) => {
     setIsSubmitting(true);
 
     const appdata = {
-      userId: Number(userId),
-      positionId: position.id,
+      id: applic.id,
       application: data.application || '',
     };
 
-    console.log('Submitting application data:', appdata);
+    console.log('Editing application data:', appdata);
 
     try {
-      await applyCreate(appdata);
-      await swal('Success', 'Your application has been submitted', 'success', {
+      await applyEdit(appdata);
+      await swal('Success', 'Your position has been edited', 'success', {
         timer: 2000,
       });
       reset();
-      router.push(`/project-opening/${position.id}`);
+      router.push(`/project-opening/${applic.positionId}`);
     } catch (error) {
       if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
         return;
@@ -92,7 +84,7 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
       <Row className="justify-content-center">
         <Col>
           <Link
-            href={`/project-opening/${position.id}`}
+            href={`/project-opening/${applic.positionId}`}
           >
             Back to Opening
           </Link>
@@ -125,4 +117,4 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
   );
 };
 
-export default ApplyOpeningForm;
+export default ApplyEditForm;

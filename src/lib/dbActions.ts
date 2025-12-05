@@ -54,7 +54,7 @@ export async function addProject(project: {
  * Edits an existing project in the database.
  * @param project, an object with the following
  * properties: id, image, title, descrip,
- * positions, members, admins, duedate, skills.
+ * positions, members, admins, duedate.
  */
 export async function editProject(project: {
   id: number,
@@ -65,33 +65,69 @@ export async function editProject(project: {
   members: number[],
   admins: number[],
   duedate: string,
-  skills: Skills[],
 }) {
-  // console.log(`editStuff data: ${JSON.stringify(project, null, 2)}`);
-  await prisma.project.update({
-    where: { id: project.id },
-    data: {
-      image: project.image,
-      title: project.title,
-      descrip: project.descrip,
-      positions: {
-        set: project.positions.map((id) => ({ id })),
-      },
-      members: {
-        deleteMany: {},
-        create: project.members?.map(userId => ({
-          user: { connect: { id: userId } },
-          role: 'member',
-        })) || [],
-      },
-      admins: {
-        set: [],
-        connect: project.admins.map((id) => ({ id })),
-      },
-      duedate: new Date(project.duedate).toISOString(),
-      skills: project.skills,
-    },
-  });
+  // console.log(`editProject data: ${JSON.stringify(project, null, 2)}`);
+
+  await prisma.$transaction(async (tx) => {
+    const currentMembers = await tx.projectMembers.findMany({
+      where: { projectId: project.id },
+      select: { userId: true },
+    });
+
+    const currentMembersId = currentMembers.map(m => m.userId);
+    const newMembersId = project.members || [];
+
+    const addMembers = newMembersId.filter(id => !currentMembersId.includes(id));
+    const removeMembers = currentMembersId.filter(id => !newMembersId.includes(id));
+
+    if (removeMembers.length > 0) {
+      await tx.projectMembers.deleteMany({
+        where: {
+          projectId: project.id,
+          userId: { in: removeMembers },
+        },
+      });
+    }
+    if (addMembers.length > 0) {
+      await tx.project.update({
+        where: { id: project.id },
+        data: {
+          image: project.image,
+          title: project.title,
+          descrip: project.descrip,
+          positions: {
+            set: project.positions.map((id) => ({ id })),
+          },
+          members: {
+            create: addMembers.map(userId => ({
+              user: { connect: { id: userId } },
+              role: 'member',
+            })),
+          },
+          admins: {
+            set: (project.admins || []).map((id) => ({ id })),
+          },
+          duedate: project.duedate,
+        }
+      });
+    } else {
+      await tx.project.update({
+        where: { id: project.id },
+        data: {
+          image: project.image,
+          title: project.title,
+          descrip: project.descrip,
+          positions: {
+            set: project.positions.map((id) => ({ id })),
+          },
+          admins: {
+            set: (project.admins || []).map((id) => ({ id })),
+          },
+          duedate: project.duedate,
+        }
+      });
+    }
+  })
 }
 
 /**
@@ -339,10 +375,27 @@ export async function applyCreate(applic: {
 }
 
 /**
+ * Edits an application for a position.
+ * @param applic, an object with the following
+ * properties: id, application.
+ */
+export async function applyEdit(applic: {
+  id: number,
+  application: string,
+}) {
+  // console.log(`applyEdit data: ${JSON.stringify(applic, null, 2)}`);
+  await prisma.application.update({
+    where: { id: applic.id },
+    data: {
+      application: applic.application,
+    },
+  });
+}
+
+/**
  * Accepts an application for a position.
  * @param applic, the application ID number.
  */
-
 export async function applyAccept(applic: { applicId: number,
 }) {
   // console.log(`applyAccept data: ${JSON.stringify(application, null, 2)}`);
@@ -361,7 +414,29 @@ export async function applyAccept(applic: { applicId: number,
 
   if (position.projectId == null) throw new Error ('Position is not associated with a project.');
 
+  const project = await prisma.project.findUnique({ where: { id: Number(position.projectId) }, include: { positions: true } });
+  if (!project) throw new Error('Project not found');
+
   if (application.userId == null) throw new Error('Application is not associated with a user.');
+
+  const member = await prisma.projectMembers.findUnique({
+    where: {
+      userId_projectId: {
+        userId: application.userId!,
+        projectId: Number(position.projectId),
+      }
+    }
+  });
+
+  if (!member) {
+    await prisma.projectMembers.create({
+      data: {
+        userId: application.userId!,
+        projectId: Number(position.projectId),
+        role: 'member',
+      },
+    });
+  }
 
   await prisma.position.update({
     where: { id: application.positionId },
@@ -371,17 +446,13 @@ export async function applyAccept(applic: { applicId: number,
     },
   });
 
-  const project = await prisma.project.findUnique({ where: { id: position.projectId }, include: { positions: true } });
-  if (!project) throw new Error('Project not found');
-
   const updatedPositions = (project.positions || []).map(p => p.id).filter(pid => pid !== position.id);
   await prisma.project.update({
-    where: { id: position.projectId },
+    where: { id: Number(position.projectId) },
     data: {
       positions: {
         set: updatedPositions.map(pid => ({ id: pid })),
       },
-      members: { connect: { id: application.userId } },
     },
   });
   
@@ -392,7 +463,7 @@ export async function applyAccept(applic: { applicId: number,
   const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
   
   await prisma.project.update({
-    where: { id: position.projectId },
+    where: { id: project.id },
     data: {
       skills: updatedSkills,
     },

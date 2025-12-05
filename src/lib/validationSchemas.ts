@@ -43,11 +43,15 @@ export const EditProjectSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
-  positions: Yup.array().of(Yup.number()).required(),
-  members: Yup.array().of(Yup.number()).required(),
-  admins: Yup.array().of(Yup.number()).required(),
+  members: Yup.array()
+    .of(Yup.number().required())
+    .min(1, 'Must have at least one member')
+    .required(),
+  admins: Yup.array()
+    .of(Yup.number().required())
+    .min(1, 'Must have at least one admin')
+    .required(),
   duedate: Yup.string().required(),
-  skills: Yup.array().of(Yup.string()),
 });
 
 export const AddPositionSchema = Yup.object({
@@ -78,4 +82,8 @@ export const ApplyPositionSchema = Yup.object({
   userId: Yup.number().required(),
   positionId: Yup.number().required(),
   application: Yup.string().optional(),
-})
+});
+
+export const ApplyEditSchema = Yup.object({
+  application: Yup.string().optional(),
+});
