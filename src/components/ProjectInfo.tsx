@@ -87,7 +87,7 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
             project.members.map((member) => (
               <MemberName
                 key={`User-${typeof member === 'object' ? member.id ?? '' : member}`}
-                userid={typeof member === 'object' ? member.id as number : member as number}
+                userid={typeof member === 'object' ? member.userId as number : member as number}
               />
             ))
           ) : (
