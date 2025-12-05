@@ -7,11 +7,11 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('Seeding the database');
-  const password = await hash('changeme', 10);
 
   for (const account of config.defaultAccounts) {
     const role = account.role as Role || Role.USER;
     console.log(`  Creating user: ${account.email} with role: ${role}`);
+    const password = await hash(account.password, 10);
 
     await prisma.user.upsert({
       where: { email: account.email },

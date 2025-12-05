@@ -19,12 +19,14 @@ type EditProjectFormValues = {
   title: string;
   descrip: string;
   duedate: string;
+  positions?: number[];
   members?: number[];
   admins?: number[];
 };
 
 type EditProjectFormProps = {
   proj: {
+    positions?: number[];
     id: number;
     image?: string;
     title: string;
@@ -53,6 +55,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
       descrip: proj.descrip,
       duedate: proj.duedate || undefined,
       image: proj.image || undefined,
+      positions: proj.positions || [],
       members: members?.map((m) => m.id) || [],
       admins: admins?.map((a) => a.id) || [],
     },
@@ -103,7 +106,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
       title: data.title,
       descrip: data.descrip,
       duedate: selected.toISOString(),
-      positions: [],
+      positions: data.positions || [],
       members: data.members || [],
       admins: data.admins || [],
     };
