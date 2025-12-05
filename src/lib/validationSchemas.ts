@@ -44,19 +44,13 @@ export const EditProjectSchema = Yup.object({
   title: Yup.string().required(),
   descrip: Yup.string().required(),
   members: Yup.array()
-    .of(
-      Yup.object({
-        id: Yup.number().required(),
-        name: Yup.string().required(),
-        email: Yup.string().email().required(),
-      })).required(),
+    .of(Yup.number().required())
+    .min(1, 'Must have at least one member')
+    .required(),
   admins: Yup.array()
-    .of(
-      Yup.object({
-        id: Yup.number().required(),
-        name: Yup.string().required(),
-        email: Yup.string().email().required(),
-      })).required(),
+    .of(Yup.number().required())
+    .min(1, 'Must have at least one admin')
+    .required(),
   duedate: Yup.string().required(),
 });
 

@@ -61,7 +61,7 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
               </Button>
             </Link>
             <Link href={`/project-page/edit-project/${(await params).id}`} passHref>
-              <Button id="edit-project-button">
+              <Button id="editproject-button">
                 Edit Project
               </Button>
             </Link>

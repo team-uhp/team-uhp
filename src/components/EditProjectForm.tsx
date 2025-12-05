@@ -9,9 +9,9 @@ import { editProject } from '@/lib/dbActions';
 import { EditProjectSchema } from '@/lib/validationSchemas';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import MemberToggle from './MemberToggle';
+import Link from 'next/link';
+import UserToggle from './UserToggle';
 
 type EditProjectFormValues = {
   id: number;
@@ -34,16 +34,16 @@ type EditProjectFormProps = {
   members: { id: number; name: string; image?: string }[],
   admins: { id: number; name: string }[],
 };
-
 const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins }) => {
   const [selected, setSelected] = useState<Date | null>(null);
   const router = useRouter();
-
+  const UserToggleAny = UserToggle as unknown as React.ComponentType<{ name: string; isChecked: boolean; onChange: () => void; image?: string }>;
   const {
     register,
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<EditProjectFormValues>({
     resolver: yupResolver(EditProjectSchema) as unknown as Resolver<EditProjectFormValues>,
@@ -53,10 +53,31 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
       descrip: proj.descrip,
       duedate: proj.duedate || undefined,
       image: proj.image || undefined,
-      members: members?.map((m) => m.id) || undefined,
-      admins: admins?.map((a) => a.id) || undefined,
+      members: members?.map((m) => m.id) || [],
+      admins: admins?.map((a) => a.id) || [],
     },
   });
+
+  const watchMembers = (watch('members') as number[] | undefined) || [];
+  const watchAdmins = (watch('admins') as number[] | undefined) || [];
+
+  const handleMembersToggle = (memberId: number) => {
+    const currentMembers = watchMembers || [];
+    if (currentMembers.includes(memberId)) {
+      setValue('members', currentMembers.filter(id => id !== memberId));
+    } else {
+      setValue('members', [...currentMembers, memberId]);
+    }
+  };
+
+  const handleAdminsToggle = (adminId: number) => {
+    const currentAdmins = watchAdmins || [];
+    if (currentAdmins.includes(adminId)) {
+      setValue('admins', currentAdmins.filter(id => id !== adminId));
+    } else {
+      setValue('admins', [...currentAdmins, adminId]);
+    }
+  };
 
   // Sync selected date to RHF form
   useEffect(() => {
@@ -88,10 +109,10 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
     };
 
     try {
-      if (members.length === 0 || admins.length === 0) throw new Error('At least one member and admin must be assigned');
+      if (projectData.members.length === 0 || projectData.admins.length === 0) throw new Error('At least one member and admin must be assigned');
       
       await editProject(projectData);
-      swal('Success', 'Your project has been added', 'success', { timer: 2000 });
+      swal('Success', 'Your project has been edited', 'success', { timer: 2000 });
 
       reset();
       router.push('/project-list');
@@ -108,7 +129,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
             <h2>Edit Project</h2>
           </Col>
 
-          <Link href="/project-list/">Back to Project List</Link>
+          <Link href={`/project-page/${proj.id}`}>Back to Project</Link>
 
           <Card>
             <Card.Body>
@@ -153,55 +174,58 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
-                <br />
                 <Form.Group>
-                  <Form.Label>Members (Uncheck to remove)</Form.Label>
-                    <div style={{ marginTop: '0.5rem' }}>
-                      {Array.isArray(members) && members.length > 0 ? (
-                        members.map((tag) => (
-                          <MemberToggle key={tag.id} name={tag.name} />
-                        ))
-                      ) : (
-                        <div>No members listed.</div>
-                      )}
-                    </div>
+                  <Form.Label>Members</Form.Label>
+                  {Array.isArray(members) && members.length > 0 ? (
+                    members.map((member) => (
+                      <UserToggleAny 
+                        key={member.id} 
+                        name={member.name}
+                        isChecked={watchMembers.includes(member.id)}
+                        onChange={() => handleMembersToggle(member.id)}
+                      />
+                    ))
+                  ) : (
+                    <div>No members listed.</div>
+                  )}
                 </Form.Group>
 
                 <Form.Group>
-                  <Form.Label>Admins (Check to give admin role)</Form.Label>
-                    <div style={{ marginTop: '0.5rem' }}>
-                      {Array.isArray(members) && members.length > 0 ? (
-                        members.map((tag) => (
-                          <MemberToggle key={tag.id} name={tag.name} />
-                        ))
-                      ) : (
-                        <div>No admins listed.</div>
-                      )}
-                    </div>
+                  <Form.Label>Admins</Form.Label>
+                  {Array.isArray(members) && members.length > 0 ? (
+                    members.map((member) => (
+                      <UserToggleAny 
+                        key={member.id} 
+                        name={member.name}
+                        isChecked={watchAdmins.includes(member.id)}
+                        onChange={() => handleAdminsToggle(member.id)}
+                      />
+                    ))
+                  ) : (
+                    <div>No members to assign as admins.</div>
+                  )}
                 </Form.Group>
 
-                <Form.Group>
-                  <Row className="pt-3">
-                    <Col>
-                      <Button type="submit" variant="primary">
-                        Submit
-                      </Button>
-                    </Col>
-                    <Col>
-                      <Button
-                        type="button"
-                        onClick={() => {
-                          reset();
-                          setSelected(null);
-                        }}
-                        variant="warning"
-                        className="float-right"
-                      >
-                        Reset
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form.Group>
+                <Row className="pt-3">
+                  <Col>
+                    <Button type="submit" variant="primary">
+                      Submit
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        reset();
+                        setSelected(null);
+                      }}
+                      variant="warning"
+                      className="float-right"
+                    >
+                      Reset
+                    </Button>
+                  </Col>
+                </Row>
               </Form>
             </Card.Body>
           </Card>

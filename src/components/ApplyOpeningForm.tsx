@@ -68,7 +68,7 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
 
     try {
       await applyCreate(appdata);
-      await swal('Success', 'Your position has been edited', 'success', {
+      await swal('Success', 'Your application has been submitted', 'success', {
         timer: 2000,
       });
       reset();
