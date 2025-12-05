@@ -43,6 +43,7 @@ export const EditProjectSchema = Yup.object({
   image: Yup.string(),
   title: Yup.string().required(),
   descrip: Yup.string().required(),
+  positions: Yup.array().of(Yup.number()).required(),
   members: Yup.array()
     .of(Yup.number().required())
     .min(1, 'Must have at least one member')
