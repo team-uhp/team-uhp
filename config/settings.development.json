@@ -1,6 +1,6 @@
 {
   "defaultAccounts": [
-    { "email": "team.uhp.automation@gmail.com", "username": "team.uhp.automation", "password": "teamUHpPasswordFFewJuno9898KatchRaymondzhutto++", "role": "ADMIN", "firstName": "Ad", "lastName": "Min", "image": "replaceme.png", "phone": "", "skills": [ ], "validation": true },
+    { "email": "team.uhp.automation@gmail.com", "username": "team.uhp.automation", "password": "changeme", "role": "ADMIN", "firstName": "Ad", "lastName": "Min", "image": "replaceme.png", "phone": "", "skills": [ ], "validation": true },
     { "email": "smithj@hawaii.edu", "username": "smithj", "password": "changemesmithj", "role": "USER", "firstName": "John", "lastName": "Smith", "image": "", "phone": "808-867-5309", "skills": [ "programming", "other", "C", "CPP" ], "validation": true },
     { "email": "smithj1@hawaii.edu", "username": "smithj1", "password": "changemesmithj1", "role": "USER", "firstName": "Jane", "lastName": "Smith", "image": "", "phone": "808-867-5309", "skills": [ "programming", "Ruby", "Lisp" ], "validation": true },
     { "email": "rollinsl@hawaii.edu", "username": "rollinsl", "password": "changemerollinsl", "role": "USER", "firstName": "Laura", "lastName": "Rollins", "image": "", "phone": "888-888-8888", "skills": [ "CSS", "FORTRAN", "HTML" ], "validation": true },
