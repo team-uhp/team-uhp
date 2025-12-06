@@ -20,6 +20,7 @@ const EditProfilePage = async ({ params }: { params: Promise<{ id: number; }> })
     notFound();
   }
 
+  const session = await getServerSession(authOptions);
   const authUsers: string[] = (await prisma.user.findMany({
     where: { role: 'ADMIN' },
     select: { id: true },
@@ -27,7 +28,6 @@ const EditProfilePage = async ({ params }: { params: Promise<{ id: number; }> })
   authUsers.push(id.toString());
 
   // Protect the page, only authorized users can access it.
-  const session = await getServerSession(authOptions);
   userProtectedPage(
     session as {
       user: { email: string; id: string; randomKey: string };
