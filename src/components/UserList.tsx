@@ -36,7 +36,7 @@ const UserList = ({
         </Button>
       </td>
       <td>{image}</td>
-      <td><a href={`/user-profile/${id}`}>View</a></td>
+      <td><a href={`/edit-profile/${id}`}>Edit</a></td>
     </tr>
   );
 };
