@@ -209,11 +209,15 @@ footer strong {
 }
 
 #project-members {
+  display: flex;
+  flex-direction: row;
   margin-bottom: 20px;
   margin-top: 10px;
 }
 
 #project-openings {
+  display: flex;
+  flex-direction: row;
   margin-bottom: 20px;
   margin-top: 10px;
 }
