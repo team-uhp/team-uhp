@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { User } from '@prisma/client';
 import { Button } from 'react-bootstrap';
@@ -12,7 +14,6 @@ const UserList = ({
   image,
   changeRole
 }: User & { changeRole: (userId: number) => void }) => {
-
   const handleChange = () => {
     changeRole(id);
   };
@@ -27,12 +28,12 @@ const UserList = ({
       <td>{role}</td>
       <td>
         <Button 
-            type="button" 
-            variant="primary"
-            onClick={handleChange}
-          >
-            Change
-          </Button>
+          type="button" 
+          variant="primary"
+          onClick={handleChange}
+        >
+          Change
+        </Button>
       </td>
       <td>{image}</td>
       <td><a href={`/user-profile/${id}`}>View</a></td>

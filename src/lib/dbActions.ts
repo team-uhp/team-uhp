@@ -8,6 +8,7 @@ import { prisma } from './prisma';
 import authOptions from './authOptions';
 import sendAutoEmail from './email';
 import keyGen from './keygen';
+import { revalidatePath } from 'next/cache';
 
 /**
  * Adds a new project to the database.
@@ -806,4 +807,22 @@ export async function forgotUsernameEmail(email: string) {
         </body>
       </html>`
   );
+}
+
+export async function changeUserRole(userId: number) {
+  try {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new Error('User not found');
+
+    const newRole: Role = user.role === 'ADMIN' ? 'USER' : 'ADMIN';
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { role: newRole },
+    });
+
+    revalidatePath('/admin/users');
+  } catch (error) {
+    console.error('Failed to change role', error);
+  }
 }
