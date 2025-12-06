@@ -85,10 +85,12 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
         <div style={{ marginTop: '0.5rem' }}>
           {Array.isArray(project.members) && project.members.length > 0 ? (
             project.members.map((member) => (
-              <MemberName
-                key={`User-${typeof member === 'object' ? member.id ?? '' : member}`}
-                userid={typeof member === 'object' ? member.userId as number : member as number}
-              />
+              <div className="py-1">
+                <MemberName
+                  key={`User-${typeof member === 'object' ? member.id ?? '' : member}`}
+                  userid={typeof member === 'object' ? member.userId as number : member as number}
+                />
+              </div>
             ))
           ) : (
             <div>No members listed.</div>
@@ -102,10 +104,12 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
         <div style={{ marginTop: '0.5rem' }}>
           {Array.isArray(project.positions) && project.positions.length > 0 ? (
             project.positions.map((opening) => (
-              <OpeningTitle
-                key={`Position-${typeof opening === 'object' ? opening.id ?? '' : opening}`}
-                openingid={typeof opening === 'object' ? opening.id as number : opening as number}
-              />
+              <div className="py-1">
+                <OpeningTitle
+                  key={`Position-${typeof opening === 'object' ? opening.id ?? '' : opening}`}
+                  openingid={typeof opening === 'object' ? opening.id as number : opening as number}
+                />
+              </div>
             ))
           ) : (
             <div>Currently no openings available.</div>

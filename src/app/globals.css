@@ -209,11 +209,15 @@ footer strong {
 }
 
 #project-members {
+  display: flex;
+  flex-direction: row;
   margin-bottom: 20px;
   margin-top: 10px;
 }
 
 #project-openings {
+  display: flex;
+  flex-direction: row;
   margin-bottom: 20px;
   margin-top: 10px;
 }
@@ -328,6 +332,8 @@ img.padded {
 #posted-by-card .posted-by-info .posted-by-text {
   line-height: 1.2;
   font-weight: 500;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 #posted-by-card a {
@@ -363,6 +369,16 @@ img.padded {
 }
 
 #editproject-button {
+  margin-top: 20px!important;
+  width: 100%!important;
+  background-color: #008091!important;
+  color: white!important;
+  border-radius: '0.2rem'!important;
+  border-color: #008091!important;
+  font-size: 0.9rem!important;
+}
+
+#application-submit {
   margin-top: 20px!important;
   width: 100%!important;
   background-color: #008091!important;
