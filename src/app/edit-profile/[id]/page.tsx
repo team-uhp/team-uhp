@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { User } from '@prisma/client';
 import { Container } from 'react-bootstrap';
 import authOptions from '@/lib/authOptions';
-import { loggedInProtectedPage } from '@/lib/page-protection';
+import { userProtectedPage } from '@/lib/page-protection';
 import { prisma } from '@/lib/prisma';
 import EditUserForm from '@/components/EditUserForm';
 import { PageIDs } from '@/utilities/ids';
@@ -19,12 +19,20 @@ const EditProfilePage = async ({ params }: { params: Promise<{ id: number; }> })
   if (Number.isNaN(id)) {
     notFound();
   }
-  // Protect the page, only logged in users can access it.
+
+  const authUsers: string[] = (await prisma.user.findMany({
+    where: { role: 'ADMIN' },
+    select: { id: true },
+  })).map(u => u.id.toString());
+  authUsers.push(id.toString());
+
+  // Protect the page, only authorized users can access it.
   const session = await getServerSession(authOptions);
-  loggedInProtectedPage(
+  userProtectedPage(
     session as {
       user: { email: string; id: string; randomKey: string };
     } | null,
+    authUsers,
   );
   // console.log(id);
   const user: User | null = await prisma.user.findUnique({

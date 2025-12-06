@@ -11,6 +11,18 @@ export const loggedInProtectedPage = (session: { user: { email: string; id: stri
 };
 
 /**
+ * Redirects to the not-authorized page if user is not authorized user or site admin.
+ */
+export const userProtectedPage = (session: { user: { email: string; id: string; randomKey: string } } | null, allowList: string[] ) => {
+  loggedInProtectedPage(session);
+  if (session && session.user.randomKey !== Role.ADMIN) {
+    if (!allowList.includes(session.user.id)) {
+      redirect('/not-authorized');
+    }
+  }
+};
+
+/**
  * Redirects to the login page if the user is not logged in.
  * Redirects to the not-authorized page if the user is not an admin.
  */
