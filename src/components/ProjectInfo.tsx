@@ -81,40 +81,46 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
 
       {/* Members */}
       <Container id="project-members" fluid className="my-3">
-        <strong>Members:</strong>
-        <div style={{ marginTop: '0.5rem' }}>
-          {Array.isArray(project.members) && project.members.length > 0 ? (
-            project.members.map((member) => (
-              <div className="py-1">
-                <MemberName
-                  key={`User-${typeof member === 'object' ? member.id ?? '' : member}`}
-                  userid={typeof member === 'object' ? member.userId as number : member as number}
-                />
-              </div>
-            ))
-          ) : (
-            <div>No members listed.</div>
-          )}
-        </div>
+        <Row>
+          <strong>Members:</strong>
+        </Row>
+        <Row>
+          <div style={{ marginTop: '0.5rem', display: 'flex', flexWrap: 'wrap' }}>
+            {Array.isArray(project.members) && project.members.length > 0 ? (
+              project.members.map((member) => (
+                <div key={`User-${typeof member === 'object' ? member.id ?? '' : member}`} className="mb-2">
+                  <MemberName
+                    userid={typeof member === 'object' ? member.userId as number : member as number}
+                  />
+                </div>
+              ))
+            ) : (
+              <div>No members listed.</div>
+            )}
+          </div>
+        </Row>
       </Container>
 
       {/* Openings */}
       <Container id="project-openings" fluid className="my-3">
-        <strong>Openings:</strong>
-        <div style={{ marginTop: '0.5rem' }}>
-          {Array.isArray(project.positions) && project.positions.length > 0 ? (
-            project.positions.map((opening) => (
-              <div className="py-1">
-                <OpeningTitle
-                  key={`Position-${typeof opening === 'object' ? opening.id ?? '' : opening}`}
-                  openingid={typeof opening === 'object' ? opening.id as number : opening as number}
-                />
-              </div>
-            ))
-          ) : (
-            <div>Currently no openings available.</div>
-          )}
-        </div>
+        <Row>
+          <strong>Openings:</strong>
+        </Row>
+        <Row>
+          <div style={{ marginTop: '0.5rem', display: 'flex', flexWrap: 'wrap' }}>
+            {Array.isArray(project.positions) && project.positions.length > 0 ? (
+              project.positions.map((opening) => (
+                <div key={`Position-${typeof opening === 'object' ? opening.id ?? '' : opening}`} className="mb-2">
+                  <OpeningTitle
+                    openingid={typeof opening === 'object' ? opening.id as number : opening as number}
+                  />
+                </div>
+              ))
+            ) : (
+              <div>Currently no openings available.</div>
+            )}
+          </div>
+        </Row>
       </Container>
 
       {/* Skills */}

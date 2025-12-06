@@ -231,19 +231,8 @@ export async function editPosition(position: {
   if (!project) {
     redirect('/project-list/');
   }
-  const updatedPositions = (project.positions || []).map(p => p.id).filter(id => id !== position.id);
-  await prisma.project.update({
-    where: { id: position.project },
-    data: {
-      positions: {
-        set: updatedPositions.map(id => ({ id })),
-      },
-    },
-  });
 
-  const remainingPositions = await prisma.position.findMany({
-    where: { id: { in: updatedPositions } },
-  });
+  const remainingPositions = await prisma.position.findMany({});
 
   const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
 
