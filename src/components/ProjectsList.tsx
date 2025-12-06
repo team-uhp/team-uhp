@@ -8,7 +8,7 @@ const ProjectList = ({ id, title, descrip, duedate, image }: Project) => (
     <td>{descrip}</td>
     <td>{duedate}</td>
     <td>{image}</td>
-    <td><a href={`/edit-project/${id}`}>Edit</a></td>
+    <td><a href={`/project-page/edit-project/${id}`}>Edit</a></td>
   </tr>
 );
 

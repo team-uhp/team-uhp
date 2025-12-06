@@ -10,7 +10,7 @@ const UserList = ({ id, username, email, firstName, lastName, role, image }: Use
     <td>{lastName}</td>
     <td>{role}</td>
     <td>{image}</td>
-    <td><a href={`/user-profile/${id}`}>Edit</a></td>
+    <td><a href={`/user-profile/${id}`}>View</a></td>
   </tr>
 );
 

@@ -85,8 +85,6 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
     }
   };
 
-  console.log('Errors:', errors);
-  console.log('userId', userId);
   return (
     <Container className="py-3" fluid>
       <Row className="justify-content-center">
@@ -110,7 +108,7 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
                 <Form.Group className="form-group">
                   <Row className="pt-3">
                     <Col>
-                      <Button type="submit" variant="primary" disabled={isSubmitting}>
+                      <Button type="submit" id="application-submit" variant="primary" disabled={isSubmitting}>
                         {isSubmitting ? 'Submitting...' : 'Submit'}
                       </Button>
                     </Col>
