@@ -2,12 +2,10 @@ import React from 'react';
 import { User } from '@prisma/client';
 import Link from 'next/link';
 import { Badge, Card, CardBody, CardFooter, CardHeader, CardText, Col, Container, Row } from 'react-bootstrap';
-import Image from 'next/image';
 
 /* Renders a single row in the Contacts list. See contacts/page.tsx. */
 /* In the form of the Project List cards. */
 const ContactCardTest = ({ contact }: { contact: User }) => {
-  const imgPath = `/${contact.image}`;
   return (
     <Container className="py-3">
       <Row className="justify-content-start">
@@ -20,10 +18,9 @@ const ContactCardTest = ({ contact }: { contact: User }) => {
               <Row className="mx-auto g-0">
                 <div style={{ width: '75px', height: '75px', position: 'relative' }}>
                   {contact.image && contact.image.trim() !== '/' ? (
-                    <Image
-                      src={imgPath}
+                    <img
+                      src={`${contact.image}`}
                       alt={contact.username}
-                      fill
                       style={{ objectFit: 'contain' }}
                       sizes="75px"
                     />

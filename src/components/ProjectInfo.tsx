@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { ComponentIDs } from '@/utilities/ids';
 import { notFound } from 'next/navigation';
 import { Badge, Container, Row, Col } from 'react-bootstrap';
-import Image from 'next/image';
 import MemberName from './MemberName';
 import OpeningTitle from './OpeningTitle';
 
@@ -21,7 +20,6 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
   const day = date.getDate().toString().padStart(2, '0');
   const mon = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
-  const imgPath = `/${project.image}`;
 
   return (
     <Container id={ComponentIDs.projectInfo} className="py-3">
@@ -29,12 +27,10 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
       <Row>
         <div style={{ height: '200px', position: 'relative', width: '100%', marginBottom: '15px' }}>
           {project.image && project.image.trim() !== '/' ? (
-            <Image
-              src={imgPath}
+            <img
+              src={project.image}
               alt={project.title}
-              fill
               style={{ objectFit: 'contain' }}
-              sizes="75px"
             />
           ) : (
             <div

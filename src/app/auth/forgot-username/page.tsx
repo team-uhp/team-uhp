@@ -1,5 +1,6 @@
 'use client';
 
+import { forgotUsernameEmail } from '@/lib/dbActions';
 import React from 'react';
 import { useState } from 'react';
 import { Container, Col, Row, Form, Button, Card } from 'react-bootstrap';
@@ -16,6 +17,7 @@ export default function ForgotUsername() {
   const onSubmit = (data: ForgotUsernameForm) => {
     console.log(data);
     setSubmitted(true);
+    forgotUsernameEmail(data.email);
   };
 
   return (
