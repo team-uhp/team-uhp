@@ -30,6 +30,7 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
             <img
               src={project.image}
               alt={project.title}
+              height={200}
               style={{ objectFit: 'contain' }}
             />
           ) : (
