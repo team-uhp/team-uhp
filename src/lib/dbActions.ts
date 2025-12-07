@@ -231,19 +231,8 @@ export async function editPosition(position: {
   if (!project) {
     redirect('/project-list/');
   }
-  const updatedPositions = (project.positions || []).map(p => p.id).filter(id => id !== position.id);
-  await prisma.project.update({
-    where: { id: position.project },
-    data: {
-      positions: {
-        set: updatedPositions.map(id => ({ id })),
-      },
-    },
-  });
 
-  const remainingPositions = await prisma.position.findMany({
-    where: { id: { in: updatedPositions } },
-  });
+  const remainingPositions = await prisma.position.findMany({});
 
   const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
 
@@ -738,55 +727,57 @@ export async function changeForgotPassword(credentials: { email: string, passwor
       </body>
       </html>`,
   );
+
+  redirect('/home');
 }
 
 export async function forgotPasswordEmail(email: string) {
   const key = await keyGen();
   await prisma.user.update({
-    where: { email },
+    where: { email: email },
     data: {
       validation: false,
       validpasschg: key,
     },
   });
-  sendAutoEmail(
-      email,
-      'Team UHp! password change notification.',
-      `<!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-      </head>
-      <body>
-        <h1>Team UHp!</h1>
-        <br />
-        <h3>
-          <p>
-            You recently requested a password reset.
-          </p>
-        </h3>
-        <br />
-        <h3>
-          <a href="https://team-uhp.vercel.app/verify/forgotpassword?token=${key}">
-            Click here to set a new password.
-          </a>
-        </h3>
-        <br />
+  await sendAutoEmail(
+    email,
+    'Team UHp! password change notification.',
+    `<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+    </head>
+    <body>
+      <h1>Team UHp!</h1>
+      <br />
+      <h3>
         <p>
-          If you did not make this request, please use the link above to reset your password.
+          You recently requested a password reset.
         </p>
-        <br />
-        <p>
-          If you do not have an account with Team UHp!, please disregard this email.
-        </p>
-        </body>
-        </html>`,
-      );
+      </h3>
+      <br />
+      <h3>
+        <a href="https://team-uhp.vercel.app/verify/forgotpassword?token=${key}">
+          Click here to set a new password.
+        </a>
+      </h3>
+      <br />
+      <p>
+        If you did not make this request, please use the link above to reset your password.
+      </p>
+      <br />
+      <p>
+        If you do not have an account with Team UHp!, please disregard this email.
+      </p>
+      </body>
+      </html>`,
+    );
 }
 
 export async function forgotUsernameEmail(email: string) {
   const user = await prisma.user.findUnique({
-    where: { email },
+    where: { email: email },
     select: { username: true },
   });
 
