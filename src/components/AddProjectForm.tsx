@@ -28,7 +28,9 @@ const AddProjectForm: React.FC = () => {
   const { data: session, status } = useSession();
   const [userId, setUserId] = useState<number>(0);
   const [selected, setSelected] = useState<Date | null>(null);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [imgPre, setImgPre] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [img, setImg] = useState<File | null>(null);
   const router = useRouter();
 
   const {
@@ -69,14 +71,46 @@ const AddProjectForm: React.FC = () => {
     }
   }, [userId, setValue]);
 
-  const onFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        setUploadedFile(file);
-        setValue('image', file.name, { shouldDirty: true, shouldValidate: true });
-        console.log(`File selected: ${file.name}`);
+  const handleImgChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      swal('Error', 'Image must be .jpg, .png, .webp, or .gif', 'error');
+      return;
+    }
+
+    const maxSize = 4 * 1024 * 1024;
+    if (file.size > maxSize) {
+      swal('Error', 'Image size must be under 4MB', 'error');
+      return;
+    }
+
+    setImg(file);
+
+    const read = new FileReader();
+    read.onloadend = () => {
+      const base64Image = read.result as string;
+      if (!base64Image.startsWith('data:image/')) {
+        swal('Error', 'Invalid image format', 'error');
+        return;
       }
+
+      setImgPre(base64Image);
+      setValue('image', base64Image);
     };
+
+    read.readAsDataURL(file);
+  }
+
+  const handleImgDel = () => {
+    setImg(null);
+    setImgPre(null);
+    setValue('image', '');
+    const input = document.getElementById('image-upload') as HTMLInputElement;
+    if(input) input.value = '';
+  };
 
   const onSubmit = async (data: ProjectFormValues) => {
     if (!selected) {
@@ -92,36 +126,13 @@ const AddProjectForm: React.FC = () => {
       members: [userId],
       admins: [userId],
     };
-    
-    if (uploadedFile) {
-      try {
-        const formData = new FormData();
-        formData.append('file', uploadedFile);
-        
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
-        });
-        
-        if (!response.ok) {
-          throw new Error('File upload failed');
-        }
-        
-        const result = await response.json();
-        projectData.image = result.url; // Use the server-returned URL path
-        console.log(`File uploaded successfully: ${result.url}`);
-      } catch (error) {
-        console.error('Upload error:', error);
-        swal('Error', 'Failed to upload image', 'error');
-        return; // Stop submission if upload fails
-      }
-    }
 
     try {
       await addProject(projectData);
       swal('Success', 'Your project has been added', 'success', { timer: 2000 });
 
       reset();
+      handleImgDel();
       router.push('/project-list');
     } catch {
       swal('Error', 'Something went wrong.', 'error');
@@ -156,16 +167,39 @@ const AddProjectForm: React.FC = () => {
                       />
                       <div className="invalid-feedback">{errors.title?.message}</div>
                     </Form.Group>
+
                     {/* Project Image */}
-                    <Form.Group controlId='formFile'>
-                      <Form.Label>Project Image</Form.Label>
-                      <Form.Control 
-                        type='file'
-                        accept='.jpg,.png,.jpeg'
-                        onChange={onFileUpload}
-                        className={`form-control ${errors.image ? 'is-invalid' : ''}`}
+                    <Form.Group className="mb-3">
+                      <Form.Label>Image</Form.Label>
+                      <Form.Control
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImgChange}
                       />
-                      <div className="invalid-feedback">{errors.image?.message}</div>
+                      <Form.Text>
+                        Upload an image (4MB limit). Supported formats: JPG, PNG, GIF, WebP 
+                      </Form.Text>
+    
+                      {imgPre && (
+                        <>
+                          <Container className="d-flex align-items-start gap-3">
+                            <img
+                              src={imgPre}
+                              alt="Image Preview"
+                              style={{
+                                maxWidth: '200px',
+                                maxHeight: '200px',
+                                objectFit: 'cover',
+                                borderRadius: '8px',
+                                border: '1px solid #002224'
+                              }} />
+                          </Container>
+                          <Button variant="danger" onClick={handleImgDel}>
+                            Delete Image
+                          </Button>
+                        </>
+                      )}
                     </Form.Group>
                   </Col>
 

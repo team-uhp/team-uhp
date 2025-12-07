@@ -36,8 +36,12 @@ type EditProjectFormProps = {
   members: { id: number; name: string; image?: string }[],
   admins: { id: number; name: string }[],
 };
+
 const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins }) => {
   const [selected, setSelected] = useState<Date | null>(null);
+  const [imgPre, setImgPre] = useState<string | null>(proj.image || null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [img, setImg] = useState<File | null>(null);
   const router = useRouter();
   const UserToggleAny = UserToggle as unknown as React.ComponentType<{ name: string; isChecked: boolean; onChange: () => void; image?: string }>;
   const {
@@ -82,6 +86,47 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
     }
   };
 
+  const handleImgChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      swal('Error', 'Image must be .jpg, .png, .webp, or .gif', 'error');
+      return;
+    }
+
+    const maxSize = 4 * 1024 * 1024;
+    if (file.size > maxSize) {
+      swal('Error', 'Image size must be under 4MB', 'error');
+      return;
+    }
+
+    setImg(file);
+
+    const read = new FileReader();
+    read.onloadend = () => {
+      const base64Image = read.result as string;
+      if (!base64Image.startsWith('data:image/')) {
+        swal('Error', 'Invalid image format', 'error');
+        return;
+      }
+
+      setImgPre(base64Image);
+      setValue('image', base64Image);
+    };
+
+    read.readAsDataURL(file);
+  }
+
+  const handleImgDel = () => {
+    setImg(null);
+    setImgPre(null);
+    setValue('image', '');
+    const input = document.getElementById('image-upload') as HTMLInputElement;
+    if(input) input.value = '';
+  };
+
   // Sync selected date to RHF form
   useEffect(() => {
     if (selected) setValue('duedate', selected.toISOString());
@@ -118,6 +163,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
       swal('Success', 'Your project has been edited', 'success', { timer: 2000 });
 
       reset();
+      handleImgDel();
       router.push('/project-list');
     } catch {
       swal('Error', 'Something went wrong.', 'error');
@@ -177,6 +223,40 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>Image</Form.Label>
+                  <Form.Control
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImgChange}
+                  />
+                  <Form.Text>
+                    Upload an image (4MB limit). Supported formats: JPG, PNG, GIF, WebP 
+                  </Form.Text>
+
+                  {imgPre && (
+                    <>
+                      <Container className="d-flex align-items-start gap-3">
+                        <img
+                          src={imgPre}
+                          alt="Image Preview"
+                          style={{
+                            maxWidth: '200px',
+                            maxHeight: '200px',
+                            objectFit: 'cover',
+                            borderRadius: '8px',
+                            border: '1px solid #002224'
+                          }} />
+                      </Container>
+                      <Button variant="danger" onClick={handleImgDel}>
+                        Delete Image
+                      </Button>
+                    </>
+                  )}
+                </Form.Group>
+
                 <Form.Group>
                   <Form.Label>Members</Form.Label>
                   {Array.isArray(members) && members.length > 0 ? (
