@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 const PATH_OVERRIDES: Record<string, { label: string; href?: string; clickable?: boolean }> = {
   '/user-profile': { label: 'User Profile' },
-  '/edit-profile': { label: 'Edit Profile', clickable: false }, // <-- special case
+  '/edit-profile': { label: 'Edit Profile', clickable: false },
   '/project-page': { label: 'Project List', href: '/project-list' },
   '/project-opening': { label: 'Project Opening', href: '/project-opening' },
   '/auth/change-password': { label: 'Change Password' },
@@ -18,7 +18,15 @@ const PATH_OVERRIDES: Record<string, { label: string; href?: string; clickable?:
   '/auth/forgot-username': { label: 'Forgot Username' },
 };
 
-// Optional static folder names for aesthetics
+// Segments that represent *folders without pages* → never clickable
+const NON_CLICKABLE_SEGMENTS = [
+  'edit-project',
+  'edit-profile',
+  'project-page',
+  'project-opening',
+  'add-opening',
+];
+
 const STATIC_SEGMENTS: Record<string, string> = {
   'project-page': 'Projects',
 };
@@ -36,14 +44,14 @@ const BreadcrumbBar: React.FC = () => {
     const fullPath = '/' + segments.slice(0, index + 1).join('/');
     const isLast = index === lastIndex;
 
-    // Apply overrides first
     if (PATH_OVERRIDES[fullPath]) {
       const { label, href, clickable } = PATH_OVERRIDES[fullPath];
+      const isClickable = !isLast && clickable !== false && href;
 
       crumbs.push(
         <Breadcrumb.Item
           key={fullPath}
-          {...(isLast || clickable === false || !href ? { active: true } : { linkAs: Link, href })}
+          {...(isClickable ? { linkAs: Link, href } : { active: true })}
         >
           {label}
         </Breadcrumb.Item>
@@ -51,7 +59,6 @@ const BreadcrumbBar: React.FC = () => {
       return;
     }
 
-    // Numeric segments: show as ID
     if (isNumeric(segment)) {
       crumbs.push(
         <Breadcrumb.Item active key={fullPath}>
@@ -61,9 +68,19 @@ const BreadcrumbBar: React.FC = () => {
       return;
     }
 
-    // Static folder label (if defined)
+    if (NON_CLICKABLE_SEGMENTS.includes(segment)) {
+      const label = segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+      crumbs.push(
+        <Breadcrumb.Item key={fullPath} active>
+          {label}
+        </Breadcrumb.Item>
+      );
+      return;
+    }
+
     const staticLabel = STATIC_SEGMENTS[segment];
-    const label = staticLabel || segment.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    const label = staticLabel || segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
     crumbs.push(
       <Breadcrumb.Item
