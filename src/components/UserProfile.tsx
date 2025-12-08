@@ -3,7 +3,6 @@ import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/authOptions';
 import React from 'react';
 import { Badge, Button, Col, Row } from 'react-bootstrap';
-import Image from 'next/image';
 import { Project, User, Position } from '@prisma/client';
 import UserProjectCard from './UserProjectCard';
 
@@ -27,22 +26,19 @@ const UserProfile = async ({ user }: { user: User }) => {
   });
 
   // Get profile picture path
-  const imgPath = `/${user.image}`;
 
   return (
     <Row>
       <Col lg={3}>
-        <Image
-          src={imgPath}
+        <img
+          src={user.image && user.image.trim() !== "" ? user.image : "/default-profile.jpg"}
           alt={`${user.firstName} ${user.lastName}`}
           width={200}
           height={200}
           style={{ objectFit: 'contain' }}
         />
-        <h1>
-          {user.firstName}
-          &nbsp;
-          {user.lastName}
+        <h1 style={{ wordWrap: 'break-word', marginTop: '20px' }}>
+          {`${user.firstName} ${user.lastName}`}
         </h1>
         <h6>
           Username:&nbsp;
@@ -63,7 +59,7 @@ const UserProfile = async ({ user }: { user: User }) => {
           {user.skills.join(', ')}
         </h6>
       </Col>
-      <Col lg={9}>
+      <Col lg={9} className='px-3'>
         <h2 className="mb-4">Projects</h2>
           <Row className="g-4">
             {projects.length === 0 && (

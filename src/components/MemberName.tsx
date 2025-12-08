@@ -1,6 +1,6 @@
 import React from 'react';
 import { prisma } from '@/lib/prisma';
-import { Button, Image } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -12,25 +12,24 @@ const MemberName = async ({ userid }: { userid: number }) => {
     notFound();
   }
 
-  const imgSrc = member.image ? `/${member.image}` : '/default-profile.png';
-
   return (
     <Link
       href={`/user-profile/${member.id}`}
       style={{ textDecoration: 'none' }}
     >
       <Button variant="primary" className="member-button">
-        <Image
-          src={imgSrc}
-          alt={`${member.firstName} ${member.lastName}`}
-          width={32}
-          height={32}
-          style={{
-            borderRadius: '50%',
-            objectFit: 'cover',
-            marginRight: '5px',
-          }}
-        />
+        <img
+  src={member.image || "/default-profile.jpg"}
+  alt={`${member.firstName} ${member.lastName}`}
+  width={32}
+  height={32}
+  style={{
+    borderRadius: "50%",
+    objectFit: "cover",
+    marginRight: "5px",
+  }}
+/>
+
         {member.firstName}
         &nbsp;
         {member.lastName}

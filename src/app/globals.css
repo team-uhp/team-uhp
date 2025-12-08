@@ -328,6 +328,8 @@ img.padded {
 #posted-by-card .posted-by-info .posted-by-text {
   line-height: 1.2;
   font-weight: 500;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 #posted-by-card a {
@@ -360,4 +362,202 @@ img.padded {
   border-radius: '0.2rem';
   border-color: #008091!important;
   font-size: 0.9rem!important;
+}
+
+#editproject-button {
+  margin-top: 15px!important;
+  width: 100%!important;
+  background-color: #0E4F6C!important;
+  color: white!important;
+  border-radius: '0.2rem'!important;
+  border-color: #0E4F6C!important;
+  font-size: 0.9rem!important;
+}
+
+#application-submit {
+  margin-top: 20px!important;
+  width: 100%!important;
+  background-color: #008091!important;
+  color: white!important;
+  border-radius: '0.2rem'!important;
+  border-color: #008091!important;
+  font-size: 0.9rem!important;
+}
+
+/* Tag card styles */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+  margin-top: 8px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #007bff;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.tag:hover {
+  background-color: #0056b3;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.tag button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.tag button:focus {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+
+#add-opening-form .form-label {
+  margin-top: 15px;
+}
+
+#add-opening-form .btn-submit {
+  background-color: #0f4144;
+  border-color: #002325;
+  width: 200px;
+}
+
+#add-opening-form .btn-reset {
+  background-color: white;
+  border-color: #111613;
+  color: #111613;
+  width: 150px;
+}
+
+#add-opening-form .btn-reset:hover {
+  background-color: rgb(162, 20, 20);
+  border-color: rgb(162, 20, 20);
+  width: 150px;
+  color: white!important;
+}
+
+#edit-opening-form .form-label {
+  margin-top: 15px;
+}
+
+#edit-opening-form .btn-submit {
+  background-color: #0f4144;
+  border-color: #002325;
+  width: 200px;
+}
+
+#edit-opening-form .btn-reset {
+  background-color: white;
+  border-color: #111613;
+  color: #111613;
+  width: 150px;
+}
+
+#edit-opening-form .btn-reset:hover {
+  background-color: rgb(162, 20, 20);
+  border-color: rgb(162, 20, 20);
+  width: 150px;
+  color: white!important;
+}
+
+#add-project-form .card {
+  margin-bottom: 115px;
+}
+
+#add-project-form .btn-submit {
+  background-color: #0f4144;
+  border-color: #002325;
+  width: 200px;
+}
+
+#add-project-form .btn-reset {
+  background-color: white;
+  border-color: #111613;
+  color: #111613;
+  width: 150px;
+}
+
+#add-project-form .btn-reset:hover {
+  background-color: rgb(162, 20, 20);
+  border-color: rgb(162, 20, 20);
+  width: 150px;
+  color: white!important;
+}
+
+#edit-project-form .form-label {
+  margin-top: 15px;
+}
+
+#edit-project-form .member-toggle {
+  margin-left: 10px;
+  background-color: #111613!important;
+}
+
+#edit-project-form .btn-submit {
+  background-color: #0f4144;
+  border-color: #002325;
+  width: 200px;
+}
+
+#edit-project-form .btn-reset {
+  background-color: white;
+  border-color: #111613;
+  color: #111613;
+  width: 150px;
+}
+
+#edit-project-form .btn-reset:hover {
+  background-color: rgb(162, 20, 20);
+  border-color: rgb(162, 20, 20);
+  width: 150px;
+  color: white!important;
+}
+
+#user-toggle .member-button {
+  color: #111613;
+  border-radius: 22px;
+  margin: 0 5px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 4px 12px;
+  background-color: #F0F0F0FF;
+  border-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#opening-tags .custom-badge {
+  background-color: #0E4F6C!important; /* override bg if you want */
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 10px 30px;
 }

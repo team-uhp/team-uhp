@@ -33,9 +33,9 @@ const ApplyOpening = async ({ params }: { params: Promise<{
 
   return (
     <main>
-      <Link href={`/project-opening/${position.id}`}>Back to Position</Link>
+      <Link href={`/project-opening/${position.id}`}>Back to Opening</Link>
       <Row>
-        <h1>
+        <h1 style={{ textAlign: 'center', width: '100%' }}>
           Application for {project.title}
         </h1>
       </Row>

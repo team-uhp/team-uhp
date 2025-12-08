@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardBody, CardHeader, Image } from "react-bootstrap";
+import { Card, CardBody, CardHeader } from "react-bootstrap";
 
 interface PostedByProps {
   admin: {
@@ -20,8 +20,8 @@ const PostedByCard: React.FC<PostedByProps> = ({ admin }) => {
         {admin ? (
           <>
             <div className="posted-by-info">
-              <Image
-                src={`/${admin.image || "default-profile.png"}`}
+              <img
+                src={`${admin.image}` || `/default-profile.jpg`}
                 alt="Profile"
                 width={40}
                 height={40}

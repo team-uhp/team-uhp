@@ -1,10 +1,9 @@
-import React from 'react';
 import { getServerSession } from 'next-auth';
 import { adminProtectedPage } from '@/lib/page-protection';
 import authOptions from '@/lib/authOptions';
-import UserList from '@/components/UserList';
-import { Container, Row, Col, Table } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { prisma } from '@/lib/prisma';
+import UserListClient from '@/components/UserListClient';
 
 const UsersAdminPage = async () => {
   const session = await getServerSession(authOptions);
@@ -13,7 +12,6 @@ const UsersAdminPage = async () => {
       user: { email: string; id: string; randomKey: string };
     } | null,
   );
-
   const users = await prisma.user.findMany({});
 
   return (
@@ -22,25 +20,7 @@ const UsersAdminPage = async () => {
         <Row>
           <Col>
             <h1>List Users Admin</h1>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Id #</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Role</th>
-                  <th>Image</th>
-                  <th>Edit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <UserList key={user.id} {...user} />
-                ))}
-              </tbody>
-            </Table>
+            <UserListClient users={users} />
           </Col>
         </Row>
       </Container>

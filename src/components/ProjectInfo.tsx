@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { ComponentIDs } from '@/utilities/ids';
 import { notFound } from 'next/navigation';
 import { Badge, Container, Row, Col } from 'react-bootstrap';
-import Image from 'next/image';
 import MemberName from './MemberName';
 import OpeningTitle from './OpeningTitle';
 
@@ -21,38 +20,21 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
   const day = date.getDate().toString().padStart(2, '0');
   const mon = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
-  const imgPath = `/${project.image}`;
 
   return (
     <Container id={ComponentIDs.projectInfo} className="py-3">
       {/* Project Image and Title */}
       <Row>
-        <div style={{ height: '200px', position: 'relative', width: '100%', marginBottom: '15px' }}>
-          {project.image && project.image.trim() !== '/' ? (
-            <Image
-              src={imgPath}
-              alt={project.title}
-              fill
-              style={{ objectFit: 'contain' }}
-              sizes="75px"
-            />
-          ) : (
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: '#e0e0e0',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '48px',
-                color: '#888',
-              }}
-            >
-              No Image Provided
-            </div>
-          )}
+       {project.image && project.image.trim() !== '' && (
+        <div style={{ width: '100%', marginBottom: '15px' }}>
+          <img
+            src={project.image}
+            alt={project.title}
+            height={200}
+            style={{ objectFit: 'contain' }}
+          />
         </div>
+      )}
         <h1
           className="title mt-2"
           style={{
@@ -81,36 +63,46 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
 
       {/* Members */}
       <Container id="project-members" fluid className="my-3">
-        <strong>Members:</strong>
-        <div style={{ marginTop: '0.5rem' }}>
-          {Array.isArray(project.members) && project.members.length > 0 ? (
-            project.members.map((member) => (
-              <MemberName
-                key={`User-${typeof member === 'object' ? member.id ?? '' : member}`}
-                userid={typeof member === 'object' ? member.id as number : member as number}
-              />
-            ))
-          ) : (
-            <div>No members listed.</div>
-          )}
-        </div>
+        <Row>
+          <strong>Members:</strong>
+        </Row>
+        <Row>
+          <div style={{ marginTop: '0.5rem', display: 'flex', flexWrap: 'wrap' }}>
+            {Array.isArray(project.members) && project.members.length > 0 ? (
+              project.members.map((member) => (
+                <div key={`User-${typeof member === 'object' ? member.id ?? '' : member}`} className="mb-2">
+                  <MemberName
+                    userid={typeof member === 'object' ? member.userId as number : member as number}
+                  />
+                </div>
+              ))
+            ) : (
+              <div>No members listed.</div>
+            )}
+          </div>
+        </Row>
       </Container>
 
       {/* Openings */}
       <Container id="project-openings" fluid className="my-3">
-        <strong>Openings:</strong>
-        <div style={{ marginTop: '0.5rem' }}>
-          {Array.isArray(project.positions) && project.positions.length > 0 ? (
-            project.positions.map((opening) => (
-              <OpeningTitle
-                key={`Position-${typeof opening === 'object' ? opening.id ?? '' : opening}`}
-                openingid={typeof opening === 'object' ? opening.id as number : opening as number}
-              />
-            ))
-          ) : (
-            <div>Currently no openings available.</div>
-          )}
-        </div>
+        <Row>
+          <strong>Openings:</strong>
+        </Row>
+        <Row>
+          <div style={{ marginTop: '0.5rem', display: 'flex', flexWrap: 'wrap' }}>
+            {Array.isArray(project.positions) && project.positions.length > 0 ? (
+              project.positions.map((opening) => (
+                <div key={`Position-${typeof opening === 'object' ? opening.id ?? '' : opening}`} className="mb-2">
+                  <OpeningTitle
+                    openingid={typeof opening === 'object' ? opening.id as number : opening as number}
+                  />
+                </div>
+              ))
+            ) : (
+              <div>Currently no openings available.</div>
+            )}
+          </div>
+        </Row>
       </Container>
 
       {/* Skills */}

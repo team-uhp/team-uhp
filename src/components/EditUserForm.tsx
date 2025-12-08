@@ -22,6 +22,9 @@ function useForceUpdate() {
 }
   // A function that increment the previous state like here
 function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
+   const [imgPre, setImgPre] = useState<string | null>(user.image || null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [img, setImg] = useState<File | null>(null);
   const {
     register,
     handleSubmit,
@@ -32,18 +35,19 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
     resolver: yupResolver(EditUserSchema),
     defaultValues: user as EditUserFormData,
   });
+
   const forceUpdate = useForceUpdate();
   const router = useRouter();
 
   const [skillTags, setSkillTags] = useState<Skills[]>(user.skills ?? []); // State to store the tags
-  const [availabilityTags, setAvailabilityTags] = useState<number[]>(user.availability ?? []); // State to store the tags
   const [contactTags, setContactTags] = useState<number[]>(user.contacts ?? []); // State to store the tags
 
-  // Register array fields so setValue works without inputs
+  // Register array fields and file input so setValue works without inputs
   useEffect(() => {
     register("skills");
     register("availability");
     register("contacts");
+    register("image");
   }, [register]);
 
   // Keep RHF values in sync with local state
@@ -52,12 +56,9 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   }, [skillTags, setValue]);
 
   useEffect(() => {
-    setValue("availability", availabilityTags, { shouldDirty: true, shouldValidate: true });
-  }, [availabilityTags, setValue]);
-
-  useEffect(() => {
     setValue("contacts", contactTags, { shouldDirty: true, shouldValidate: true });
   }, [contactTags, setValue]);
+
   // Function to add a new tag
   const addTag = <T,>(newTag: T, tags: T[], setTags: (tags: T[]) => void) => {
     if (newTag && !tags.includes(newTag)) { // Prevent adding empty or duplicate tags
@@ -68,8 +69,51 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   const removeTag = <T,>(tagToRemove: T, tags: T[], setTags: (tags: T[]) => void) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
+
+  const handleImgChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      swal('Error', 'Image must be .jpg, .png, .webp, or .gif', 'error');
+      return;
+    }
+
+    const maxSize = 4 * 1024 * 1024;
+    if (file.size > maxSize) {
+      swal('Error', 'Image size must be under 4MB', 'error');
+      return;
+    }
+
+    setImg(file);
+
+    const read = new FileReader();
+    read.onloadend = () => {
+      const base64Image = read.result as string;
+      if (!base64Image.startsWith('data:image/')) {
+        swal('Error', 'Invalid image format', 'error');
+        return;
+      }
+
+      setImgPre(base64Image);
+      setValue('image', base64Image);
+    };
+
+    read.readAsDataURL(file);
+  }
+
+  const handleImgDel = () => {
+    setImg(null);
+    setImgPre(null);
+    setValue('image', '');
+    const input = document.getElementById('image-upload') as HTMLInputElement;
+    if(input) input.value = '';
+  };
+
   const onSubmit = async (data: EditUserFormData) => {
     console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
+    
     await editUser({
       id: data.id,
       email: data.email,
@@ -81,7 +125,7 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
       image: data.image ?? null,
       phone: data.phone ?? null,
       skills: skillTags,
-      availability: availabilityTags,
+      availability: data.availability,
       contacts: contactTags,
     });
     swal('Success', 'Your item has been updated', 'success', {
@@ -108,7 +152,8 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
                     type="text"
                     {...register('email')}
                     defaultValue={user.email}
-                    required
+                    disabled
+                    readOnly
                     className={`form-control ${errors.email ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.email?.message}</div>
                 </Form.Group>
@@ -117,6 +162,8 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
                   <input
                     type="text"
                     {...register('username')}
+                    disabled
+                    readOnly
                     defaultValue={user.username ? user.username : ''}
                     className={`form-control ${errors.username ? 'is-invalid' : ''}`} />
                   <div className="invalid-feedback">{errors.username?.message}</div>
@@ -145,14 +192,37 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Form.Group>
-                  <Form.Label>Profile Image</Form.Label>
-                  <input
-                    type="text"
-                    {...register('image')}
-                    defaultValue={user.image ? user.image : ''}
-                    className={`form-control ${errors.image ? 'is-invalid' : ''}`} />
-                  <div className="invalid-feedback">{errors.image?.message}</div>
+                <Form.Group className="mb-3">
+                  <Form.Label>Image</Form.Label>
+                  <Form.Control
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImgChange}
+                  />
+                  <Form.Text>
+                    Upload an image (4MB limit). Supported formats: JPG, PNG, GIF, WebP 
+                  </Form.Text>
+
+                  {imgPre && (
+                    <>
+                      <Container className="d-flex align-items-start gap-3">
+                        <img
+                          src={imgPre}
+                          alt="Image Preview"
+                          style={{
+                            maxWidth: '200px',
+                            maxHeight: '200px',
+                            objectFit: 'cover',
+                            borderRadius: '8px',
+                            border: '1px solid #002224'
+                          }} />
+                      </Container>
+                      <Button variant="danger" onClick={handleImgDel}>
+                        Delete Image
+                      </Button>
+                    </>
+                  )}
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Phone Number</Form.Label>
@@ -174,17 +244,6 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
                     forceUpdate={forceUpdate}
                   />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
-                </Form.Group>
-                <Form.Group onClick={forceUpdate}>
-                  <Form.Label>Availability</Form.Label>
-                  <TagsContainer
-                    defaultValue="Select an availability slot to add"
-                    type="availability"
-                    tags={availabilityTags}
-                    removeTag={(tag) => removeTag(tag, availabilityTags, setAvailabilityTags)}
-                    addTag={(tag) => addTag(tag, availabilityTags, setAvailabilityTags)}
-                    forceUpdate={forceUpdate} />
-                  <div className="invalid-feedback">{errors.availability?.message}</div>
                 </Form.Group>
                 <Form.Group onClick={forceUpdate}>
                   <Form.Label>Contacts</Form.Label>

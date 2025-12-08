@@ -2,7 +2,6 @@ import React from 'react';
 import { Project, Position } from '@prisma/client';
 import Link from 'next/link';
 import { Badge, Card, CardBody, CardFooter, CardHeader, CardText, Col, Container, Row } from 'react-bootstrap';
-import Image from 'next/image';
 
 /* Renders a single row in the Projects list. See project-list/page.tsx. */
 
@@ -13,7 +12,6 @@ const ProjectCard = ({ project }: { project: ProjectWithPositions }) => {
   const day = date.getDate().toString().padStart(2, '0');
   const mon = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
-  const imgPath = `/${project.image}`;
 
   return (
     <Container className="py-3">
@@ -27,12 +25,13 @@ const ProjectCard = ({ project }: { project: ProjectWithPositions }) => {
               <Row className="mx-auto g-0">
                 <div style={{ width: '75px', height: '75px', position: 'relative' }}>
                   {project.image && project.image.trim() !== '/' ? (
-                    <Image
-                      src={imgPath}
+                    <img
+                      src={`${project.image}`}
                       alt={project.title}
-                      fill
-                      style={{ objectFit: 'contain' }}
+                      width={75}
+                      height={75}
                       sizes="75px"
+                      style={{ objectFit: 'cover' }}
                     />
                   ) : (
                     <div style={{
@@ -46,7 +45,7 @@ const ProjectCard = ({ project }: { project: ProjectWithPositions }) => {
                       color: '#888',
                     }}
                     >
-                      No Image
+                      {/* No Image */}
                     </div>
                   )}
                 </div>

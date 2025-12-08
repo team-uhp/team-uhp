@@ -34,7 +34,7 @@ const Footer = () => {
             <strong>Resources</strong>
             <hr />
             <a className="footLink" href="https://team-uhp.github.io/#user-guide">User Guide</a>
-            <a className="footLink" href="https://team-uhp.github.io/">Contact Us</a>
+            <a className="footLink" href="https://team-uhp.github.io/#contact-us">Contact Us</a>
           </Col>
 
           {currentUser && role === 'ADMIN' && (
