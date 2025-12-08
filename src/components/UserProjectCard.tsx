@@ -22,7 +22,7 @@ const UserProjectCard = ({ project }: { project: ProjectWithPositions }) => {
       style={{
         borderRadius: '6px',
         backgroundColor: '#FFFFFF',
-        color: '#000000',
+        color: '#111613',
         border: '1px solid #D9D9D9',
       }}
     >
@@ -30,7 +30,7 @@ const UserProjectCard = ({ project }: { project: ProjectWithPositions }) => {
       <div
         className="card-header text-center"
         style={{
-          backgroundColor: '#000000',
+          backgroundColor: '#111613',
           color: 'white',
           fontWeight: 600,
           borderRadius: '6px 6px 0 0',
@@ -60,7 +60,7 @@ const UserProjectCard = ({ project }: { project: ProjectWithPositions }) => {
           style={{
             fontSize: '0.9rem',
             fontWeight: 600,
-            color: '#000000',
+            color: '#111613',
           }}
         >
           <span>Open For:</span>{' '}
