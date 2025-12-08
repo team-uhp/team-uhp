@@ -91,10 +91,11 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
         <Col>
           <Link
             href={`/project-opening/${position.id}`}
+            style={{ marginBottom: '12px', display: 'inline-block' }}
           >
             Back to Opening
           </Link>
-          <Card>
+          <Card style={{ marginBottom: '80px' }}>
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group>
