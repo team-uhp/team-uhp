@@ -181,7 +181,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                   <textarea
                     {...register('descrip')}
                     className={`form-control ${errors.descrip ? 'is-invalid' : ''}`}
-                    style={{ height: '120px' }}
+                    style={{ height: '300px' }}
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
