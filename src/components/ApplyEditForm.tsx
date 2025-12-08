@@ -80,11 +80,12 @@ const ApplyEditForm: React.FC<ApplyEditFormProps> = ({ applic }) => {
   console.log('Errors:', errors);
   console.log('userId', userId);
   return (
-    <Container className="py-3" fluid>
+    <Container className="py-3">
       <Row className="justify-content-center">
         <Col>
           <Link
             href={`/project-opening/${applic.positionId}`}
+            style={{ marginBottom: '12px', display: 'inline-block' }}
           >
             Back to Opening
           </Link>
@@ -95,6 +96,7 @@ const ApplyEditForm: React.FC<ApplyEditFormProps> = ({ applic }) => {
                   <Form.Label>Application Text</Form.Label>
                   <textarea
                     {...register('application')}
+                    style={{ height: '200px' }} 
                     className={`form-control ${errors.application ? 'is-invalid' : ''}`}
                   />
                   <div className="invalid-feedback">{errors.application?.message}</div>
@@ -102,7 +104,7 @@ const ApplyEditForm: React.FC<ApplyEditFormProps> = ({ applic }) => {
                 <Form.Group className="form-group">
                   <Row className="pt-3">
                     <Col>
-                      <Button type="submit" variant="primary" disabled={isSubmitting}>
+                      <Button type="submit" variant="primary" disabled={isSubmitting} id="application-submit">
                         {isSubmitting ? 'Submitting...' : 'Submit'}
                       </Button>
                     </Col>

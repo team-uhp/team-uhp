@@ -86,21 +86,23 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
   };
 
   return (
-    <Container className="py-3" fluid>
+    <Container className="py-3">
       <Row className="justify-content-center">
         <Col>
           <Link
             href={`/project-opening/${position.id}`}
+            style={{ marginBottom: '12px', display: 'inline-block' }}
           >
             Back to Opening
           </Link>
-          <Card>
+          <Card style={{ marginBottom: '80px' }}>
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group>
                   <Form.Label>Application Text</Form.Label>
                   <textarea
                     {...register('application')}
+                    style={{ height: '200px' }} 
                     className={`form-control ${errors.application ? 'is-invalid' : ''}`}
                   />
                   <div className="invalid-feedback">{errors.application?.message}</div>

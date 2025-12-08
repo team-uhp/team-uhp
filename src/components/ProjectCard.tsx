@@ -45,7 +45,7 @@ const ProjectCard = ({ project }: { project: ProjectWithPositions }) => {
                       color: '#888',
                     }}
                     >
-                      No Image
+                      {/* No Image */}
                     </div>
                   )}
                 </div>

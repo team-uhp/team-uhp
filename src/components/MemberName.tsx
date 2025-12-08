@@ -19,16 +19,17 @@ const MemberName = async ({ userid }: { userid: number }) => {
     >
       <Button variant="primary" className="member-button">
         <img
-          src={`${member.image}`}
-          alt={`${member.firstName} ${member.lastName}`}
-          width={32}
-          height={32}
-          style={{
-            borderRadius: '50%',
-            objectFit: 'cover',
-            marginRight: '5px',
-          }}
-        />
+  src={member.image || "/default-profile.jpg"}
+  alt={`${member.firstName} ${member.lastName}`}
+  width={32}
+  height={32}
+  style={{
+    borderRadius: "50%",
+    objectFit: "cover",
+    marginRight: "5px",
+  }}
+/>
+
         {member.firstName}
         &nbsp;
         {member.lastName}

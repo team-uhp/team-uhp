@@ -31,13 +31,13 @@ const UserProfile = async ({ user }: { user: User }) => {
     <Row>
       <Col lg={3}>
         <img
-          src={`${user.image}`}
+          src={user.image && user.image.trim() !== "" ? user.image : "/default-profile.jpg"}
           alt={`${user.firstName} ${user.lastName}`}
           width={200}
           height={200}
           style={{ objectFit: 'contain' }}
         />
-        <h1 style={{ wordWrap: 'break-word' }}>
+        <h1 style={{ wordWrap: 'break-word', marginTop: '20px' }}>
           {`${user.firstName} ${user.lastName}`}
         </h1>
         <h6>
