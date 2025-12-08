@@ -139,7 +139,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
   console.log('skills:', selectedSkills);
   console.log('selected date:', selected);
   return (
-    <Container className="py-3">
+    <Container className="py-3" id="add-opening-form">
       <Row className="justify-content-center">
         <Col>
           <Col className="text-center">
@@ -150,7 +150,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
           >
             Back to Project List
           </Link>
-          <Card>
+          <Card style={{ marginBottom: '80px' }}>
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
                 <Row>
@@ -217,9 +217,9 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
                   </div>
                 </Form.Group>
                 <Form.Group className="form-group">
-                  <Row className="pt-3">
+                  <Row className="pt-3" style={{ marginTop: '12px' }}>
                     <Col>
-                      <Button type="submit" variant="primary" disabled={isSubmitting}>
+                      <Button className="btn-submit" type="submit" variant="primary" disabled={isSubmitting}>
                         {isSubmitting ? 'Submitting...' : 'Submit'}
                       </Button>
                     </Col>
@@ -232,7 +232,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
                           setSelected(undefined);
                         }}
                         variant="warning"
-                        className="float-right"
+                        className="float-right btn-reset"
                       >
                         Reset
                       </Button>
