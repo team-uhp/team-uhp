@@ -37,7 +37,7 @@ const UserProfile = async ({ user }: { user: User }) => {
           height={200}
           style={{ objectFit: 'contain' }}
         />
-        <h1 style={{ wordWrap: 'break-word' }}>
+        <h1 style={{ wordWrap: 'break-word', marginTop: '20px' }}>
           {`${user.firstName} ${user.lastName}`}
         </h1>
         <h6>
