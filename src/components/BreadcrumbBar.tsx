@@ -5,8 +5,9 @@ import { Breadcrumb, Container } from 'react-bootstrap';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-const PATH_OVERRIDES: Record<string, { label: string; href?: string }> = {
+const PATH_OVERRIDES: Record<string, { label: string; href?: string; clickable?: boolean }> = {
   '/user-profile': { label: 'User Profile' },
+  '/edit-profile': { label: 'Edit Profile', clickable: false }, // <-- special case
   '/project-page': { label: 'Project List', href: '/project-list' },
   '/project-opening': { label: 'Project Opening', href: '/project-opening' },
   '/auth/change-password': { label: 'Change Password' },
@@ -35,13 +36,14 @@ const BreadcrumbBar: React.FC = () => {
     const fullPath = '/' + segments.slice(0, index + 1).join('/');
     const isLast = index === lastIndex;
 
-    // Apply overrides
+    // Apply overrides first
     if (PATH_OVERRIDES[fullPath]) {
-      const { label, href } = PATH_OVERRIDES[fullPath];
+      const { label, href, clickable } = PATH_OVERRIDES[fullPath];
+
       crumbs.push(
         <Breadcrumb.Item
           key={fullPath}
-          {...(isLast || !href ? { active: true } : { linkAs: Link, href })}
+          {...(isLast || clickable === false || !href ? { active: true } : { linkAs: Link, href })}
         >
           {label}
         </Breadcrumb.Item>
