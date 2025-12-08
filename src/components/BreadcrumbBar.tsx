@@ -5,30 +5,41 @@ import { Breadcrumb, Container } from 'react-bootstrap';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-const PATH_OVERRIDES: Record<string, { label: string; href?: string; clickable?: boolean }> = {
-  '/user-profile': { label: 'User Profile' },
-  '/edit-profile': { label: 'Edit Profile', clickable: false },
-  '/project-page': { label: 'Project List', href: '/project-list' },
-  '/project-opening': { label: 'Project Opening', href: '/project-opening' },
-  '/auth/change-password': { label: 'Change Password' },
-  '/auth/signin': { label: 'Sign In' },
-  '/auth/signup': { label: 'Sign Up' },
-  '/auth/signout': { label: 'Sign Out' },
-  '/auth/forgot-password': { label: 'Forgot Password' },
-  '/auth/forgot-username': { label: 'Forgot Username' },
-};
-
 // Segments that represent *folders without pages* → never clickable
 const NON_CLICKABLE_SEGMENTS = [
-  'edit-project',
-  'edit-profile',
-  'project-page',
-  'project-opening',
   'add-opening',
+  'add-project',
+  'apply-opening',
+  'application',
+  'edit-application',
+  'edit-opening',
+  'edit-project',
+  'forgotpassword',
+  'not-authorized',
+  'passchange',
+  'project-opening',
+  'project-page',
+  'signup',
+  'user-profile',
+  'verify',
 ];
 
+// Optional overrides for specific paths
+const PATH_OVERRIDES: Record<string, { label: string; href?: string; clickable?: boolean }> = {
+  '/edit-profile': { label: 'Edit Profile', clickable: false },
+  '/auth/change-password': { label: 'Change Password', clickable: false },
+  '/auth/signin': { label: 'Sign In', clickable: false },
+  '/auth/signout': { label: 'Sign Out', clickable: false },
+  '/auth/forgot-password': { label: 'Forgot Password', clickable: false },
+  '/auth/forgot-username': { label: 'Forgot Username', clickable: false },
+};
+
+// Static folder names for nicer labels
 const STATIC_SEGMENTS: Record<string, string> = {
   'project-page': 'Projects',
+  'project-opening': 'Project Opening',
+  'add-project': 'Add Project',
+  'edit-project': 'Edit Project',
 };
 
 const isNumeric = (str: string) => /^\d+$/.test(str);
@@ -43,10 +54,12 @@ const BreadcrumbBar: React.FC = () => {
   segments.forEach((segment, index) => {
     const fullPath = '/' + segments.slice(0, index + 1).join('/');
     const isLast = index === lastIndex;
+    const isNonClickable = NON_CLICKABLE_SEGMENTS.includes(segment);
 
+    // Overrides first
     if (PATH_OVERRIDES[fullPath]) {
       const { label, href, clickable } = PATH_OVERRIDES[fullPath];
-      const isClickable = !isLast && clickable !== false && href;
+      const isClickable = !isLast && !isNonClickable && clickable !== false && href;
 
       crumbs.push(
         <Breadcrumb.Item
@@ -59,6 +72,7 @@ const BreadcrumbBar: React.FC = () => {
       return;
     }
 
+    // Numeric segments → show as ID
     if (isNumeric(segment)) {
       crumbs.push(
         <Breadcrumb.Item active key={fullPath}>
@@ -68,9 +82,9 @@ const BreadcrumbBar: React.FC = () => {
       return;
     }
 
-    if (NON_CLICKABLE_SEGMENTS.includes(segment)) {
-      const label = segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
+    // Non-clickable segment
+    if (isNonClickable) {
+      const label = STATIC_SEGMENTS[segment] || segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
       crumbs.push(
         <Breadcrumb.Item key={fullPath} active>
           {label}
@@ -79,9 +93,8 @@ const BreadcrumbBar: React.FC = () => {
       return;
     }
 
-    const staticLabel = STATIC_SEGMENTS[segment];
-    const label = staticLabel || segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
+    // Default segment
+    const label = STATIC_SEGMENTS[segment] || segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     crumbs.push(
       <Breadcrumb.Item
         key={fullPath}
