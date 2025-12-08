@@ -250,7 +250,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                             border: '1px solid #002224'
                           }} />
                       </Container>
-                      <Button variant="danger" onClick={handleImgDel}>
+                      <Button variant="danger" onClick={handleImgDel} style={{ marginTop: '10px', height: '35px', fontSize: '14px' }}>
                         Delete Image
                       </Button>
                     </>
