@@ -11,7 +11,7 @@ const ContactCard = ({ contact }: { contact: User }) => {
             <Link
               href={`/user-profile/${contact.id}`}
             >
-              <img src={`${contact.image}`} alt={contact.username} width={75} height={75} />
+              <img src={`${contact.image}` || `/default-profile.jpg`} alt={contact.username} width={75} height={75} />
               <h3>{contact.firstName} {contact.lastName}</h3>
               <p>{contact.username}</p>
             </Link>
