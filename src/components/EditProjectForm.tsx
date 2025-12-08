@@ -180,7 +180,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
           <div style={{ marginBottom: '12px' }}>
             <Link href={`/project-page/${proj.id}`} >Back to Project</Link>
           </div>
-          <Card>
+          <Card style={{ marginBottom: '80px' }}>
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
                 <Row>
