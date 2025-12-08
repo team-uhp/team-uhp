@@ -517,7 +517,6 @@ img.padded {
 #edit-project-form .member-toggle {
   margin-left: 10px;
   background-color: #111613!important;
-
 }
 
 #edit-project-form .btn-submit {
@@ -553,4 +552,12 @@ img.padded {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+}
+
+#opening-tags .custom-badge {
+  background-color: #0E4F6C!important; /* override bg if you want */
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 10px 30px;
 }

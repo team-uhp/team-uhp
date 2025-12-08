@@ -60,7 +60,7 @@ const ProjectOpening = async ({ params }: { params: Promise<{
 
   if ((position.admins?.some((a) => a.id === user.id) ?? false) || (user.role === 'ADMIN')) {
     return (
-      <Container id={PageIDs.openingPage} className="py-3">
+      <Container id={PageIDs.openingPage} className="py-3" style={{ marginBottom: '80px' }}>
         <Link href={`/project-page/${position.project?.id}`} style={{ color: '#111613' }}>Back to Project</Link>
         <OpeningInfo
           key={`Position-${resolvedParams.id}`}
@@ -71,19 +71,20 @@ const ProjectOpening = async ({ params }: { params: Promise<{
         <Row>
           <Link href={`/project-opening/edit-opening/${position.id}`}>Edit Opening</Link>
         </Row>
-        <h2>Applications</h2>
-        <Container id="opening-tags" fluid>
-        {apps.map((app) => (
-          <Link key={`app-${app.id}`} href={`/project-opening/application/${app.id}`}>
-            <Badge
-              className="mx-1"
-              bg="info"
-            >
-              {app.name ?? 'N/A'}
-            </Badge>
-          </Link>
-        ))}
-      </Container>
+        <hr />
+        <h2 style={{ textAlign: 'start', width: '100%', marginBottom: '20px' }}>Applications</h2>
+        <Container id="opening-tags">
+          {apps.map((app) => (
+            <Link key={`app-${app.id}`} href={`/project-opening/application/${app.id}`}>
+              <Badge
+                className="mx-1 custom-badge"
+                bg="info"
+              >
+                {app.name ?? 'N/A'}
+              </Badge>
+            </Link>
+          ))}
+        </Container>
       </Container>
     );
   }
