@@ -132,17 +132,13 @@ export default function SignInPage() {
                     }}
                   />
                 </Col>
-                <Col className="text-start" style={{ marginTop: '10px' }}>
+                <Col className="text-start" style={{ marginTop: '21px' }}>
                   <div>
-                    <a href="/auth/forgot-password" style={{ color: '#F8C100', fontWeight: 500 }}>
+                    <a href="/auth/forgot-password" style={{ color: '#F8C100', fontWeight: 600 }}>
                       Forgot Password?
                     </a>
                   </div>
-                  <div style={{ marginTop: '0.5rem' }}>
-                    <a href="/auth/forgot-username" style={{ color: '#F8C100', fontWeight: 500 }}>
-                      Forgot Username?
-                    </a>
-                  </div>
+                  <div style={{ marginTop: '0.5rem' }} />
                 </Col>
               </Row>
             </Col>
