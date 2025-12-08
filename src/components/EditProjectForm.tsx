@@ -199,7 +199,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                   <Col>
                     <Form.Group>
                       <br />
-                      <Form.Label className="mb-0">Due Date:</Form.Label>
+                      <Form.Label className="mb-0">Due Date: &nbsp;</Form.Label>
                       <DatePicker
                         selected={selected}
                         onChange={(date) => setSelected(date)}
