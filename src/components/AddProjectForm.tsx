@@ -143,14 +143,16 @@ const AddProjectForm: React.FC = () => {
   if (status === 'unauthenticated') redirect('/auth/signin');
 
   return (
-    <Container className="py-3">
+    <Container className="py-3" id="add-project-form">
       <Row className="justify-content-center">
         <Col>
           <Col className="text-center">
             <h2>Add Project</h2>
           </Col>
 
-          <Link href="/project-list/">Back to Project List</Link>
+          <div style={{ marginBottom: '12px' }}>
+            <Link href="/project-list/">Back to Project List</Link>
+          </div>
 
           <Card>
             <Card.Body>
@@ -170,7 +172,7 @@ const AddProjectForm: React.FC = () => {
 
                     {/* Project Image */}
                     <Form.Group className="mb-3">
-                      <Form.Label>Image</Form.Label>
+                      <Form.Label style={{ marginTop:'10px'}}>Image</Form.Label>
                       <Form.Control
                         id="image-upload"
                         type="file"
@@ -207,7 +209,7 @@ const AddProjectForm: React.FC = () => {
                     {/* Date Picker */}
                     <Form.Group>
                       <br />
-                      <Form.Label className="mb-0">Due Date:&nbsp;</Form.Label>
+                      <Form.Label className="mb-0">Due Date: &nbsp;</Form.Label>
                       <DatePicker
                         selected={selected}
                         onChange={(date) => setSelected(date)}
@@ -228,7 +230,7 @@ const AddProjectForm: React.FC = () => {
                   <textarea
                     {...register('descrip')}
                     className={`form-control ${errors.descrip ? 'is-invalid' : ''}`}
-                    style={{ height: '120px' }}
+                    style={{ height: '300px' }}
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
@@ -237,7 +239,7 @@ const AddProjectForm: React.FC = () => {
                 <Form.Group>
                   <Row className="pt-3">
                     <Col>
-                      <Button type="submit" variant="primary">
+                      <Button type="submit" variant="primary" className="btn-submit">
                         Submit
                       </Button>
                     </Col>
@@ -249,7 +251,7 @@ const AddProjectForm: React.FC = () => {
                           setSelected(null);
                         }}
                         variant="warning"
-                        className="float-right"
+                        className="float-right btn-reset"
                       >
                         Reset
                       </Button>

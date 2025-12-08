@@ -171,15 +171,15 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
   };
 
   return (
-    <Container className="py-3">
+    <Container className="py-3" id="edit-project-form">
       <Row className="justify-content-center">
         <Col>
           <Col className="text-center">
             <h2>Edit Project</h2>
           </Col>
-
-          <Link href={`/project-page/${proj.id}`}>Back to Project</Link>
-
+          <div style={{ marginBottom: '12px' }}>
+            <Link href={`/project-page/${proj.id}`} >Back to Project</Link>
+          </div>
           <Card>
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
@@ -219,7 +219,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                   <textarea
                     {...register('descrip')}
                     className={`form-control ${errors.descrip ? 'is-invalid' : ''}`}
-                    style={{ height: '120px' }}
+                    style={{ height: '300px' }}
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
@@ -261,12 +261,12 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                   <Form.Label>Members</Form.Label>
                   {Array.isArray(members) && members.length > 0 ? (
                     members.map((member) => (
-                      <UserToggleAny 
-                        key={member.id} 
-                        name={member.name}
-                        isChecked={watchMembers.includes(member.id)}
-                        onChange={() => handleMembersToggle(member.id)}
-                      />
+                        <UserToggleAny
+                          key={member.id}
+                          name={member.name}
+                          isChecked={watchMembers.includes(member.id)}
+                          onChange={() => handleMembersToggle(member.id)}
+                        />
                     ))
                   ) : (
                     <div>No members listed.</div>
@@ -277,21 +277,21 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                   <Form.Label>Admins</Form.Label>
                   {Array.isArray(members) && members.length > 0 ? (
                     members.map((member) => (
-                      <UserToggleAny 
-                        key={member.id} 
-                        name={member.name}
-                        isChecked={watchAdmins.includes(member.id)}
-                        onChange={() => handleAdminsToggle(member.id)}
-                      />
+                        <UserToggleAny
+                          key={member.id}
+                          name={member.name}
+                          isChecked={watchAdmins.includes(member.id)}
+                          onChange={() => handleAdminsToggle(member.id)}
+                        />
                     ))
                   ) : (
                     <div>No members to assign as admins.</div>
                   )}
                 </Form.Group>
 
-                <Row className="pt-3">
+                <Row className="pt-3" style={{ marginTop: '10px' }}>
                   <Col>
-                    <Button type="submit" variant="primary">
+                    <Button type="submit" variant="primary" className="btn-submit">
                       Submit
                     </Button>
                   </Col>
@@ -303,7 +303,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                         setSelected(null);
                       }}
                       variant="warning"
-                      className="float-right"
+                      className="float-right btn-reset"
                     >
                       Reset
                     </Button>

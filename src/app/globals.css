@@ -436,3 +436,73 @@ img.padded {
   outline: 2px solid white;
   outline-offset: 2px;
 }
+
+
+#add-project-form .card {
+  margin-bottom: 115px;
+}
+
+#add-project-form .btn-submit {
+  background-color: #0f4144;
+  border-color: #002325;
+  width: 200px;
+}
+
+#add-project-form .btn-reset {
+  background-color: white;
+  border-color: #111613;
+  color: #111613;
+  width: 150px;
+}
+
+#add-project-form .btn-reset:hover {
+  background-color: rgb(162, 20, 20);
+  border-color: rgb(162, 20, 20);
+  width: 150px;
+  color: white!important;
+}
+
+#edit-project-form .form-label {
+  margin-top: 15px;
+}
+
+#edit-project-form .member-toggle {
+  margin-left: 10px;
+  background-color: #111613!important;
+
+}
+
+#edit-project-form .btn-submit {
+  background-color: #0f4144;
+  border-color: #002325;
+  width: 200px;
+}
+
+#edit-project-form .btn-reset {
+  background-color: white;
+  border-color: #111613;
+  color: #111613;
+  width: 150px;
+}
+
+#edit-project-form .btn-reset:hover {
+  background-color: rgb(162, 20, 20);
+  border-color: rgb(162, 20, 20);
+  width: 150px;
+  color: white!important;
+}
+
+#user-toggle .member-button {
+  color: #111613;
+  border-radius: 22px;
+  margin: 0 5px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 4px 12px;
+  background-color: #F0F0F0FF;
+  border-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}

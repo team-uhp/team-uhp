@@ -11,21 +11,23 @@ type UserToggleProps = {
 const UserToggle: React.FC<UserToggleProps> = ({ name, isChecked, onChange }) => {
 
   return (
-    <Button variant="primary" className="member-button">
-      <Row>
-        <Col>
-          <input
-            type="checkbox"
-            id={`checkbox-${name}`}
-            checked={isChecked}
-            onChange={onChange}
-          />
-        </Col>
-        <Col style={{ whiteSpace: 'nowrap' }}>
-          {name}
-        </Col>
-      </Row>
-    </Button>
+    <div id="user-toggle">
+      <Button variant="primary" className="member-button">
+        <Row>
+          <Col>
+            <input
+              type="checkbox"
+              id={`checkbox-${name}`}
+              checked={isChecked}
+              onChange={onChange}
+            />
+          </Col>
+          <Col style={{ whiteSpace: 'nowrap' }}>
+            {name}
+          </Col>
+        </Row>
+      </Button>
+    </div>
   );
 };
 
