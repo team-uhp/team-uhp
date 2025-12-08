@@ -25,31 +25,16 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
     <Container id={ComponentIDs.projectInfo} className="py-3">
       {/* Project Image and Title */}
       <Row>
-        <div style={{ height: '200px', position: 'relative', width: '100%', marginBottom: '15px' }}>
-          {project.image && project.image.trim() !== '/' ? (
-            <img
-              src={project.image}
-              alt={project.title}
-              height={200}
-              style={{ objectFit: 'contain' }}
-            />
-          ) : (
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: '#e0e0e0',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '48px',
-                color: '#888',
-              }}
-            >
-              No Image Provided
-            </div>
-          )}
+       {project.image && project.image.trim() !== '' && (
+        <div style={{ width: '100%', marginBottom: '15px' }}>
+          <img
+            src={project.image}
+            alt={project.title}
+            height={200}
+            style={{ objectFit: 'contain' }}
+          />
         </div>
+      )}
         <h1
           className="title mt-2"
           style={{
