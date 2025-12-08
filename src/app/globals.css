@@ -437,6 +437,7 @@ img.padded {
   outline-offset: 2px;
 }
 
+
 #add-opening-form .form-label {
   margin-top: 15px;
 }
@@ -455,6 +456,30 @@ img.padded {
 }
 
 #add-opening-form .btn-reset:hover {
+  background-color: rgb(162, 20, 20);
+  border-color: rgb(162, 20, 20);
+  width: 150px;
+  color: white!important;
+}
+
+#edit-opening-form .form-label {
+  margin-top: 15px;
+}
+
+#edit-opening-form .btn-submit {
+  background-color: #0f4144;
+  border-color: #002325;
+  width: 200px;
+}
+
+#edit-opening-form .btn-reset {
+  background-color: white;
+  border-color: #111613;
+  color: #111613;
+  width: 150px;
+}
+
+#edit-opening-form .btn-reset:hover {
   background-color: rgb(162, 20, 20);
   border-color: rgb(162, 20, 20);
   width: 150px;

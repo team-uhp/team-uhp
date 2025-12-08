@@ -1,20 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
-import { useForm, type Resolver } from 'react-hook-form';
+import { useForm, type Resolver, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import swal from 'sweetalert';
 import { editPosition, deletePosition } from '@/lib/dbActions';
 import { EditPositionSchema } from '@/lib/validationSchemas';
-import { useState, useEffect } from 'react';
-import { DateRange, DayPicker } from 'react-day-picker';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Link from 'next/link';
 import { Position, Skills } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import SkillSelect from './SkillSelect';
-import type { SubmitHandler } from 'react-hook-form';
 
 type PositionFormValues = {
   id: number;
@@ -37,7 +36,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [userId, setUserId] = useState<number>(0);
-  const [selected, setSelected] = useState<DateRange | undefined>(undefined);
+  const [selected, setSelected] = useState<{ from?: Date; to?: Date } | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState<Record<string, boolean>>({});
 
@@ -49,21 +48,12 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
 
   useEffect(() => {
     if (position.skills && position.skills.length > 0) {
-      const initialSkills = position.skills.reduce((acc, skill) => ({
-        ...acc,
-        [skill]: true,
-      }), {} as Record<string, boolean>);
+      const initialSkills = position.skills.reduce((acc, skill) => ({ ...acc, [skill]: true }), {} as Record<string, boolean>);
       setSelectedSkills(initialSkills);
     }
-  }, [session, position.skills]);
+  }, [position.skills]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm<PositionFormValues>({
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<PositionFormValues>({
     resolver: yupResolver(EditPositionSchema) as unknown as Resolver<PositionFormValues>,
     defaultValues: {
       id: position.id,
@@ -74,19 +64,14 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
       admins: [],
       member: position.memberId ?? undefined,
       image: position.image ?? undefined,
-      skills: Array.isArray(position.skills)
-        ? position.skills.filter((skill): skill is Skills => typeof skill === 'string')
-        : [],
+      skills: Array.isArray(position.skills) ? position.skills : [],
       project: position.projectId ?? 0,
     },
   });
 
   useEffect(() => {
     if (position.datestart && position.dateend) {
-      setSelected({
-        from: new Date(position.datestart),
-        to: new Date(position.dateend),
-      });
+      setSelected({ from: new Date(position.datestart), to: new Date(position.dateend) });
     }
   }, [position.datestart, position.dateend]);
 
@@ -97,26 +82,17 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
     setValue('skills', skillsArray);
   }, [selectedSkills, setValue]);
 
-  const handleSkillToggle = (skillname: string) => {
-    setSelectedSkills(prev => ({
-      ...prev,
-      [skillname]: !prev[skillname],
-    }));
+  const handleSkillToggle = (skill: string) => {
+    setSelectedSkills(prev => ({ ...prev, [skill]: !prev[skill] }));
   };
 
   useEffect(() => {
-    if (selected?.from) {
-      setValue('datestart', selected.from.toISOString());
-    }
-    if (selected?.to) {
-      setValue('dateend', selected.to.toISOString());
-    }
+    if (selected?.from) setValue('datestart', selected.from.toISOString());
+    if (selected?.to) setValue('dateend', selected.to.toISOString());
   }, [selected, setValue]);
 
   useEffect(() => {
-    if (userId > 0) {
-      setValue('admins', [String(userId)]);
-    }
+    if (userId > 0) setValue('admins', [String(userId)]);
   }, [userId, setValue]);
 
   const onSubmit: SubmitHandler<PositionFormValues> = async (data) => {
@@ -124,7 +100,6 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
       swal('Error', 'Please select a due date', 'error');
       return;
     }
-
     setIsSubmitting(true);
 
     const openingData = {
@@ -136,83 +111,84 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
       datestart: selected.from.toISOString(),
       dateend: selected.to?.toISOString() || selected.from.toISOString(),
       project: position.projectId ?? 0,
-      admins: data.admins.map(id => Number(id)),
+      admins: data.admins.map(Number),
       member: data.member ?? null,
     };
 
     try {
-      if (openingData.project != 0) {
+      if (openingData.project !== 0) {
         await editPosition(openingData);
-        await swal('Success', 'Your position has been edited', 'success', {
-          timer: 2000,
-        });
+        await swal('Success', 'Your position has been edited', 'success', { timer: 2000 });
         reset();
         setSelected(undefined);
         router.push(`/project-opening/${position.id}`);
       }
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
-        return;
-      }
-      await swal('Error', 'Your position was not edited', 'error', {
-        timer: 2000,
-      });
+    } catch {
+      await swal('Error', 'Your position was not edited', 'error', { timer: 2000 });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Container className="py-3" fluid>
+    <Container className="py-3" id="edit-opening-form">
       <Row className="justify-content-center">
         <Col>
           <Col className="text-center">
             <h2>Edit Opening</h2>
           </Col>
-          <Link
-            href={`/project-opening/${position.id}`}
-          >
+          <Link href={`/project-opening/${position.id}`} className="mb-3 d-inline-block">
             Back to Opening
           </Link>
-          <Card>
+          <Card className="mb-5">
             <Card.Body>
               <Form onSubmit={handleSubmit(onSubmit)}>
-                <Form.Group>
-                  <Form.Label>Title</Form.Label>
-                  <input
-                    type="text"
-                    {...register('title')}
-                    className={`form-control ${errors.title ? 'is-invalid' : ''}`}
-                  />
-                  <div className="invalid-feedback">{errors.title?.message}</div>
-                </Form.Group>
+                <Row>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Title</Form.Label>
+                      <input
+                        type="text"
+                        {...register('title')}
+                        className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+                      />
+                      <div className="invalid-feedback">{errors.title?.message}</div>
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group className="mb-3 mt-4">
+                      <Form.Label className="me-2 mb-0">Timeline:</Form.Label>
+                      <DatePicker
+                        selectsRange
+                        startDate={selected?.from || null}
+                        endDate={selected?.to || null}
+                        onChange={(dates) => {
+                          const [start, end] = dates;
+                          setSelected({ from: start || undefined, to: end || undefined });
+                          if (start) setValue("datestart", start.toISOString());
+                          if (end) setValue("dateend", end.toISOString());
+                        }}
+                        minDate={new Date()}
+                        placeholderText="Select a start and end date"
+                        className="form-control"
+                      />
+                      {errors.datestart && <div className="text-danger mt-2">{errors.datestart.message}</div>}
+                    </Form.Group>
+                  </Col>
+                </Row>
                 <Form.Group>
                   <Form.Label>Description</Form.Label>
                   <textarea
                     {...register('descrip')}
                     className={`form-control ${errors.descrip ? 'is-invalid' : ''}`}
+                    style={{ height: '120px' }}
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
                 <Form.Group>
-                  <DayPicker
-                    mode="range"
-                    required
-                    disabled={{ before: new Date() }}
-                    selected={selected}
-                    onSelect={setSelected}
-                    footer={
-                      selected?.from ? `Selected: ${selected.from.toLocaleDateString()}${selected.to ? ` - ${selected.to.toLocaleDateString()}` : ''}` : 'Pick a day.'
-                    }
-                  />
-                </Form.Group>
-                {errors.datestart && (
-                <div className="text-danger mt-2">{errors.datestart.message}</div>
-                )}
-                <Form.Group>
                   <Form.Label>Skills Needed:</Form.Label>
                   <div className="d-flex flex-wrap gap-2">
-                    {Object.values(Skills).map((skill) => (
+                    {Object.values(Skills).map(skill => (
                       <SkillSelect
                         key={`skill-${skill}`}
                         skill={skill}
@@ -222,28 +198,29 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                     ))}
                   </div>
                 </Form.Group>
-                <Form.Group className="form-group">
-                  <Row className="pt-3">
+                <Form.Group className="form-group mt-3" >
+                  <Row>
                     <Col>
-                      <Button type="submit" variant="primary" disabled={isSubmitting}>
-                        {isSubmitting ? 'Submitting...' : 'Submit'}
+                      <Button className="btn-submit" type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? 'Updating...' : 'Update'}
                       </Button>
                     </Col>
-                    <Col>
-                      <Button
+                    <Col className="text-end">
+                    <Button
                         type="button"
                         onClick={() => {
                           reset();
                           setSelectedSkills({});
-                          setSelected(undefined);
+                          setSelected({
+                            from: position.datestart ? new Date(position.datestart) : undefined,
+                            to: position.dateend ? new Date(position.dateend) : undefined
+                          });
                         }}
-                        variant="warning"
-                        className="float-right"
+                        className="float-right btn-reset"
+                        style={{ marginRight: '25px' }}
                       >
                         Reset
                       </Button>
-                    </Col>
-                    <Col>
                       <Button
                         type="button"
                         onClick={async (event) => {
@@ -256,23 +233,17 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                             buttons: ['Cancel', 'Delete'],
                             dangerMode: true,
                           });
-
                           if (willDelete) {
                             const proj = position.projectId ?? '';
                             await deletePosition(position.id);
-                            swal('Success!', 'Position deleted.', 'success', {
-                              timer: 2000,
-                            });
+                            swal('Success!', 'Position deleted.', 'success', { timer: 2000 });
                             router.push(`/project-page/${proj}`);
-                          } else {
-                            swal('Cancelled', 'Position was not deleted', 'info', {
-                              timer: 2000,
-                            });
-                          }}
-                        }
+                          }
+                        }}
+                        variant="danger"
                         className="float-right"
                       >
-                        DELETE
+                        Delete
                       </Button>
                     </Col>
                   </Row>
