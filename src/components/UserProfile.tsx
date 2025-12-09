@@ -5,12 +5,14 @@ import React from 'react';
 import { Badge, Button, Col, Row } from 'react-bootstrap';
 import { Project, User, Position } from '@prisma/client';
 import UserProjectCard from './UserProjectCard';
+import ContactButton from '@/components/ContactButton';
 
 type ProjectWithPositions = Project & { positions: Position[] };
+type UserWithContacts = User & { contacts: User[] };
 
 
 /** Renders the information page for a Project. */
-const UserProfile = async ({ user }: { user: User }) => {
+const UserProfile = async ({ user }: { user: UserWithContacts }) => {
   const session = await getServerSession(authOptions) as {
     user: { email: string; id: string; randomKey: string };
   } | null;
@@ -25,6 +27,16 @@ const UserProfile = async ({ user }: { user: User }) => {
     },
   });
 
+  const sessionUserId = Number(session?.user.id);
+
+  const sessionUser = await prisma.user.findUnique({
+    where: { id: sessionUserId },
+    include: { contacts: true },
+  });
+
+  const isInitiallyContact = sessionUser?.contacts.some(c => c.id === user.id) ?? false;
+
+  
   // Get profile picture path
 
   return (
@@ -58,6 +70,13 @@ const UserProfile = async ({ user }: { user: User }) => {
           Skills:&nbsp;
           {user.skills.join(', ')}
         </h6>
+        {sessionUserId !== user.id && (
+          <ContactButton
+            isInitiallyContact={isInitiallyContact}
+            currentUserId={sessionUserId}
+            profileId={user.id}
+          />
+        )}
       </Col>
       <Col lg={9} className='px-3'>
         <h2 className="mb-4">Projects</h2>
@@ -76,7 +95,7 @@ const UserProfile = async ({ user }: { user: User }) => {
       <Col>
         {
           session && Number(session.user.id) === user.id && (
-            <Button style={{backgroundColor: '#0e4f6cff', borderColor:'#0e4f6cff' }} href={`/edit-profile/${user.id}`}>Edit Profile</Button>
+            <Button style={{backgroundColor: '#0e4f6cff', borderColor:'#0e4f6cff', marginTop: '10px' }} href={`/edit-profile/${user.id}`}>Edit Profile</Button>
           )
         }
       </Col>
