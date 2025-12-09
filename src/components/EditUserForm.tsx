@@ -21,7 +21,7 @@ function useForceUpdate() {
   return () => setValue((v) => v + 1);
 }
   // A function that increment the previous state like here
-function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
+function EditUserForm({ user }: { user: User }) {
    const [imgPre, setImgPre] = useState<string | null>(user.image || null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [img, setImg] = useState<File | null>(null);
@@ -40,13 +40,11 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   const router = useRouter();
 
   const [skillTags, setSkillTags] = useState<Skills[]>(user.skills ?? []); // State to store the tags
-  const [contactTags, setContactTags] = useState<number[]>(user.contacts ?? []); // State to store the tags
 
   // Register array fields and file input so setValue works without inputs
   useEffect(() => {
     register("skills");
     register("availability");
-    register("contacts");
     register("image");
   }, [register]);
 
@@ -54,10 +52,6 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
   useEffect(() => {
     setValue("skills", skillTags, { shouldDirty: true, shouldValidate: true });
   }, [skillTags, setValue]);
-
-  useEffect(() => {
-    setValue("contacts", contactTags, { shouldDirty: true, shouldValidate: true });
-  }, [contactTags, setValue]);
 
   // Function to add a new tag
   const addTag = <T,>(newTag: T, tags: T[], setTags: (tags: T[]) => void) => {
@@ -126,7 +120,7 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
       phone: data.phone ?? null,
       skills: skillTags,
       availability: data.availability,
-      contacts: contactTags,
+      contacts: data.contacts,
     });
     swal('Success', 'Your item has been updated', 'success', {
       timer: 2000,
@@ -244,16 +238,6 @@ function EditUserForm({ user }: { user: User & { contacts?: number[] }; }) {
                     forceUpdate={forceUpdate}
                   />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
-                </Form.Group>
-                <Form.Group onClick={forceUpdate}>
-                  <Form.Label>Contacts</Form.Label>
-                  <TagsContainer
-                    defaultValue="Select a contact to add"
-                    type="contacts"
-                    tags={contactTags}
-                    removeTag={(tag) => removeTag(tag, contactTags, setContactTags)}
-                    addTag={(tag) => addTag(tag, contactTags, setContactTags)}
-                    forceUpdate={forceUpdate} />
                 </Form.Group>
                 <Form.Group className="form-group">
                   <Row className="pt-3">
