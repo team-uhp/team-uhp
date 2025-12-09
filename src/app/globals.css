@@ -437,6 +437,25 @@ img.padded {
   outline-offset: 2px;
 }
 
+#edit-user-form .btn-submit {
+  background-color: #0E4F6D;
+  border-color: #0E4F6D;
+  width: 200px;
+}
+
+#edit-user-form .btn-reset {
+  background-color: white;
+  border-color: #111613;
+  color: #111613;
+  width: 150px;
+}
+
+#edit-user-form .btn-reset:hover {
+  background-color: rgb(162, 20, 20);
+  border-color: rgb(162, 20, 20);
+  width: 150px;
+  color: white!important;
+}
 
 #add-opening-form .form-label {
   margin-top: 15px;
@@ -555,7 +574,7 @@ img.padded {
 }
 
 #opening-tags .custom-badge {
-  background-color: #0E4F6C!important; /* override bg if you want */
+  background-color: #0E4F6C!important;
   color: white;
   font-size: 0.9rem;
   cursor: pointer;

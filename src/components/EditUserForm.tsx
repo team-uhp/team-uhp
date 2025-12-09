@@ -129,7 +129,7 @@ function EditUserForm({ user }: { user: User }) {
   };
 
   return (
-    <Container className="py-3">
+    <Container className="py-3" id="edit-user-form">
       <Row className="justify-content-center">
         <Col xs={8}>
           <Col className="text-center">
@@ -239,15 +239,15 @@ function EditUserForm({ user }: { user: User }) {
                   />
                   <div className="invalid-feedback">{errors.skills?.message}</div>
                 </Form.Group>
-                <Form.Group className="form-group">
+                <Form.Group className="form-group" style={{ marginTop:'15px' }}>
                   <Row className="pt-3">
                     <Col>
-                      <Button type="submit" variant="primary">
+                      <Button type="submit" variant="primary" className="btn-submit">
                         Submit
                       </Button>
                     </Col>
                     <Col>
-                      <Button type="button" onClick={() => reset()} variant="warning" className="float-right">
+                      <Button type="button" onClick={() => reset()} variant="warning" className="float-right btn-reset">
                         Reset
                       </Button>
                     </Col>
