@@ -30,13 +30,23 @@ const ContactPage = async () => {
 
   return (
     <Container id={PageIDs.contactsPage} className="py-4 pt-5">
-      <Row>
-        <h1 className="py-3">Your Contacts</h1>
-        {contacts.map((contact) => (
-        <ContactCard contact={contact} key={`${contact.id}`} />
-      ))}
-      </Row>
-    </Container>
+    <Row className="d-flex justify-content-between align-items-center">
+      <h1 className="py-3">Your Contacts</h1>
+      <div className="py-3 text-muted">
+        Contacts: {contacts.length}
+      </div>
+    </Row>
+
+    <Row>
+      {contacts.length === 0 ? (
+        <p>You currently have no contacts to list.</p>
+      ) : (
+        contacts.map((contact) => (
+          <ContactCard contact={contact} key={contact.id} />
+        ))
+      )}
+    </Row>
+  </Container>
   );
 };
 
