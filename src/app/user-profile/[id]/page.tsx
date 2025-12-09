@@ -13,12 +13,14 @@ import { User } from '@prisma/client';
  * Renders User's profile page.
  * @param params is the profile to display.
  */
+
+type UserWithContacts = User & { contacts: User[] };
+
 const ProfilePage = async ({ params }: { params: Promise<{ id: number; }> }) => {
   const resolvedParams = await params;
   if (Number.isNaN(Number(resolvedParams.id))) {
     notFound();
   }
-
   // Protect the page, only logged in users can access it.
   console.log(resolvedParams.id);
   const session = await getServerSession(authOptions);
@@ -28,7 +30,11 @@ const ProfilePage = async ({ params }: { params: Promise<{ id: number; }> }) => 
     } | null,
   );
   // Get the profile data from database using the id from params
-  const profile: User | null = await prisma.user.findUnique({ where: { id: Number(resolvedParams.id) } });
+  const profile: UserWithContacts | null = await prisma.user.findUnique({
+    where: { id: Number(resolvedParams.id) },
+    include: { contacts: true },
+  });
+
   if (!profile) {
     notFound();
   }
