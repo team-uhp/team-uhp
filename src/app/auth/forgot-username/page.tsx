@@ -88,7 +88,7 @@ export default function ForgotUsername() {
               {submitted && (
                 <div className="text-center" style={{ padding: '2rem' }}>
                   <h3 style={{ color: '#024731', fontWeight: 'bold', paddingBottom: '1rem' }}>
-                    Please Check Your Email
+                    Please check your email to verify your account before logging in
                   </h3>
                   <p style={{ paddingBottom: '0.5rem' }}>
                     Your account details have been sent to the email address you provided.
