@@ -18,10 +18,10 @@ const NON_CLICKABLE_SEGMENTS = [
   'not-authorized',
   'passchange',
   'project-opening',
-  'project-page',
   'signup',
   'user-profile',
   'verify',
+  'auth',
 ];
 
 // Optional overrides for specific paths
@@ -32,6 +32,7 @@ const PATH_OVERRIDES: Record<string, { label: string; href?: string; clickable?:
   '/auth/signout': { label: 'Sign Out', clickable: false },
   '/auth/forgot-password': { label: 'Forgot Password', clickable: false },
   '/auth/forgot-username': { label: 'Forgot Username', clickable: false },
+  '/project-page': { label: 'Projects List', href: '/project-list', clickable: true},
 };
 
 // Static folder names for nicer labels

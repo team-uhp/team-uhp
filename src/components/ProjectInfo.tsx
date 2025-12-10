@@ -53,10 +53,18 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
       </Row>
 
       {/* Description */}
-      <Row className="mt-3">
+      <Row className="mt-3" >
         <Col>
           <strong>Description:</strong>
-          <div id="proj-descrip" style={{ whiteSpace: 'pre-line', marginTop: '0.5rem' }}>
+          <div
+            id="proj-descrip"
+            style={{
+              whiteSpace: 'pre-line',
+              marginTop: '0.5rem',
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere',
+            }}
+          >
             {project.descrip}
           </div>
         </Col>

@@ -164,7 +164,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
 
       reset();
       handleImgDel();
-      router.push('/project-list');
+      router.push(`/project-page/${proj.id}`);
     } catch {
       swal('Error', 'Something went wrong.', 'error');
     }
@@ -292,7 +292,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                 <Row className="pt-3" style={{ marginTop: '10px' }}>
                   <Col>
                     <Button type="submit" variant="primary" className="btn-submit">
-                      Submit
+                      Update
                     </Button>
                   </Col>
                   <Col>

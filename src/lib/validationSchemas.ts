@@ -30,7 +30,9 @@ export const EditUserSchema = Yup.object({
 });
 
 export const AddProjectSchema = Yup.object({
-  title: Yup.string().required('Title is required'),
+  title: Yup.string()
+    .required('Title is required')
+    .max(60, 'Title must be at most 60 characters'),
   descrip: Yup.string().required('Description is required'),
   members: Yup.array().of(Yup.number().defined()).default([]),
   admins: Yup.array().of(Yup.number().defined()).default([]),
@@ -41,7 +43,9 @@ export const AddProjectSchema = Yup.object({
 export const EditProjectSchema = Yup.object({
   id: Yup.number().required(),
   image: Yup.string(),
-  title: Yup.string().required(),
+  title: Yup.string()
+    .required()
+    .max(60, 'Title must be at most 60 characters'),
   descrip: Yup.string().required(),
   positions: Yup.array().of(Yup.number()).required(),
   members: Yup.array()

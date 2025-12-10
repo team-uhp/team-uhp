@@ -23,22 +23,26 @@ const ApplicationUser: React.FC<ApplicationAdminProps> = ({ applic, user }) => {
   const router = useRouter();
 
   return (
-    <Container fluid className="py-3">
+    <Container fluid className="py-3" style={{ marginBottom: '35px' }} id="application">
       <Row>
         <h2>Applicant:</h2>
         <p>{user.firstName} {user.lastName}</p>
       </Row>
       <Row>
         <h2>Application Text:</h2>
-        <p>{applic.application}</p>
+        <div style={{ whiteSpace: 'pre-wrap', fontSize: '0.9rem', color: '#333' }}>
+          {applic.application}
+        </div>
       </Row>
       <Row>
         <Col>
-            <Button variant="primary" href={`/project-opening/edit-application/${applic.id}`}>Edit Application</Button>
+          <Button variant="primary" href={`/project-opening/edit-application/${applic.id}`} style={{ marginTop: '30px' }}>Edit Application</Button>
         </Col>
         <Col>
           <Button
+            style={{ marginTop: '30px' }}
             type="button"
+            variant="danger"
             onClick={async (event) => {
               event.preventDefault();
               event.stopPropagation();
@@ -66,7 +70,7 @@ const ApplicationUser: React.FC<ApplicationAdminProps> = ({ applic, user }) => {
                   router.push(`/project-opening/application/${applic.id}`)
                 }
             }}}
-            className="float-right"
+            className="float-right btn-reset"
           >
             DELETE
           </Button>
