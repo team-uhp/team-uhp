@@ -32,9 +32,15 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
     },
   });
 
-
   const postedBy = project?.admins?.[0] || null;
   const isAdmin = project && session?.user && project.admins?.some(a => a.id === userId);
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { savedProjects: true },
+  });
+
+  const isInitiallyBookmarked = user?.savedProjects?.some(p => p.id === project?.id) ?? false;
 
   if (isAdmin) {
     return (
@@ -53,7 +59,13 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
           <Col lg={3}>
             <PostedByCard admin={postedBy} />
             <div style={{ marginTop: "10px" }}>
-            <BookmarkButton />
+              {project && userId && (
+               <BookmarkButton
+                userId={userId}
+                projectId={project.id}
+                isInitiallyBookmarked={isInitiallyBookmarked}
+              />
+              )}
             </div>
             <Link href={`/project-opening/add-opening/${(await params).id}`} passHref>
               <Button id="recruit-button">
@@ -85,7 +97,13 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
         <Col lg={3}>
           <PostedByCard admin={postedBy} />
           <div style={{ marginTop: "10px" }}>
-            <BookmarkButton />
+            {project && userId && (
+              <BookmarkButton
+                userId={userId}
+                projectId={project.id}
+                isInitiallyBookmarked={isInitiallyBookmarked}
+              />
+            )}
           </div>
         </Col>
       </Row>
