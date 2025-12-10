@@ -25,23 +25,23 @@ const HelpfulTools = () => (
         <p>
         </p>
         <p>
-          <a role="button" href="https://www.when2meet.com" class="w-10 btn btn-secondary">When2meet</a>
+          <a role="button" href="https://www.when2meet.com" className="w-10 btn btn-secondary">When2meet</a>
           : A convenient site for discovering what times team members are available for meetings or get togethers.
         </p>
         <p>
-          <a role="button" href="https://github.com" class="w-10 btn btn-secondary">GitHub</a>
+          <a role="button" href="https://github.com" className="w-10 btn btn-secondary">GitHub</a>
           : The most popular repository site, particularly for open source code.
         </p>
         <p>
-          <a role="button" href="https://resend.com" class="w-10 btn btn-secondary">Resend</a>
+          <a role="button" href="https://resend.com" className="w-10 btn btn-secondary">Resend</a>
           : A commonly recommended service for commercial automated emails.
         </p>
         <p>
-          <a role="button" href="https://vercel.com" class="w-10 btn btn-secondary">Vercel</a>
+          <a role="button" href="https://vercel.com" className="w-10 btn btn-secondary">Vercel</a>
           : A webapp hosting site that offers limited free hosting.
         </p>
         <p>
-          <a role="button" href="https://code.visualstudio.com" class="w-10 btn btn-secondary">VSCode</a>
+          <a role="button" href="https://code.visualstudio.com" className="w-10 btn btn-secondary">VSCode</a>
           : Free code editor with many plugins and convenient automated tools.
         </p>
       </Container>
