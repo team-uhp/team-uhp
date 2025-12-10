@@ -1,4 +1,4 @@
-import { Container } from "react-bootstrap";
+import { Container, Card } from "react-bootstrap";
 
 
 const HelpfulTools = () => (
@@ -23,23 +23,25 @@ const HelpfulTools = () => (
       >
         <h1>Helpful Tools</h1>
         <p>
-          <a href="https://www.when2meet.com">When2meet</a>
+        </p>
+        <p>
+          <a role="button" href="https://www.when2meet.com" class="w-10 btn btn-secondary">When2meet</a>
           : A convenient site for discovering what times team members are available for meetings or get togethers.
         </p>
         <p>
-          <a href="https://github.com">GitHub</a>
+          <a role="button" href="https://github.com" class="w-10 btn btn-secondary">GitHub</a>
           : The most popular repository site, particularly for open source code.
         </p>
         <p>
-          <a href="https://resend.com">Resend</a>
+          <a role="button" href="https://resend.com" class="w-10 btn btn-secondary">Resend</a>
           : A commonly recommended service for commercial automated emails.
         </p>
         <p>
-          <a href="https://vercel.com">Vercel</a>
+          <a role="button" href="https://vercel.com" class="w-10 btn btn-secondary">Vercel</a>
           : A webapp hosting site that offers limited free hosting.
         </p>
         <p>
-          <a href="https://code.visualstudio.com">VSCode</a>
+          <a role="button" href="https://code.visualstudio.com" class="w-10 btn btn-secondary">VSCode</a>
           : Free code editor with many plugins and convenient automated tools.
         </p>
       </Container>
