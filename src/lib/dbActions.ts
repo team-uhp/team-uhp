@@ -232,7 +232,7 @@ export async function editPosition(position: {
     redirect('/project-list/');
   }
 
-  const remainingPositions = await prisma.position.findMany({});
+  const remainingPositions = await prisma.position.findMany({ where: { projectId: position.project } });
 
   const updatedSkills = Array.from(new Set(remainingPositions.flatMap(p => p.skills)));
 
