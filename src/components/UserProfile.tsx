@@ -41,7 +41,7 @@ const UserProfile = async ({ user }: { user: UserWithContacts }) => {
 
   return (
     <Row>
-      <Col lg={3}>
+      <Col lg={3} className="user-left-col">
         <img
           src={user.image && user.image.trim() !== "" ? user.image : "/default-profile.jpg"}
           alt={`${user.firstName} ${user.lastName}`}
@@ -80,17 +80,13 @@ const UserProfile = async ({ user }: { user: UserWithContacts }) => {
       </Col>
       <Col lg={9} className='px-3'>
         <h2 className="mb-4">Projects</h2>
-          <Row className="g-4">
-            {projects.length === 0 && (
-              <p>This user is not part of any projects.</p>
-            )}
-
+         <div className="masonry-grid">
             {projects.map((project) => (
-              <Col key={project.id} xs={12} md={6} lg={6}>
+              <div key={project.id} className="masonry-item">
                 <UserProjectCard project={project} />
-              </Col>
+              </div>
             ))}
-          </Row>
+          </div>
       </Col>
       <Col>
         {

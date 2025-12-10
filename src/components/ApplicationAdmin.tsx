@@ -23,19 +23,22 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
   const router = useRouter();
 
   return (
-    <Container fluid className="py-3">
+    <Container fluid className="py-3" style={{ marginBottom: '35px' }}>
       <Row>
         <h2>Applicant:</h2>
         <p>{user.firstName} {user.lastName}</p>
       </Row>
       <Row>
         <h2>Application Text:</h2>
-        <p>{applic.application}</p>
+        <div style={{ whiteSpace: 'pre-wrap', fontSize: '0.9rem', color: '#333' }}>
+          {applic.application}
+        </div>
       </Row>
       <Row>
         <Col>
             <Button
             type="button"
+            style={{ marginTop: '30px' }}
             onClick={async (event) => {
               event.preventDefault();
               event.stopPropagation();
@@ -69,6 +72,8 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
         <Col>
           <Button
             type="button"
+            style={{ marginTop: '30px' }}
+            variant="danger"
             onClick={async (event) => {
               event.preventDefault();
               event.stopPropagation();

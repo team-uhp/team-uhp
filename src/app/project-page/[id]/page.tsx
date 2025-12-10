@@ -22,23 +22,30 @@ const ProjectPage = async ({ params }: { params: Promise<{ id: string; }> }) => 
   loggedInProtectedPage(session);
 
   const userId = Number(session?.user?.id);
-
   const project = await prisma.project.findUnique({
     where: { id: Number((await params).id) },
     include: {
       admins: {
         include: { projects: { select: { id: true } } },
       },
+      members: {
+        include: {
+          user: true, // needed to get the user object
+        },
+      },
     },
   });
 
-  const postedBy = project?.admins?.[0] || null;
-  const isAdmin = project && session?.user && project.admins?.some(a => a.id === userId);
+  const postedBy = project?.members
+    ?.map(m => m.user)
+    .find(u => project.admins.some(a => a.id === u.id)) || null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { savedProjects: true },
-  });
+    const isAdmin = project && session?.user && project.admins?.some(a => a.id === userId);
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { savedProjects: true },
+    });
 
   const isInitiallyBookmarked = user?.savedProjects?.some(p => p.id === project?.id) ?? false;
 

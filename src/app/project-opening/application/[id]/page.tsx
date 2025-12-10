@@ -56,7 +56,7 @@ const ApplicationPage = async ({ params }: { params: Promise<{
 
   if (applic.userId == user.id) {
     return (
-      <Container>
+      <Container style={{ marginTop: '25px' }}>
         <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
         <ApplicationUser
           user={user}
@@ -71,7 +71,7 @@ const ApplicationPage = async ({ params }: { params: Promise<{
   }
   else if ((applic.position.admins?.some((a) => a.id === user.id) ?? false) || (user.role === 'ADMIN')) {
     return (
-      <Container>
+      <Container style={{ marginTop: '25px' }}>
         <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
         <ApplicationAdmin
           user={user}
@@ -85,7 +85,7 @@ const ApplicationPage = async ({ params }: { params: Promise<{
     );
   }
   return (
-    <Container>
+    <Container style={{ marginTop: '25px' }}>
       <Link href={`/project-page/${applic.position.id ?? ''}`}>Back to Position</Link>
       <h1>
         Permissions denied.

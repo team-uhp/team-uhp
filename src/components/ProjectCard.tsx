@@ -73,8 +73,8 @@ const ProjectCard = ({ project }: { project: ProjectWithPositions }) => {
                 id="proj-descrip"
                 style={{ whiteSpace: 'pre-line' }}
               >
-                {project.descrip.length > 650
-                  ? project.descrip.slice(0, 650) + '...'
+                {project.descrip.length > 420
+                  ? project.descrip.slice(0, 420) + '...'
                   : project.descrip}
               </CardText>
               {/* Openings */}

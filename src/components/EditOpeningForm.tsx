@@ -254,9 +254,6 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                     </div>
                   </Form.Group>
                 )}
-
-
-
                 <Form.Group className="form-group mt-3" >
                   <Row>
                     <Col>
