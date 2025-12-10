@@ -2,6 +2,7 @@ import React from 'react';
 import { Project, Position } from '@prisma/client';
 import Link from 'next/link';
 import { Badge, Card, CardBody, CardFooter, CardHeader, CardText, Col, Container, Row } from 'react-bootstrap';
+import { splitCamelCase } from '@/utilities/format';
 
 /* Renders a single row in the Projects list. See project-list/page.tsx. */
 
@@ -99,7 +100,7 @@ const ProjectCard = ({ project }: { project: ProjectWithPositions }) => {
                   key={tag}
                   bg="info"
                 >
-                  {tag}
+                  {splitCamelCase(tag)}
                 </Badge>
               ))}
             </CardFooter>

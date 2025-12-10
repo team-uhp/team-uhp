@@ -14,6 +14,8 @@ import { Position, Skills } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import SkillSelect from './SkillSelect';
+import { splitCamelCase } from '@/utilities/format';
+import { groupedSkills } from '@/utilities/skills';
 
 type PositionFormValues = {
   id: number;
@@ -38,6 +40,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
   const [userId, setUserId] = useState<number>(0);
   const [selected, setSelected] = useState<{ from?: Date; to?: Date } | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedField, setSelectedField] = useState<string>('');
   const [selectedSkills, setSelectedSkills] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -50,8 +53,18 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
     if (position.skills && position.skills.length > 0) {
       const initialSkills = position.skills.reduce((acc, skill) => ({ ...acc, [skill]: true }), {} as Record<string, boolean>);
       setSelectedSkills(initialSkills);
+
+      // NEW: set selectedField to the first field that has a pre-selected skill
+      const fields = Object.keys(groupedSkills);
+      const firstFieldWithSkill = fields.find(field =>
+        groupedSkills[field].some(skill => initialSkills[skill])
+      );
+      if (firstFieldWithSkill) {
+        setSelectedField(firstFieldWithSkill);
+      }
     }
   }, [position.skills]);
+
 
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<PositionFormValues>({
     resolver: yupResolver(EditPositionSchema) as unknown as Resolver<PositionFormValues>,
@@ -185,19 +198,66 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
-                <Form.Group>
-                  <Form.Label>Skills Needed:</Form.Label>
-                  <div className="d-flex flex-wrap gap-2">
-                    {Object.values(Skills).map(skill => (
-                      <SkillSelect
-                        key={`skill-${skill}`}
-                        skill={skill}
-                        isSelected={selectedSkills[skill] || false}
-                        onChange={() => handleSkillToggle(skill)}
-                      />
+
+                {/* Field / Group Dropdown */}
+                <Form.Group className="mb-3">
+                  <Form.Label>Field / Group</Form.Label>
+                  <Form.Select
+                    value={selectedField}
+                    onChange={(e) => setSelectedField(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Please select a field...
+                    </option>
+                    {Object.keys(groupedSkills).map((field) => (
+                      <option key={field} value={field}>
+                        {splitCamelCase(field)}
+                      </option>
                     ))}
-                  </div>
+                  </Form.Select>
                 </Form.Group>
+
+                {/* Skills filtered by selected Field */}
+                {selectedField && (
+                  <Form.Group>
+                    <Form.Label>Skills Needed:</Form.Label>
+                    <div className="d-flex flex-wrap gap-2">
+                      {groupedSkills[selectedField].map((skill) => (
+                        <SkillSelect
+                          key={`skill-${skill}`}
+                          skill={skill}
+                          isSelected={selectedSkills[skill] || false}
+                          onChange={() => handleSkillToggle(skill)}
+                          label={splitCamelCase(skill)}
+                        />
+                      ))}
+                    </div>
+                  </Form.Group>
+                )}
+
+                {/* Currently Selected Skills */}
+                {Object.entries(selectedSkills).filter(([, isSelected]) => isSelected).length > 0 && (
+                  <Form.Group className="mt-3">
+                    <Form.Label>Selected Skills:</Form.Label>
+                    <div className="d-flex flex-wrap gap-2">
+                      {Object.entries(selectedSkills)
+                        .filter(([, isSelected]) => isSelected)
+                        .map(([skill]) => (
+                          <Button
+                            key={`selected-${skill}`}
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => handleSkillToggle(skill)}
+                          >
+                            {splitCamelCase(skill)}
+                          </Button>
+                        ))}
+                    </div>
+                  </Form.Group>
+                )}
+
+
+
                 <Form.Group className="form-group mt-3" >
                   <Row>
                     <Col>

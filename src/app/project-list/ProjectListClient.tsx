@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import { Project, Position, Skills } from "@prisma/client";
+import { groupedSkills } from "@/utilities/skills";
+import { splitCamelCase } from "@/utilities/format";
 
 type ProjectWithPositions = Project & { positions: Position[] };
 
@@ -16,92 +18,125 @@ export default function ProjectListClient({
   savedProjectIds?: number[];
 }) {
   const [searchInput, setSearchInput] = useState("");
-  const [skillInput, setSkillInput] = useState("");
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [skillTerm, setSkillTerm] = useState("");
+
+  const [selectedField, setSelectedField] = useState(""); // single field dropdown
+  const [selectedSkills, setSelectedSkills] = useState<Record<string, boolean>>({});
 
   const [showSavedOnly, setShowSavedOnly] = useState(false);
 
-  // Filtering logic
+  const handleSearch = () => setSearchTerm(searchInput);
+
+  // Reset all filters
+  const handleReset = () => {
+    setSearchInput("");
+    setSearchTerm("");
+    setSelectedField("");
+    setSelectedSkills({});
+    setShowSavedOnly(false);
+  };
+
+  // Skills to show in dropdown, filtered by selectedField
+  const skillsToShow = selectedField ? groupedSkills[selectedField] || [] : [];
+
+  // Array of selected skills for badges
+  const selectedSkillsArray = Object.entries(selectedSkills)
+    .filter(([, isSelected]) => isSelected)
+    .map(([skill]) => skill);
+
+  // Filtering logic: match any of selected skills
   const filtered = projects.filter(({ project }) => {
-    const matchesName = project.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-
+    const matchesName = project.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSkill =
-      skillTerm === "" || project.skills.includes(skillTerm as Skills);
-
-    const matchesSaved =
-      !showSavedOnly || savedProjectIds.includes(project.id);
-
+      selectedSkillsArray.length === 0 ||
+      selectedSkillsArray.some((skill) => project.skills.includes(skill as Skills));
+    const matchesSaved = !showSavedOnly || savedProjectIds.includes(project.id);
     return matchesName && matchesSkill && matchesSaved;
   });
 
-  const handleSearch = () => {
-    setSearchTerm(searchInput);
-    setSkillTerm(skillInput);
-  };
+  const toggleSkill = (skill: string) =>
+    setSelectedSkills((prev) => ({ ...prev, [skill]: !prev[skill] }));
 
-  // Convert enum keys to dropdown options
-  const allSkills = Object.values(Skills);
+  const removeSkill = (skill: string) =>
+    setSelectedSkills((prev) => ({ ...prev, [skill]: false }));
 
   return (
-    <Row style={{ marginBottom: '75px' }}>
+    <Row style={{ marginBottom: "75px" }} id="search-panel">
       {/* LEFT: Search Panel */}
       <Col lg={3}>
         <h5>Filters & Search</h5>
 
         {/* TEXT SEARCH */}
-        <label htmlFor="search">Search by title</label>
-        <input
+        <Form.Label htmlFor="search">Search by title</Form.Label>
+        <Form.Control
           type="text"
           id="search"
-          className="form-control mb-3"
           placeholder="Project name..."
+          className="mb-3"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
         />
 
-        {/* SKILL DROPDOWN */}
-        <label htmlFor="skills">Skill</label>
-        <select
-          id="skills"
-          className="form-select mb-3"
-          value={skillInput}
-          onChange={(e) => setSkillInput(e.target.value)}
+        {/* FIELD DROPDOWN */}
+        <Form.Label htmlFor="fields">Select Field</Form.Label>
+        <Form.Select
+          id="fields"
+          className="mb-3"
+          value={selectedField}
+          onChange={(e) => setSelectedField(e.target.value)}
         >
-          <option value="">All Skills</option>
-          {allSkills.map((skill) => (
-            <option key={skill} value={skill}>
-              {skill}
+          <option value="">-- Select a field --</option>
+          {Object.keys(groupedSkills).map((field) => (
+            <option key={field} value={field}>
+              {splitCamelCase(field)}
             </option>
           ))}
-        </select>
+        </Form.Select>
 
-        {/* SEARCH BUTTON */}
-        <button type="button" className="btn btn-secondary" onClick={handleSearch} style={{ marginBottom: '25px', marginTop: '12px' }}>
-          Search
-        </button>
+        {/* SKILLS DROPDOWN */}
+        {skillsToShow.length > 0 && (
+          <>
+            <Form.Label htmlFor="skills">Select Skills</Form.Label>
+            <Form.Select
+              id="skills"
+              className="mb-3"
+              value=""
+              onChange={(e) => toggleSkill(e.target.value)}
+            >
+              <option value="">-- Select a skill --</option>
+              {skillsToShow.map((skill) => (
+                <option key={skill} value={skill}>
+                  {splitCamelCase(skill)}
+                </option>
+              ))}
+            </Form.Select>
+          </>
+        )}
+
+        {/* SEARCH & RESET BUTTONS */}
+        <div className="d-flex justify-content-between mb-3" style={{ marginTop: '25px' }}>
+          <button type="button" className="btn btn-secondary" onClick={handleSearch}>
+            Search
+          </button>
+          <button type="button" className="btn btn-warning btn-reset" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
 
         {/* FILTER BY SAVED: Saved Projects Toggle */}
-          <div className="form-check form-switch mb-3">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="savedSwitch"
-              checked={showSavedOnly}
-              onChange={() => setShowSavedOnly(!showSavedOnly)}
-              style = {{
-                width: '3rem',    // default is ~2rem
-                height: '1.2rem', // default is ~1rem
-                marginRight: '10px'
-              }}
-            />
-            <label className="form-check-label" htmlFor="savedSwitch">
-              Filter by Saved Projects
-            </label>
-          </div>
+        <div className="form-check form-switch mb-3">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="savedSwitch"
+            checked={showSavedOnly}
+            onChange={() => setShowSavedOnly(!showSavedOnly)}
+            style={{ width: "3rem", height: "1.2rem", marginRight: "10px" }}
+          />
+          <label className="form-check-label" htmlFor="savedSwitch">
+            Filter by Saved Projects
+          </label>
+        </div>
       </Col>
 
       {/* RIGHT: Project Cards */}
@@ -115,7 +150,6 @@ export default function ProjectListClient({
           }}
         >
           <h2>Projects List</h2>
-
           <Link
             href="/project-page/add-project/"
             className="btn btn-primary"
@@ -129,7 +163,32 @@ export default function ProjectListClient({
           </Link>
         </div>
 
+       {/* SELECTED SKILLS AS REMOVABLE BADGES */}
+        {selectedSkillsArray.length > 0 && (
+          <div className="mb-4 d-flex flex-wrap" style={{ gap: "6px" }}>
+            <strong style={{ marginRight: "8px" }}>Selected Skills:</strong>
+            {selectedSkillsArray.map((skill) => (
+              <span
+                key={skill}
+                className="badge"
+                style={{
+                  backgroundColor: "#6c757d", // dark gray
+                  color: "#fff",
+                  padding: "6px 10px",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                  fontSize: "0.85rem",
+                }}
+                onClick={() => removeSkill(skill)}
+              >
+                {splitCamelCase(skill)} ×
+              </span>
+            ))}
+          </div>
+        )}
+
         <Row className="g-4">
+          {filtered.length === 0 && <p>No projects match the current filters.</p>}
           {filtered.map((item) => (
             <ProjectCard key={item.project.id} project={item.project} />
           ))}

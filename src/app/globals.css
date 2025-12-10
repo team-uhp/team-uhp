@@ -437,6 +437,10 @@ img.padded {
   outline-offset: 2px;
 }
 
+#edit-user-form .form-label {
+  margin-top: 15px;
+}
+
 #edit-user-form .btn-submit {
   background-color: #0E4F6D;
   border-color: #0E4F6D;
@@ -454,6 +458,22 @@ img.padded {
   background-color: rgb(162, 20, 20);
   border-color: rgb(162, 20, 20);
   width: 150px;
+  color: white!important;
+}
+
+#search-panel .btn-reset {
+  background-color: white;
+  border-color: #111613;
+  color: #111613;
+  width: 70px;
+  font-size: medium;
+}
+
+#search-panel .btn-reset:hover {
+  background-color: rgb(162, 20, 20);
+  border-color: rgb(162, 20, 20);
+  width: 70px;
+  font-size: medium;
   color: white!important;
 }
 
