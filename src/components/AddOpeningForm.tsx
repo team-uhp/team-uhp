@@ -16,6 +16,9 @@ import { Skills } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import SkillSelect from './SkillSelect';
+import { groupedSkills } from '@/utilities/skills'; 
+import { splitCamelCase } from '@/utilities/format';
+
 
 type PositionFormValues = {
   image?: string;
@@ -38,6 +41,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
   const [userId, setUserId] = useState<number>(0);
   const [selected, setSelected] = useState<DateRange | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedField, setSelectedField] = useState<string>('');
   const [selectedSkills, setSelectedSkills] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -198,24 +202,69 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>
-               
-
                 {errors.datestart && (
                 <div className="text-danger mt-2">{errors.datestart.message}</div>
                 )}
-                <Form.Group>
-                  <Form.Label>Skills Needed:</Form.Label>
-                  <div className="d-flex flex-wrap gap-2">
-                    {Object.values(Skills).map((skill) => (
-                      <SkillSelect
-                        key={`skill-${skill}`}
-                        skill={skill}
-                        isSelected={selectedSkills[skill] || false}
-                        onChange={() => handleSkillToggle(skill)}
-                      />
+
+
+                {/*Field / Group Dropdown */}
+                <Form.Group className="mb-3">
+                  <Form.Label>Field / Group</Form.Label>
+                  <Form.Select
+                    value={selectedField}
+                    onChange={(e) => setSelectedField(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Please select a field...
+                    </option>
+                    {Object.keys(groupedSkills).map((field) => (
+                      <option key={field} value={field}>
+                        {splitCamelCase(field)}
+                      </option>
                     ))}
-                  </div>
+                  </Form.Select>
                 </Form.Group>
+
+                {/*Skills filtered by selected Field */}
+                {selectedField && (
+                  <Form.Group>
+                    <Form.Label>Skills Needed:</Form.Label>
+                    <div className="d-flex flex-wrap gap-2">
+                      {groupedSkills[selectedField].map((skill) => (
+                        <SkillSelect
+                          key={`skill-${skill}`}
+                          skill={skill}
+                          isSelected={selectedSkills[skill] || false}
+                          onChange={() => handleSkillToggle(skill)}
+                          label={splitCamelCase(skill)}
+                        />
+                      ))}
+                    </div>
+                  </Form.Group>
+                )}
+
+                {/* Currently Selected Skills */}
+                {Object.entries(selectedSkills)
+                  .filter(([, isSelected]) => isSelected)
+                  .map(([skill]) => skill).length > 0 && (
+                  <Form.Group className="mt-3">
+                    <Form.Label>Selected Skills:</Form.Label>
+                    <div className="d-flex flex-wrap gap-2">
+                      {Object.entries(selectedSkills)
+                        .filter(([, isSelected]) => isSelected)
+                        .map(([skill]) => (
+                          <Button
+                            key={`selected-${skill}`}
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => handleSkillToggle(skill)} // allow deselect
+                          >
+                            {splitCamelCase(skill)}
+                          </Button>
+                        ))}
+                    </div>
+                  </Form.Group>
+                )}
                 <Form.Group className="form-group">
                   <Row className="pt-3" style={{ marginTop: '12px' }}>
                     <Col>
@@ -239,6 +288,7 @@ const AddOpeningForm: React.FC<AddOpeningFormProps> = ({ projectId }) => {
                     </Col>
                   </Row>
                 </Form.Group>
+
               </Form>
             </Card.Body>
           </Card>

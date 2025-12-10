@@ -1,7 +1,14 @@
 /* Renders a single skill for selection. See project-page/page.tsx. */
 import React from 'react';
 
-const SkillSelect = ({ skill, isSelected: isSelected, onChange }: { skill: string, isSelected: boolean, onChange: () => void }) => (
+type SkillSelectProps = {
+  skill: string;
+  isSelected: boolean;
+  onChange: () => void;
+  label?: string; // <-- add this
+};
+
+const SkillSelect: React.FC<SkillSelectProps> = ({ skill, isSelected, onChange, label }) => (
   <label 
     htmlFor={`skill-${skill}`}
     style={{
@@ -27,7 +34,7 @@ const SkillSelect = ({ skill, isSelected: isSelected, onChange }: { skill: strin
     />
     <span className="text-sm">
       {' '}
-      {skill}
+      {label || skill}
     </span>
   </label>
 );
