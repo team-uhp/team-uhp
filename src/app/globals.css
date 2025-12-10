@@ -437,6 +437,10 @@ img.padded {
   outline-offset: 2px;
 }
 
+#edit-user-form .form-label {
+  margin-top: 15px;
+}
+
 #edit-user-form .btn-submit {
   background-color: #0E4F6D;
   border-color: #0E4F6D;
