@@ -60,6 +60,10 @@ export default function ProjectListClient({
   const removeSkill = (skill: string) =>
     setSelectedSkills((prev) => ({ ...prev, [skill]: false }));
 
+  // Get date today for comparison
+  const now = new Date();
+  console.log(now.toISOString());
+
   return (
     <Row style={{ marginBottom: "75px" }} id="search-panel">
       {/* LEFT: Search Panel */}
@@ -190,7 +194,18 @@ export default function ProjectListClient({
         <Row className="g-4">
           {filtered.length === 0 && <p>No projects match the current filters.</p>}
           {filtered.map((item) => (
+            item.project.duedate >= now.toISOString() && (
             <ProjectCard key={item.project.id} project={item.project} />
+            )
+          ))}
+        </Row>
+
+        <Row className="g-4 pt-4">
+          <h3>Overdue Projects</h3>
+          {filtered.map((item) => (
+            item.project.duedate < now.toISOString() && (
+            <ProjectCard key={item.project.id} project={item.project} />
+            )
           ))}
         </Row>
       </Col>
