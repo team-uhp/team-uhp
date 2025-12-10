@@ -1,85 +1,19 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model User {
-  id             Int              @id @default(autoincrement())
-  email          String           @unique
-  username       String           @unique
-  password       String
-  role           Role             @default(USER)
-  firstName      String
-  lastName       String
-  image          String?
-  phone          String?
-  skills         Skills[]         @default([])
-  availability   Int[]
-  validation     Boolean          @default(false)
-  validcheck     String?
-  passchgcanx    String?
-  validpasschg   String?
-  applics        Application[]    @relation("UserApplics")
-  positions      Position[]       @relation("UserPosits")
-  projects       ProjectMembers[]
-  adminPositions Position[]       @relation("PositAdmins")
-  adminProjects  Project[]        @relation("ProjAdmins")
-  savedProjects  Project[]        @relation("SavedProjects")
-  User_A         User[]           @relation("UserContacts")
-  User_B         User[]           @relation("UserContacts")
-}
-
-model Project {
-  id        Int              @id @default(autoincrement())
-  image     String?
-  title     String
-  descrip   String
-  duedate   String
-  skills    Skills[]         @default([])
-  positions Position[]       @relation("ProjPosits")
-  members   ProjectMembers[]
-  admins    User[]           @relation("ProjAdmins")
-  savedBy   User[]           @relation("SavedProjects")
-}
-
-model Position {
-  id        Int           @id @default(autoincrement())
-  image     String?
-  title     String
-  descrip   String
-  skills    Skills[]      @default([])
-  datestart String
-  dateend   String
-  projectId Int?
-  memberId  Int?
-  applics   Application[] @relation("PositApplics")
-  member    User?         @relation("UserPosits", fields: [memberId], references: [id])
-  project   Project?      @relation("ProjPosits", fields: [projectId], references: [id])
-  admins    User[]        @relation("PositAdmins")
-}
-
-model Application {
-  id          Int       @id @default(autoincrement())
-  userId      Int?
-  positionId  Int?
-  application String?
-  position    Position? @relation("PositApplics", fields: [positionId], references: [id])
-  user        User?     @relation("UserApplics", fields: [userId], references: [id])
-}
-
-model ProjectMembers {
-  id        Int     @id @default(autoincrement())
-  userId    Int
-  projectId Int
-  role      String?
-  project   Project @relation(fields: [projectId], references: [id])
-  user      User    @relation(fields: [userId], references: [id])
-
-  @@unique([userId, projectId])
+  // for local development
+  url       = env("DATABASE_URL")
+  // Optional: only used for Vercel
+  //directUrl = env("POSTGRES_URL")
 }
 
 enum Role {
@@ -128,4 +62,79 @@ enum Skills {
   Unity
   Unreal
   XML
+}
+
+model User {
+  id              Int           @id @default(autoincrement())
+  email           String        @unique
+  username        String        @unique
+  password        String
+  role            Role          @default(USER)
+  firstName       String
+  lastName        String
+  image           String?
+  phone           String?
+  skills          Skills[]      @default([])
+  contacts        User[]        @relation("UserContacts")
+  contactsOf      User[]        @relation("UserContacts")
+  projects        ProjectMembers[]
+  adminProjects   Project[]     @relation("ProjAdmins")
+  positions       Position[]    @relation("UserPosits")
+  adminPositions  Position[]    @relation("PositAdmins")
+  applics         Application[] @relation("UserApplics")
+  availability    Int[]
+  validation      Boolean       @default(false)
+  validcheck      String?
+  passchgcanx     String?
+  validpasschg    String?
+  savedProjects   Project[]     @relation("SavedProjects")
+}
+
+model Project {
+  id        Int         @id @default(autoincrement())
+  image     String?
+  title     String
+  descrip   String
+  positions Position[]  @relation("ProjPosits")
+  members   ProjectMembers[]
+  admins    User[]      @relation("ProjAdmins")
+  duedate   String
+  skills    Skills[]    @default([])
+  savedBy   User[]      @relation("SavedProjects")
+}
+
+model Position {
+  id          Int       @id @default(autoincrement())
+  image       String?
+  title       String
+  descrip     String
+  skills      Skills[]  @default([])
+  datestart   String
+  dateend     String
+  project     Project?  @relation("ProjPosits", fields: [projectId], references: [id])
+  projectId   Int?
+  admins      User[]    @relation("PositAdmins")
+  member      User?     @relation("UserPosits", fields: [memberId], references: [id])
+  memberId    Int?
+  applics     Application[] @relation("PositApplics")
+}
+
+model Application {
+  id          Int       @id @default(autoincrement())
+  user        User?     @relation("UserApplics", fields: [userId], references: [id])
+  userId      Int?
+  position    Position? @relation("PositApplics", fields: [positionId], references: [id])
+  positionId  Int?
+  application String?
+}
+
+model ProjectMembers {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  role      String?
+
+  @@unique([userId, projectId])
 }
