@@ -21,14 +21,15 @@ const ProjectListPage = async () => {
   const projects = (await prisma.project.findMany({
     include: { positions: true },
   })) as ProjectWithPositions[];
-
+  
   const sessionUser = session?.user as { id: string };
   const user = await prisma.user.findUnique({
     where: { id: Number(sessionUser.id) },
-    select: { skills: true },
+    select: { skills: true, savedProjects: { select: { id: true } } },
   });
 
   const userSkills: Skills[] = user?.skills || [];
+  const savedProjectIds: number[] = user?.savedProjects.map((p) => p.id) || [];
 
   const sortedProjs = projects
     .map((project) => ({
@@ -39,7 +40,7 @@ const ProjectListPage = async () => {
 
   return (
     <Container id={PageIDs.projectsList} className="py-3">
-      <ProjectListClient projects={sortedProjs} />
+      <ProjectListClient projects={sortedProjs} savedProjectIds={savedProjectIds} />
     </Container>
   );
 };
