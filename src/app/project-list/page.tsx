@@ -38,7 +38,7 @@ const ProjectListPage = async () => {
     .sort((a, b) => b.matches - a.matches);
 
   return (
-    <Container id={PageIDs.projectsList} className="py-3">
+    <Container id={PageIDs.projectsList} className="py-5">
       <ProjectListClient projects={sortedProjs} />
     </Container>
   );

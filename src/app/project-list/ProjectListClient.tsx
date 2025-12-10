@@ -39,6 +39,10 @@ export default function ProjectListClient({
   // Convert enum keys to dropdown options
   const allSkills = Object.values(Skills);
 
+  // Get date today for comparison
+  const now = new Date();
+  console.log(now.toISOString());
+
   return (
     <Row>
       {/* LEFT: Search Panel */}
@@ -105,7 +109,18 @@ export default function ProjectListClient({
 
         <Row className="g-4">
           {filtered.map((item) => (
+            item.project.duedate >= now.toISOString() && (
             <ProjectCard key={item.project.id} project={item.project} />
+            )
+          ))}
+        </Row>
+
+        <Row className="g-4 pt-4">
+          <h3>Overdue Projects</h3>
+          {filtered.map((item) => (
+            item.project.duedate < now.toISOString() && (
+            <ProjectCard key={item.project.id} project={item.project} />
+            )
           ))}
         </Row>
       </Col>
