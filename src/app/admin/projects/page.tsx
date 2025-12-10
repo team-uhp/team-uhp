@@ -23,7 +23,7 @@ const ProjectsAdminPage = async () => {
           <Col lg={11}>
             <h1>List Projects Admin</h1>
             {/* Wrap table in scrollable div */}
-            <div style={{ overflowX: 'auto' }}>
+            <div style={{ overflowY: 'scroll', overflowX: 'auto', height: '65vh' }}>
               <Table striped bordered hover>
                 <thead>
                   <tr>
