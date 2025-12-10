@@ -1,6 +1,7 @@
 import { Skills } from "@prisma/client";
 
 export const groupedSkills: Record<string, Skills[]> = {
+  Other: [Skills.other],
   Art: [
     Skills.DigitalArt,
     Skills.Illustration,
