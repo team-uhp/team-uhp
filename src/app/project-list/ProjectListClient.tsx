@@ -10,14 +10,18 @@ type ProjectWithPositions = Project & { positions: Position[] };
 
 export default function ProjectListClient({
   projects,
+  savedProjectIds = [],
 }: {
   projects: Array<{ project: ProjectWithPositions; matches: number }>;
+  savedProjectIds?: number[];
 }) {
   const [searchInput, setSearchInput] = useState("");
   const [skillInput, setSkillInput] = useState("");
 
   const [searchTerm, setSearchTerm] = useState("");
   const [skillTerm, setSkillTerm] = useState("");
+
+  const [showSavedOnly, setShowSavedOnly] = useState(false);
 
   // Filtering logic
   const filtered = projects.filter(({ project }) => {
@@ -28,7 +32,10 @@ export default function ProjectListClient({
     const matchesSkill =
       skillTerm === "" || project.skills.includes(skillTerm as Skills);
 
-    return matchesName && matchesSkill;
+    const matchesSaved =
+      !showSavedOnly || savedProjectIds.includes(project.id);
+
+    return matchesName && matchesSkill && matchesSaved;
   });
 
   const handleSearch = () => {
@@ -44,7 +51,7 @@ export default function ProjectListClient({
   console.log(now.toISOString());
 
   return (
-    <Row>
+    <Row style={{ marginBottom: '75px' }}>
       {/* LEFT: Search Panel */}
       <Col lg={3}>
         <h5>Filters & Search</h5>
@@ -77,9 +84,28 @@ export default function ProjectListClient({
         </select>
 
         {/* SEARCH BUTTON */}
-        <button type="button" className="btn btn-secondary" onClick={handleSearch}>
+        <button type="button" className="btn btn-secondary" onClick={handleSearch} style={{ marginBottom: '25px', marginTop: '12px' }}>
           Search
         </button>
+
+        {/* FILTER BY SAVED: Saved Projects Toggle */}
+          <div className="form-check form-switch mb-3">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="savedSwitch"
+              checked={showSavedOnly}
+              onChange={() => setShowSavedOnly(!showSavedOnly)}
+              style = {{
+                width: '3rem',    // default is ~2rem
+                height: '1.2rem', // default is ~1rem
+                marginRight: '10px'
+              }}
+            />
+            <label className="form-check-label" htmlFor="savedSwitch">
+              Filter by Saved Projects
+            </label>
+          </div>
       </Col>
 
       {/* RIGHT: Project Cards */}

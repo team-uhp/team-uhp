@@ -87,6 +87,7 @@ model User {
   validcheck      String?
   passchgcanx     String?
   validpasschg    String?
+  savedProjects   Project[]     @relation("SavedProjects")
 }
 
 model Project {
@@ -99,6 +100,7 @@ model Project {
   admins    User[]      @relation("ProjAdmins")
   duedate   String
   skills    Skills[]    @default([])
+  savedBy   User[]      @relation("SavedProjects")
 }
 
 model Position {
