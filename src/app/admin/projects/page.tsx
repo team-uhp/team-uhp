@@ -18,27 +18,30 @@ const ProjectsAdminPage = async () => {
 
   return (
     <main>
-      <Container id="list" className="py-3">
-        <Row>
-          <Col>
+      <Container fluid id="list" className="py-3">
+        <Row className="justify-content-center">
+          <Col lg={11}>
             <h1>List Projects Admin</h1>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Id #</th>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Due Date</th>
-                  <th>Image</th>
-                  <th>Edit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.map((project) => (
-                  <ProjectsList key={project.id} {...project} />
-                ))}
-              </tbody>
-            </Table>
+            {/* Wrap table in scrollable div */}
+            <div style={{ overflowX: 'auto' }}>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th style={{ width: '50px' }}>Id #</th>
+                    <th style={{ width: '150px' }}>Title</th>
+                    <th style={{ maxWidth: '300px', wordBreak: 'break-word' }}>Description</th>
+                    <th style={{ width: '120px' }}>Due Date</th>
+                    <th style={{ width: '100px' }}>Image</th>
+                    <th style={{ width: '80px' }}>Edit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projects.map((project) => (
+                    <ProjectsList key={project.id} {...project} />
+                  ))}
+                </tbody>
+              </Table>
+            </div>
           </Col>
         </Row>
       </Container>

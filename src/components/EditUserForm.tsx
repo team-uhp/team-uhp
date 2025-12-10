@@ -307,7 +307,7 @@ function EditUserForm({ user }: { user: User }) {
                 <Form.Group className="mt-3">
                   <Row>
                     <Col>
-                      <Button type="submit" variant="primary" className="btn-submit">Submit</Button>
+                      <Button type="submit" variant="primary" className="btn-submit">Update</Button>
                     </Col>
                     <Col className="text-end">
                       <Button type="button" onClick={handleReset} className="btn-reset" variant="warning">Revert</Button>

@@ -230,7 +230,7 @@ const AddProjectForm: React.FC = () => {
                   <textarea
                     {...register('descrip')}
                     className={`form-control ${errors.descrip ? 'is-invalid' : ''}`}
-                    style={{ height: '300px' }}
+                    style={{ height: '400px' }}
                   />
                   <div className="invalid-feedback">{errors.descrip?.message}</div>
                 </Form.Group>

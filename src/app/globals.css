@@ -600,3 +600,25 @@ img.padded {
   cursor: pointer;
   padding: 10px 30px;
 }
+
+.masonry-grid {
+  column-count: 2;
+  column-gap: 1.5rem;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 992px) {
+  .masonry-grid {
+    column-count: 1;
+  }
+}
+
+.user-left-col h6,
+.user-left-col h1 {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
