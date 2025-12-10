@@ -2,6 +2,7 @@ import React from 'react';
 import { Badge } from 'react-bootstrap';
 import { Project, Position } from '@prisma/client';
 import Link from 'next/link';
+import { splitCamelCase } from '@/utilities/format';
 
 type ProjectWithPositions = Project & { positions: Position[] };
 
@@ -87,7 +88,7 @@ const UserProjectCard = ({ project }: { project: ProjectWithPositions }) => {
                 className="px-2 py-1"
                 style={{ borderRadius: '5px' }}
               >
-                {skill}
+                {splitCamelCase(skill)}
               </Badge>
             ))
           )}

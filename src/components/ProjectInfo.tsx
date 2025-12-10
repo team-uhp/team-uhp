@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Badge, Container, Row, Col } from 'react-bootstrap';
 import MemberName from './MemberName';
 import OpeningTitle from './OpeningTitle';
+import { splitCamelCase } from '@/utilities/format';
 
 /** Renders the information page for a Project. */
 const ProjectInfo = async ({ params }: { params: { id: number } }) => {
@@ -112,7 +113,7 @@ const ProjectInfo = async ({ params }: { params: { id: number } }) => {
           {Array.isArray(project.skills) && project.skills.length > 0 ? (
             project.skills.map((tag) => (
               <Badge className="mx-1" key={tag} bg="info">
-                {tag}
+                {splitCamelCase(tag)}
               </Badge>
             ))
           ) : (
