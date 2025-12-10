@@ -6,6 +6,7 @@ import { Badge, Button, Col, Row } from 'react-bootstrap';
 import { Project, User, Position } from '@prisma/client';
 import UserProjectCard from './UserProjectCard';
 import ContactButton from '@/components/ContactButton';
+import { splitCamelCase } from '@/utilities/format';
 
 type ProjectWithPositions = Project & { positions: Position[] };
 type UserWithContacts = User & { contacts: User[] };
@@ -36,7 +37,6 @@ const UserProfile = async ({ user }: { user: UserWithContacts }) => {
 
   const isInitiallyContact = sessionUser?.contacts.some(c => c.id === user.id) ?? false;
 
-  
   // Get profile picture path
 
   return (
@@ -68,7 +68,7 @@ const UserProfile = async ({ user }: { user: UserWithContacts }) => {
         </h6>
         <h6>
           Skills:&nbsp;
-          {user.skills.join(', ')}
+          {user.skills.map(skill => splitCamelCase(skill)).join(', ')}
         </h6>
         {sessionUserId !== user.id && (
           <ContactButton
