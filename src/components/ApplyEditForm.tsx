@@ -87,7 +87,7 @@ const ApplyEditForm: React.FC<ApplyEditFormProps> = ({ applic }) => {
             href={`/project-opening/${applic.positionId}`}
             style={{ marginBottom: '12px', display: 'inline-block' }}
           >
-            Back to Opening
+            &lt;&nbsp;Back to Opening
           </Link>
           <Card>
             <Card.Body>

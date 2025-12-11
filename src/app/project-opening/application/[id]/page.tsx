@@ -48,7 +48,12 @@ const ApplicationPage = async ({ params }: { params: Promise<{ id: number }> }) 
   if (applicantUser.id === currentUser.id) {
     return (
       <Container style={{ marginTop: '25px' }}>
-        <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
+          <Link
+            href={`/project-opening/${applic.position.project?.id ?? ''}`}
+            style={{ color: '#111613', textDecoration: 'underline' }}
+          >
+            &lt;&nbsp;Back to Opening
+          </Link>
         <ApplicationUser
           user={applicantUser}
           applic={{
@@ -65,7 +70,12 @@ const ApplicationPage = async ({ params }: { params: Promise<{ id: number }> }) 
     ) {
         return (
           <Container style={{ marginTop: '25px' }}>
-            <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
+              <Link
+                href={`/project-opening/${applic.position.project?.id ?? ''}`}
+                style={{ color: '#111613', textDecoration: 'underline' }}
+              >
+                  &lt;&nbsp;Back to Opening
+              </Link>
             <ApplicationAdmin
               user={applicantUser}
               applic={{
@@ -79,7 +89,7 @@ const ApplicationPage = async ({ params }: { params: Promise<{ id: number }> }) 
       }
       return (
         <Container style={{ marginTop: '25px' }}>
-          <Link href={`/project-page/${applic.position.id ?? ''}`}>Back to Position</Link>
+          <Link href={`/project-page/${applic.position.id ?? ''}`}>&lt;Back to Position</Link>
           <h1>Permissions denied.</h1>
           <h2>You do not have permissions to view this application.</h2>
         </Container>

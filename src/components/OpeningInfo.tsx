@@ -2,24 +2,26 @@ import React from 'react';
 import { prisma } from '@/lib/prisma';
 import { ComponentIDs } from '@/utilities/ids';
 import { notFound } from 'next/navigation';
-import { Badge, Container, Row, Col } from 'react-bootstrap';
+import { Badge, Container, Row, Col, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import MemberName from './MemberName';
 import { splitCamelCase } from '@/utilities/format';
 
 /** Renders the information page for a Position/Opening. */
-const OpeningInfo = async ({ params }: { params: { id: number } }) => {
+const OpeningInfo = async ({ params, currentUserId }: { params: { id: number }, currentUserId?: number }) => {
   if (Number.isNaN(Number(params.id))) notFound();
 
   const position = await prisma.position.findUnique({ 
     where: { id: Number(params.id) },
     include: { 
-      project: { select: { id: true, title: true } } 
+      project: { select: { id: true, title: true } },
+      applics: { include: { user: true } } // include applications to check if current user applied
     }
-   });
+  });
    
   if (!position) notFound();
 
+  //  Format dates 
   const sdate = new Date(position.datestart);
   const edate = new Date(position.dateend);
   const sday = sdate.getDate().toString().padStart(2, '0');
@@ -29,6 +31,10 @@ const OpeningInfo = async ({ params }: { params: { id: number } }) => {
   const emon = (edate.getMonth() + 1).toString().padStart(2, '0');
   const eyear = edate.getFullYear();
 
+  //  Check if the logged-in user already applied 
+  const myApplication = currentUserId 
+    ? position.applics.find(app => app.userId === currentUserId) 
+    : null;
 
   return (
     <Container id={ComponentIDs.projectInfo} className="py-3">
@@ -36,16 +42,11 @@ const OpeningInfo = async ({ params }: { params: { id: number } }) => {
       <Row className="justify-content-center">
         <h1
           className="title mt-2"
-          style={{
-            fontFamily: 'Poppins, sans-serif',
-            fontWeight: 600,
-            fontSize: '1.8rem',
-            marginBottom: '0.5rem'
-          }}
+          style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '1.8rem', marginBottom: '0.5rem' }}
         >
           {position.title}
         </h1>
-         {position.project && (
+        {position.project && (
           <h5 style={{ fontWeight: 400, color: '#555', marginBottom: '0.5rem' }}>
             Project: <Link href={`/project-page/${position.project.id}`} style={{ color: '#008091' }}>
               {position.project.title}
@@ -72,16 +73,22 @@ const OpeningInfo = async ({ params }: { params: { id: number } }) => {
         </Col>
       </Row>
 
-      {/* Assigned Member / Apply Link */}
+      {/* Assigned Member / Apply or View My Application */}
       <Row className="mt-3">
         <Col>
           <strong>Position Opening:</strong>
           <div style={{ marginTop: '0.5rem' }}>
             {position.memberId ? (
               <MemberName key={`User-${position.memberId}`} userid={position.memberId} />
+            ) : myApplication ? (
+              // View My Application button
+              <Link href={`/project-opening/application/${myApplication.id}`}>
+                <Button id="view-application-button">View My Application</Button>
+              </Link>
             ) : (
+              // Apply for this opening button
               <Link href={`/project-opening/apply-opening/${position.id}?id=${position.id}`}>
-                Apply for this opening
+                <Button id="apply-button">Apply for this opening</Button>
               </Link>
             )}
           </div>
