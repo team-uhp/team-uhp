@@ -34,7 +34,7 @@ const ApplicationUser: React.FC<ApplicationAdminProps> = ({ applic, user }) => {
           {applic.application}
         </div>
       </Row>
-      <Row style={{ marginTop: '20px', gap: '10px' }}>
+      <Row style={{ marginTop: '20px', alignItems: 'center' }}>
         <Col xs="auto">
           <Button
             id="edit-application-button"
@@ -43,7 +43,8 @@ const ApplicationUser: React.FC<ApplicationAdminProps> = ({ applic, user }) => {
             Edit Application
           </Button>
         </Col>
-        <Col xs="auto">
+
+        <Col className="d-flex justify-content-end">
           <Button
             id="delete-application-button"
             type="button"

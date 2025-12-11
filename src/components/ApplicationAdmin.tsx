@@ -35,7 +35,7 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
           {applic.application}
         </div>
       </Row>
-      <Row style={{ marginTop: '20px', gap: '10px' }}>
+      <Row style={{ marginTop: '20px', alignItems: 'center' }}>
         <Col xs="auto">
           <Button
             type="button"
@@ -70,7 +70,8 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
             Accept
           </Button>
         </Col>
-        <Col xs="auto">
+
+        <Col className="d-flex justify-content-end">
           <Button
             type="button"
             variant="danger"
