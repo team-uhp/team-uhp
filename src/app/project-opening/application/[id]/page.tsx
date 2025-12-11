@@ -10,39 +10,30 @@ import ApplicationAdmin from '@/components/ApplicationAdmin';
 import ApplicationUser from '@/components/ApplicationUser';
 
 /**
- * Renders project opening page.
- * @param params is the project to pull openings to display.
+ * Page for viewing a single application for a project opening.
+ * Only the applicant or project admins (or global ADMIN) can see it.
  */
-const ApplicationPage = async ({ params }: { params: Promise<{
-  id: number;
-}> }) => {
-  // Protect the page, only logged in users can access it.
+const ApplicationPage = async ({ params }: { params: Promise<{ id: number }> }) => {
   const session = await getServerSession(authOptions) as {
     user: { email: string; id: string; randomKey: string };
   } | null;
 
-  if (!session) {
-    return NotFound();
-  }
+  if (!session) return NotFound();
 
   loggedInProtectedPage(session);
 
-  const user = await prisma.user.findUnique({ where: { id: Number(session.user.id) }})
-  if (!user) {
-    return NotFound();
-  }
+  const currentUser = await prisma.user.findUnique({ where: { id: Number(session.user.id) } });
+  if (!currentUser) return NotFound();
 
   const resolvedParams = await params;
+
   const applic = await prisma.application.findUnique({
     where: { id: Number(resolvedParams.id) },
     include: {
+      user: true,
       position: {
         include: {
-          applics: {
-            include: {
-              user: true,
-            },
-          },
+          applics: { include: { user: true } },
           admins: true,
           project: true,
         },
@@ -50,16 +41,16 @@ const ApplicationPage = async ({ params }: { params: Promise<{
     },
   });
 
-  if (!applic || !applic.position) {
-    return NotFound();
-  }
+  if (!applic || !applic.position || !applic.user) return NotFound();
 
-  if (applic.userId == user.id) {
+  const applicantUser = applic.user;
+
+  if (applicantUser.id === currentUser.id) {
     return (
       <Container style={{ marginTop: '25px' }}>
         <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
         <ApplicationUser
-          user={user}
+          user={applicantUser}
           applic={{
             ...applic,
             projId: applic.position?.project?.id ?? 0,
@@ -68,33 +59,31 @@ const ApplicationPage = async ({ params }: { params: Promise<{
         />
       </Container>
     );
-  }
-  else if ((applic.position.admins?.some((a) => a.id === user.id) ?? false) || (user.role === 'ADMIN')) {
-    return (
-      <Container style={{ marginTop: '25px' }}>
-        <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
-        <ApplicationAdmin
-          user={user}
-          applic={{
-            ...applic,
-            projId: applic.position?.project?.id ?? 0,
-            application: applic.application ?? '',
-          }}
-        />
-      </Container>
-    );
-  }
-  return (
-    <Container style={{ marginTop: '25px' }}>
-      <Link href={`/project-page/${applic.position.id ?? ''}`}>Back to Position</Link>
-      <h1>
-        Permissions denied.
-      </h1>
-      <h2>
-        You do not have permissions to view this application.
-      </h2>
-    </Container>
-  );
-};
+    } else if (
+      (applic.position.admins?.some((a) => a.id === currentUser.id) ?? false) ||
+      currentUser.role === 'ADMIN'
+    ) {
+        return (
+          <Container style={{ marginTop: '25px' }}>
+            <Link href={`/project-opening/${applic.position.project?.id ?? ''}`}>Back to Opening</Link>
+            <ApplicationAdmin
+              user={applicantUser}
+              applic={{
+                ...applic,
+                projId: applic.position?.project?.id ?? 0,
+                application: applic.application ?? '',
+              }}
+            />
+          </Container>
+        );
+      }
+      return (
+        <Container style={{ marginTop: '25px' }}>
+          <Link href={`/project-page/${applic.position.id ?? ''}`}>Back to Position</Link>
+          <h1>Permissions denied.</h1>
+          <h2>You do not have permissions to view this application.</h2>
+        </Container>
+      );
+    };
 
 export default ApplicationPage;
