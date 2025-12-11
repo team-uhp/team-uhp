@@ -384,6 +384,15 @@ img.padded {
   font-size: 0.9rem!important;
 }
 
+#delete-application-button {
+  margin-top: 10px !important;
+  width: auto !important;
+  color: white !important;
+  border-radius: 0.2rem !important;
+  font-size: 0.9rem !important;
+  border-color: transparent!important;
+}
+
 #apply-button,
 #view-application-button,
 #edit-application-button {
@@ -391,7 +400,7 @@ img.padded {
   width: auto !important;
   background-color: #0E4F6C !important;
   color: white !important;
-  border-radius: '0.2rem' !important;
+  border-radius: 0.2rem !important;
   border-color: #0E4F6C !important;
   font-size: 0.9rem !important;
 }
