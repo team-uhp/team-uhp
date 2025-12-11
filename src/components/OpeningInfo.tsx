@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Badge, Container, Row, Col } from 'react-bootstrap';
 import Link from 'next/link';
 import MemberName from './MemberName';
+import { splitCamelCase } from '@/utilities/format';
 
 /** Renders the information page for a Position/Opening. */
 const OpeningInfo = async ({ params }: { params: { id: number } }) => {
@@ -95,7 +96,7 @@ const OpeningInfo = async ({ params }: { params: { id: number } }) => {
             {position.skills.length > 0 ? (
               position.skills.map((tag) => (
                 <Badge className="mx-1" key={tag} bg="info">
-                  {tag}
+                  {splitCamelCase(tag)}
                 </Badge>
               ))
             ) : (

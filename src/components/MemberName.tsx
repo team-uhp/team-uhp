@@ -13,27 +13,29 @@ const MemberName = async ({ userid }: { userid: number }) => {
   }
 
   return (
-    <Link
-      href={`/user-profile/${member.id}`}
-      style={{ textDecoration: 'none' }}
-    >
-      <Button variant="primary" className="member-button">
-        <img
-          src={member.image || "/default-profile.jpg"}
-          alt={`${member.firstName} ${member.lastName}`}
-          width={32}
-          height={32}
-          style={{
-            borderRadius: "50%",
-            objectFit: "cover",
-            marginRight: "5px",
-          }}
-        />
-        {member.firstName}
-        &nbsp;
-        {member.lastName}
-      </Button>
-    </Link>
+    <div id="membername-wrapper">
+      <Link
+        href={`/user-profile/${member.id}`}
+        style={{ textDecoration: 'none' }}
+      >
+        <Button className="member-button">
+          <img
+            src={member.image || "/default-profile.jpg"}
+            alt={`${member.firstName} ${member.lastName}`}
+            width={32}
+            height={32}
+            style={{
+              borderRadius: "50%",
+              objectFit: "cover",
+              marginRight: "5px",
+            }}
+          />
+          {member.firstName}
+          &nbsp;
+          {member.lastName}
+        </Button>
+      </Link>
+    </div>
   );
 };
 
