@@ -596,7 +596,21 @@ img.padded {
   font-weight: 500;
   font-size: 0.95rem;
   padding: 4px 12px;
-  background-color: #F0F0F0FF;
+  background-color: #F0F0F0FF!important;
+  border-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#membername-wrapper .member-button {
+  background-color: #F0F0F0;
+  color: #111613;
+  border-radius: 22px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 4px 12px;
   border-color: transparent;
   display: inline-flex;
   align-items: center;
@@ -604,7 +618,7 @@ img.padded {
 }
 
 #opening-tags .custom-badge {
-  background-color: #0E4F6C!important;
+  background-color: #008091!important;
   color: white;
   font-size: 0.9rem;
   cursor: pointer;
