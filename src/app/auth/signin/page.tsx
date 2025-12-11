@@ -112,12 +112,12 @@ export default function SignInPage() {
             </Button>
           </Form>
 
-          <Row style={{ marginTop: '10px' }}>
-            <Col>
+         <Row style={{ marginTop: '10px' }}>
+            <Col className="px-0">
               <div className="mt-4 text-center" style={{ color: '#024731' }}>
                 <a href="/auth/signup" style={{ color: '#024731', fontWeight: 600 }}>
                   Create account
-                </a>{' '}
+                </a>
               </div>
             </Col>
             <Col>
@@ -125,27 +125,26 @@ export default function SignInPage() {
                 <Col xs="auto" className="d-flex justify-content-center">
                   <div
                     style={{
-                      width: '2px',
+                      width: '1.5px',
                       backgroundColor: '#024731',
                       height: '70px',
                       marginTop: '15px',
-                      
                     }}
                   />
                 </Col>
-                <Col className="text-start" style={{ marginTop: '21px' }}>
+
+                <Col className="text-center" style={{ marginTop: '21px' }}>
                   <div>
-                    <a href="/auth/forgot-password" style={{ color: '#024731', fontWeight: 600 }}>
+                    <a href="/auth/forgot-password" style={{ color: '#111613', fontWeight: 350 }}>
                       Forgot Password?
                     </a>
                   </div>
                   <div style={{ marginTop: '0.5rem' }} />
                   <div>
-                    <a href="/auth/forgot-username" style={{ color: '#024731', fontWeight: 600 }}>
+                    <a href="/auth/forgot-username" style={{ color: '#111613', fontWeight: 350 }}>
                       Forgot Username?
                     </a>
                   </div>
-                  <div style={{ marginTop: '0.5rem' }} />
                 </Col>
               </Row>
             </Col>

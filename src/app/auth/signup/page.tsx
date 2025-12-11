@@ -61,7 +61,7 @@ export default function SignUpPage() {
       reset();
 
       // Redirect after short delay
-      setTimeout(() => router.push('/auth/signin'), 1500);
+      setTimeout(() => router.push('/auth/signin'), 4000);
     } catch (err: unknown) {
       console.error('Signup error:', err);
       if (err instanceof Error) {
@@ -182,7 +182,7 @@ export default function SignUpPage() {
             )}
             {success && (
               <p style={{ color: 'green', textAlign: 'center', marginBottom: '1rem' }}>
-                Account created! Redirecting…
+                Account created! Please check your email to verify your account.
               </p>
             )}
 
@@ -203,7 +203,7 @@ export default function SignUpPage() {
           </Form>
 
           <div className="mt-4 text-center" style={{ color: '#024731' }}>
-            <a href="/auth/signin" style={{ color: '#F8C100', fontWeight: 600 }}>
+            <a href="/auth/signin" style={{ color: '#111613', fontWeight: 400 }}>
               Already have an account? Sign In
             </a>
           </div>

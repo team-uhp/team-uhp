@@ -7,7 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { PageIDs } from '@/utilities/ids';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
-import { Badge, Container, Row } from 'react-bootstrap';
+import { Badge, Container, Row, Button } from 'react-bootstrap';
 
 /**
  * Renders project opening page.
@@ -69,7 +69,9 @@ const ProjectOpening = async ({ params }: { params: Promise<{
           }}
         />
         <Row>
-          <Link href={`/project-opening/edit-opening/${position.id}`}>Edit Opening</Link>
+          <Link href={`/project-opening/edit-opening/${position.id}`}>
+            <Button id="editopening-button">Edit Opening</Button>
+          </Link>
         </Row>
         <hr />
         <h2 style={{ textAlign: 'start', width: '100%', marginBottom: '20px' }}>Applications</h2>

@@ -1,52 +1,88 @@
-import { Container, Card } from "react-bootstrap";
+import { Container, Card, Button, Row, Col } from "react-bootstrap";
 
+const tools = [
+  { name: "When2Meet", desc: "Quickly find overlapping availability across your team.", href: "https://www.when2meet.com" },
+  { name: "GitHub", desc: "The essential platform for hosting and collaborating on code.", href: "https://github.com" },
+  { name: "Resend", desc: "Modern email service for automated and transactional emails.", href: "https://resend.com" },
+  { name: "Vercel", desc: "Deploy front-end apps with ease using serverless functions.", href: "https://vercel.com" },
+  { name: "VSCode", desc: "Powerful, free code editor with extensions for every language.", href: "https://code.visualstudio.com" },
+  { name: "Slack", desc: "Channel-based chat, file sharing, and group calls.", href: "https://slack.com" },
+  { name: "Discord", desc: "Voice, video, and text chat — ideal for quick collaboration.", href: "https://discord.com" },
+  { name: "Notion", desc: "All-in-one workspace for notes, docs, and task tracking.", href: "https://www.notion.so" },
+  { name: "Google Workspace", desc: "Docs, Sheets, Slides, Calendar, and Drive — essential productivity tools for teams.", href: "https://workspace.google.com" },
+];
 
 const HelpfulTools = () => (
-  <main>
-    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-      <Container
-        fluid
-        className="py-5"
+  <main style={{ paddingTop: 0 }}>
+    <Container
+      fluid
+      style={{
+        backgroundImage: "url(/hero-bg.png)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "85vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        paddingTop: "60px",
+        paddingBottom: "120px", 
+      }}
+    >
+      <Card
+        className="h-100"
         style={{
-          backgroundImage: 'url(/hero-bg.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          color: 'black',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'start',
-          alignItems: 'start',
-          marginTop: '-40px',
-          minHeight: '70vh',
-          paddingTop: '100px',
+          maxWidth: "1000px",
+          width: "95%",
+          margin: "0 auto",
+          padding: "40px",
+          borderRadius: "18px",
+          boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+          backdropFilter: "blur(6px)",
         }}
       >
-        <h1>Helpful Tools</h1>
-        <p>
+        <h1
+          className="text-center mb-4"
+          style={{ color: "#024731", fontWeight: 700 }}
+        >
+          Helpful Tools
+        </h1>
+
+        <p className="text-center mb-5" style={{ fontSize: "1.1rem" }}>
+          Tools we recommend for collaboration, communication, and productivity.
         </p>
-        <p>
-          <a role="button" href="https://www.when2meet.com" className="w-10 btn btn-secondary">When2meet</a>
-          : A convenient site for discovering what times team members are available for meetings or get togethers.
-        </p>
-        <p>
-          <a role="button" href="https://github.com" className="w-10 btn btn-secondary">GitHub</a>
-          : The most popular repository site, particularly for open source code.
-        </p>
-        <p>
-          <a role="button" href="https://resend.com" className="w-10 btn btn-secondary">Resend</a>
-          : A commonly recommended service for commercial automated emails.
-        </p>
-        <p>
-          <a role="button" href="https://vercel.com" className="w-10 btn btn-secondary">Vercel</a>
-          : A webapp hosting site that offers limited free hosting.
-        </p>
-        <p>
-          <a role="button" href="https://code.visualstudio.com" className="w-10 btn btn-secondary">VSCode</a>
-          : Free code editor with many plugins and convenient automated tools.
-        </p>
-      </Container>
-    </div>
+
+        <Row xs={1} sm={2} md={3} className="g-4">
+          {tools.map((tool) => (
+            <Col key={tool.name}>
+              <Card
+                className="h-100"
+                style={{
+                  border: "1px solid #02473133",
+                  borderRadius: "14px",
+                  padding: "18px",
+                }}
+              >
+                <h5 style={{ color: "#024731", fontWeight: 600 }}>{tool.name}</h5>
+                <p className="mt-2">{tool.desc}</p>
+
+                <Button
+                  href={tool.href}
+                  target="_blank"
+                  style={{
+                    backgroundColor: "#068863ff",
+                    borderColor: "#068863ff",
+                    marginTop: "auto",
+                  }}
+                >
+                  Visit
+                </Button>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Card>
+    </Container>
   </main>
-)
+);
 
 export default HelpfulTools;
