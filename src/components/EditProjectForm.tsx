@@ -195,7 +195,6 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
                       <div className="invalid-feedback">{errors.title?.message}</div>
                     </Form.Group>
                   </Col>
-
                   <Col>
                     <Form.Group>
                       <br />
