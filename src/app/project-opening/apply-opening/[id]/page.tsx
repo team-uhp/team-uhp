@@ -33,7 +33,7 @@ const ApplyOpening = async ({ params }: { params: Promise<{
 
   return (
     <main>
-      <Link href={`/project-opening/${position.id}`} style={{ color: '#111613'}}>Back to Opening</Link>
+      <Link href={`/project-opening/${position.id}`} style={{ color: '#111613'}}>&lt;&nbsp;Back to Opening</Link>
       <Row>
         <h1 style={{ textAlign: 'center', width: '100%' }}>
           Application for {project.title}

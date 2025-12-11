@@ -34,13 +34,18 @@ const ApplicationUser: React.FC<ApplicationAdminProps> = ({ applic, user }) => {
           {applic.application}
         </div>
       </Row>
-      <Row>
+      <Row style={{ marginTop: '20px' }}>
         <Col>
-          <Button variant="primary" href={`/project-opening/edit-application/${applic.id}`} style={{ marginTop: '30px' }}>Edit Application</Button>
+          <Button
+            id="edit-application-button"
+            href={`/project-opening/edit-application/${applic.id}`}
+          >
+            Edit Application
+          </Button>
         </Col>
         <Col>
           <Button
-            style={{ marginTop: '30px' }}
+            style={{ marginTop: '20px' }}
             type="button"
             variant="danger"
             onClick={async (event) => {

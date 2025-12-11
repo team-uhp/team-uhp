@@ -151,7 +151,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
             <h2>Edit Opening</h2>
           </Col>
           <Link href={`/project-opening/${position.id}`} className="mb-3 d-inline-block">
-            Back to Opening
+            &lt;&nbsp;Back to Opening
           </Link>
           <Card className="mb-5">
             <Card.Body>

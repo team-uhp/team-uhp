@@ -151,7 +151,7 @@ const AddProjectForm: React.FC = () => {
           </Col>
 
           <div style={{ marginBottom: '12px' }}>
-            <Link href="/project-list/" style={{ color: '#111613' }}>Back to Project List</Link>
+            <Link href="/project-list/" style={{ color: '#111613' }}>&lt;&nbsp;Back to Project List</Link>
           </div>
 
           <Card>

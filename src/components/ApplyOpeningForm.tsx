@@ -93,7 +93,7 @@ const ApplyOpeningForm: React.FC<ApplyOpeningFormProps> = ({ position }) => {
             href={`/project-opening/${position.id}`}
             style={{ marginBottom: '12px', display: 'inline-block', color: '#111613' }}
           >
-            Back to Opening
+            &lt;&nbsp;Back to Opening
           </Link>
           <Card style={{ marginBottom: '80px' }}>
             <Card.Body>

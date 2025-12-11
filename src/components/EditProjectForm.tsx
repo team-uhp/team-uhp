@@ -178,7 +178,7 @@ const EditProjectForm: React.FC<EditProjectFormProps> = ({ proj, members, admins
             <h2>Edit Project</h2>
           </Col>
           <div style={{ marginBottom: '12px' }}>
-            <Link href={`/project-page/${proj.id}`} >Back to Project</Link>
+            <Link href={`/project-page/${proj.id}`}>&lt;&nbsp;Back to Project</Link>
           </div>
           <Card style={{ marginBottom: '80px' }}>
             <Card.Body>

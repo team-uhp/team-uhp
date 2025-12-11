@@ -38,7 +38,7 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
         <Col>
             <Button
             type="button"
-            style={{ marginTop: '30px' }}
+            style={{ marginTop: '30px', backgroundColor: '#0E4F6C', borderColor: 'transparent' }}
             onClick={async (event) => {
               event.preventDefault();
               event.stopPropagation();
