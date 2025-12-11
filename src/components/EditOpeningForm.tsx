@@ -216,8 +216,7 @@ const EditOpeningForm: React.FC<EditOpeningFormProps> = ({ position }) => {
                     ))}
                   </Form.Select>
                 </Form.Group>
-
-                {/* Skills filtered by selected Field */}
+                
                 {selectedField && (
                   <Form.Group>
                     <Form.Label>Skills Needed:</Form.Label>
