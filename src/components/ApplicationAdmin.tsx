@@ -28,17 +28,23 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
         <h2>Applicant:</h2>
         <p>{user.firstName} {user.lastName}</p>
       </Row>
+
       <Row>
         <h2>Application Text:</h2>
         <div style={{ whiteSpace: 'pre-wrap', fontSize: '0.9rem', color: '#333' }}>
           {applic.application}
         </div>
       </Row>
-      <Row>
-        <Col>
-            <Button
+      <Row style={{ marginTop: '20px', gap: '10px' }}>
+        <Col xs="auto">
+          <Button
             type="button"
-            style={{ marginTop: '30px', backgroundColor: '#0E4F6C', borderColor: 'transparent' }}
+            style={{
+              backgroundColor: '#0E4F6C',
+              borderColor: '#0E4F6C',
+              fontSize: '0.9rem',
+              borderRadius: '0.2rem',
+            }}
             onClick={async (event) => {
               event.preventDefault();
               event.stopPropagation();
@@ -51,29 +57,27 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
               if (willAccept) {
                 try {
                   await applyAccept({ applicId: applic.id });
-                  swal('Success!', 'Application accepted.', 'success', {
-                    timer: 2000,
-                  });
+                  swal('Success!', 'Application accepted.', 'success', { timer: 2000 });
                   router.push(`/project-page/${applic.projId}`);
-                }
-                catch (err) {
+                } catch (err) {
                   console.error(err);
-                  swal('Cancelled', 'Application was not accepted', 'info', {
-                    timer: 2000,
-                  });
-                  router.push(`/project-opening/application/${applic.id}`)
+                  swal('Cancelled', 'Application was not accepted', 'info', { timer: 2000 });
+                  router.push(`/project-opening/application/${applic.id}`);
                 }
-            }}}
-            className="float-right"
+              }
+            }}
           >
             Accept
           </Button>
         </Col>
-        <Col>
+        <Col xs="auto">
           <Button
             type="button"
-            style={{ marginTop: '30px' }}
             variant="danger"
+            style={{
+              fontSize: '0.9rem',
+              borderRadius: '0.2rem',
+            }}
             onClick={async (event) => {
               event.preventDefault();
               event.stopPropagation();
@@ -88,20 +92,15 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
               if (willDelete) {
                 try {
                   await applyDelete({ applicId: applic.id });
-                  swal('Success!', 'Application deleted.', 'success', {
-                    timer: 2000,
-                  });
+                  swal('Success!', 'Application deleted.', 'success', { timer: 2000 });
                   router.push(`/project-page/${applic.projId}`);
-                }
-                catch (err) {
+                } catch (err) {
                   console.error(err);
-                  swal('Cancelled', 'Application was not deleted', 'info', {
-                    timer: 2000,
-                  });
-                  router.push(`/project-opening/application/${applic.id}`)
+                  swal('Cancelled', 'Application was not deleted', 'info', { timer: 2000 });
+                  router.push(`/project-opening/application/${applic.id}`);
                 }
-            }}}
-            className="float-right"
+              }
+            }}
           >
             DELETE
           </Button>
@@ -109,6 +108,6 @@ const ApplicationAdmin: React.FC<ApplicationAdminProps> = ({ applic, user }) => 
       </Row>
     </Container>
   );
-}
+};
 
 export default ApplicationAdmin;
